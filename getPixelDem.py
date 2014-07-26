@@ -8,14 +8,6 @@ from osgeo.gdalconst import *
 import struct
 import sys
 
-lat = 42.243713
-lon = 12.502742
-
-if len(sys.argv) > 2:
-	lat = float(sys.argv[2])
-if len(sys.argv) > 3:
-	lon = float(sys.argv[3])
-
 def pt2fmt(pt):
 	fmttypes = {
 		GDT_Byte: 'B',
@@ -28,37 +20,48 @@ def pt2fmt(pt):
 		}
 	return fmttypes.get(pt, 'x')
 
-ds = gdal.Open(sys.argv[1], GA_ReadOnly)
-if ds is None:
-	print 'Failed open file'
-	sys.exit(1)
+def latlngFromFile(filename, lat, lon):
+	ds = gdal.Open(filename, GA_ReadOnly)
+	if ds is None:
+		return false
 
-transf = ds.GetGeoTransform()
-cols = ds.RasterXSize
-rows = ds.RasterYSize
-bands = ds.RasterCount #1
-band = ds.GetRasterBand(1)
-bandtype = gdal.GetDataTypeName(band.DataType) #Int16
-driver = ds.GetDriver().LongName #'GeoTIFF'
+	transf = ds.GetGeoTransform()
+	cols = ds.RasterXSize
+	rows = ds.RasterYSize
+	bands = ds.RasterCount #1
+	band = ds.GetRasterBand(1)
+	bandtype = gdal.GetDataTypeName(band.DataType) #Int16
+	driver = ds.GetDriver().LongName #'GeoTIFF'
 
-success, transfInv = gdal.InvGeoTransform(transf)
-if not success:
-	print "Failed InvGeoTransform()"
-	sys.exit(1)
+	success, transfInv = gdal.InvGeoTransform(transf)
+	if not success:
+		print "Failed InvGeoTransform()"
+		sys.exit(1)
 
-px, py = gdal.ApplyGeoTransform(transfInv, lon, lat)
+	px, py = gdal.ApplyGeoTransform(transfInv, lon, lat)
 
-structval = band.ReadRaster(int(px), int(py), 1,1, buf_type = band.DataType )
+	structval = band.ReadRaster(int(px), int(py), 1,1, buf_type = band.DataType )
 
-fmt = pt2fmt(band.DataType)
+	fmt = pt2fmt(band.DataType)
 
-intval = struct.unpack(fmt , structval)
+	intval = struct.unpack(fmt , structval)
 
-print round(intval[0],2) #intval is a tuple, length=1 as we only asked for 1 pixel value
+	return round(intval[0], 2) #intval is a tuple, length=1 as we only asked for 1 pixel value
 
+if __name__ == "__main__":
+	
+	lat = 42.243713
+	lon = 12.502742
 
+	if len(sys.argv) > 2:
+		lat = float(sys.argv[2])
+	if len(sys.argv) > 3:
+		lon = float(sys.argv[3])
 
+	val = latlngFromFile(sys.argv[1], lat, lon)
 
-
-
-
+	if val is None:
+		print "Failed open file"
+		sys.exit(1)
+	else:
+		print "Value piked: %d" % val
