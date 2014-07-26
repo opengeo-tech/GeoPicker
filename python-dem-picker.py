@@ -19,6 +19,7 @@ class dem:
 	def GET(self, path):
 		params = web.input()
 		web.header('Content-Type', 'application/json')
+		web.header('Server', 'python-dem-picker')
 		
 		if params.has_key('lat') and params.has_key('lon'):
 			val = geotifreader.latlngFromFile(demfiles['dem'], float(params.lat), float(params.lon) )

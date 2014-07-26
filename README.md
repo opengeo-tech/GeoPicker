@@ -2,11 +2,11 @@ python-dem-picker
 ==========
 
 Digital Elevation Model data picker
-Python web interface
+*with http interface*
 
 #requirements
 
-* http://webpy.org (started by Aaron Swartz)
+* http://webpy.org (started by [Aaron Swartz](http://www.aaronsw.com/))
 * http://trac.osgeo.org/gdal/wiki/GdalOgrInPython
 
 ```
@@ -22,7 +22,7 @@ sudo easy_install web.py
 $ ./python-dem-picker.py 8080
 ```
 
-**pick data via http**
+**pick data via http:**
 ```
-$ curl "http://127.0.0.1:8080/dem/?lat=42.5&lon=12.56"
+$ curl "http://127.0.0.1:8080/dem/?lat=42.5&lon=12.5"
 ```
