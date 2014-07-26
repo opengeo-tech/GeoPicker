@@ -19,5 +19,10 @@ sudo easy_install web.py
 **run web interface:**
 
 ```
-$ python python-dem-picker.py 8080
+$ ./python-dem-picker.py 8080
+```
+
+**pick data via http**
+```
+$ curl "http://127.0.0.1:9090/dem/?lat=42.5&lon=12.56"
 ```
