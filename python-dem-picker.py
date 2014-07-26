@@ -3,6 +3,8 @@
 import web
 import json
 import geotifreader
+from pprint import pprint
+
 
 demfiles = {
 	'dem': 'demfiles/dem.ita.tif',
@@ -10,22 +12,24 @@ demfiles = {
 }
 
 urls = (
-	'/dem/(.*)', 'dem'
+	"/(dem|esp)/", 'latlon2val'
 )
 
 app = web.application(urls, globals())
 
-class dem:        
+class latlon2val:
 	def GET(self, path):
 		params = web.input()
 		web.header('Content-Type', 'application/json')
 		web.header('Server', 'python-dem-picker')
-		
+		out = {}
+
 		if params.has_key('lat') and params.has_key('lon'):
-			val = geotifreader.latlngFromFile(demfiles['dem'], float(params.lat), float(params.lon) )
-			return json.dumps({'dem': val})
+			out[path] = geotifreader.latlngFromFile(demfiles[path], float(params.lat), float(params.lon) )
 		else:
-			return json.dumps({'err': 'lat lon params not found'})
+			out = {'err': 'lat lon params not found'}
+
+		return json.dumps(out)
 
 if __name__ == "__main__":
 	app.run()

@@ -2,6 +2,7 @@ python-dem-picker
 ==========
 
 Digital Elevation Model data picker
+
 *with http interface*
 
 #requirements
@@ -13,6 +14,8 @@ Digital Elevation Model data picker
 sudo apt-get install python-gdal
 sudo easy_install web.py
 ```
+
+- Copy GeoTiff DEM files in directory ./demfiles/
 
 #usage
 
