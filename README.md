@@ -24,5 +24,5 @@ $ ./python-dem-picker.py 8080
 
 **pick data via http**
 ```
-$ curl "http://127.0.0.1:9090/dem/?lat=42.5&lon=12.56"
+$ curl "http://127.0.0.1:8080/dem/?lat=42.5&lon=12.56"
 ```
