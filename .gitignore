@@ -1,2 +1,3 @@
 demfiles/*
 *.pyc
+node_modules

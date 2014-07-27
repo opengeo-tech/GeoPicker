@@ -1,0 +1,29 @@
+{
+  "name": "python-dem-picker",
+  "version": "0.0.1",
+  "description": "Digital Elevation Model data picker, with http interface",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:stefanocudini/python-dem-picker.git"
+  },
+  "homepage": "http://labs.easyblog.it/python-dem-picker/",
+  "author": {
+    "name": "Stefano Cudini",
+    "email": "stefano.cudini@gmail.com",
+    "url": "http://labs.easyblog.it/"
+  },
+  "license": "MIT",
+  "keywords": [
+    "gis",
+    "dem",
+    "python",
+    "bash",
+    "api"
+  ],
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-markdown": "^0.6.1"
+  }
+}

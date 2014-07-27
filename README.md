@@ -1,31 +1,35 @@
-python-dem-picker
+Python DEM Picker
 ==========
 
-Digital Elevation Model data picker
+*Digital Elevation Model* data picker
 
-*with http interface*
+with http interface
 
-#requirements
+#Requirements
 
 * http://webpy.org (started by [Aaron Swartz](http://www.aaronsw.com/))
 * http://trac.osgeo.org/gdal/wiki/GdalOgrInPython
 
-```
-sudo apt-get install python-gdal
-sudo easy_install web.py
-```
+#Setup
 
-- Copy GeoTiff DEM files in directory ./demfiles/
+```sudo apt-get install python-webpy python-gdal```
 
-#usage
+copy GeoTiff files in directory **./demfiles/**
+
+#Usage
 
 **run web interface:**
-
 ```
-$ ./python-dem-picker.py 8080
+$ ./python-dem-picker.py 80
+
 ```
 
 **pick data via http:**
 ```
-$ curl "http://127.0.0.1:8080/dem/?lat=42.5&lon=12.5"
+$ curl "http://localhost/dem/?lat=42.5&lon=12.5"
+
 ```
+
+#Source
+
+* [Github](https://github.com/stefanocudini/python-dem-picker)
