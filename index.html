@@ -130,6 +130,12 @@
 <pre><code>$ curl &quot;http://localhost/dem/?lat=42.5&amp;lon=12.5&quot;</code></pre>
 <p><strong>multiple coordinates at same time</strong></p>
 <pre><code>$ curl &quot;http://localhost/dem/?locs=42.5,12.50|42.6,12.250|42.3,12.43|42.13,12.66&quot;</code></pre>
+<p><em>return json:</em></p>
+<pre><code>{
+    &quot;dem&quot;:[
+        100.0, 76.0, 99.0, 45.0
+    ]
+}</code></pre>
 <h1 id="source">Source</h1>
 <ul>
 <li><a href="https://github.com/stefanocudini/python-dem-picker">Github</a></li>
