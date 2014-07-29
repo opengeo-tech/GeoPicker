@@ -26,8 +26,13 @@ class latlon2val:
 
 		if params.has_key('lat') and params.has_key('lon'):
 			out[path] = geotifreader.latlngFromFile(demfiles[path], float(params.lat), float(params.lon) )
+		
+		elif params.has_key('locs'):
+			locs = [[float(c) for c in ll.split(',')] for ll in params.locs.split('|')]
+			out[path] = geotifreader.locsFromFile(demfiles[path], locs)
+
 		else:
-			out = {'err': 'lat lon params not found'}
+			out = {'err': 'lat,lon or locs params not found'}
 
 		return json.dumps(out)
 

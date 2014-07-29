@@ -48,6 +48,39 @@ def latlngFromFile(filename, lat, lon):
 
 	return round(intval[0], 2) #intval is a tuple, length=1 as we only asked for 1 pixel value
 
+
+def locsFromFile(filename, locs):
+	ds = gdal.Open(filename, GA_ReadOnly)
+	if ds is None:
+		return false
+
+	transf = ds.GetGeoTransform()
+	cols = ds.RasterXSize
+	rows = ds.RasterYSize
+	bands = ds.RasterCount #1
+	band = ds.GetRasterBand(1)
+	bandtype = gdal.GetDataTypeName(band.DataType) #Int16
+	driver = ds.GetDriver().LongName #'GeoTIFF'
+
+	success, transfInv = gdal.InvGeoTransform(transf)
+	if not success:
+		print "Failed InvGeoTransform()"
+		sys.exit(1)
+
+	vals = []
+	for loc in locs:
+		px, py = gdal.ApplyGeoTransform(transfInv, loc[1], loc[0])
+
+		structval = band.ReadRaster(int(px), int(py), 1,1, buf_type = band.DataType )
+
+		fmt = pt2fmt(band.DataType)
+
+		intval = struct.unpack(fmt , structval)
+
+		vals.append( round(intval[0], 2) )
+
+	return vals
+
 if __name__ == "__main__":
 	
 	lat = 42.243713

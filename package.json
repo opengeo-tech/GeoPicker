@@ -1,6 +1,6 @@
 {
   "name": "python-dem-picker",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Digital Elevation Model data picker, with http interface",
   "repository": {
     "type": "git",
