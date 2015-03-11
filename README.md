@@ -1,7 +1,7 @@
-Python DEM Picker
+Python GeoTiff Picker
 ==========
 
-*Digital Elevation Model* data picker
+Fiule raster *GeoTiff* data picker
 
 with http interface
 
@@ -14,13 +14,13 @@ with http interface
 
 ```sudo apt-get install python-webpy python-gdal```
 
-copy GeoTiff files in directory **./demfiles/**
+copy GeoTiff files in directory **./tiffs/**
 
 #Usage
 
 **run web interface:**
 ```
-$ ./python-dem-picker.py 80
+$ ./python-geotiff-picker.py 80
 
 ```
 
@@ -44,4 +44,4 @@ $ curl "http://localhost/dem/?locs=42.5,12.50|42.6,12.250|42.3,12.43|42.13,12.66
 
 #Source
 
-* [Github](https://github.com/stefanocudini/python-dem-picker)
+* [Github](https://github.com/stefanocudini/python-geotiff-picker)

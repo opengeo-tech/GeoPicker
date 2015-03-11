@@ -112,8 +112,8 @@
     </style>
   </head>
   <body>  
-    <h1 id="python-dem-picker">Python DEM Picker</h1>
-<p><em>Digital Elevation Model</em> data picker</p>
+    <h1 id="python-geotiff-picker">Python GeoTiff Picker</h1>
+<p>Fiule raster <em>GeoTiff</em> data picker</p>
 <p>with http interface</p>
 <h1 id="requirements">Requirements</h1>
 <ul>
@@ -122,10 +122,10 @@
 </ul>
 <h1 id="setup">Setup</h1>
 <p><code>sudo apt-get install python-webpy python-gdal</code></p>
-<p>copy GeoTiff files in directory <strong>./demfiles/</strong></p>
+<p>copy GeoTiff files in directory <strong>./tiffs/</strong></p>
 <h1 id="usage">Usage</h1>
 <p><strong>run web interface:</strong></p>
-<pre><code>$ ./python-dem-picker.py 80</code></pre>
+<pre><code>$ ./python-geotiff-picker.py 80</code></pre>
 <p><strong>pick data via http:</strong></p>
 <pre><code>$ curl &quot;http://localhost/dem/?lat=42.5&amp;lon=12.5&quot;</code></pre>
 <p><strong>multiple coordinates at same time</strong></p>
@@ -138,7 +138,7 @@
 }</code></pre>
 <h1 id="source">Source</h1>
 <ul>
-<li><a href="https://github.com/stefanocudini/python-dem-picker">Github</a></li>
+<li><a href="https://github.com/stefanocudini/python-geotiff-picker">Github</a></li>
 </ul>
 
   </body>

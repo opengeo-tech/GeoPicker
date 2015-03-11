@@ -1,12 +1,12 @@
 {
-  "name": "python-dem-picker",
+  "name": "python-geotiff-picker",
   "version": "0.0.2",
   "description": "Digital Elevation Model data picker, with http interface",
   "repository": {
     "type": "git",
-    "url": "git@github.com:stefanocudini/python-dem-picker.git"
+    "url": "git@github.com:stefanocudini/python-geotiff-picker.git"
   },
-  "homepage": "http://labs.easyblog.it/python-dem-picker/",
+  "homepage": "http://labs.easyblog.it/python-geotiff-picker/",
   "author": {
     "name": "Stefano Cudini",
     "email": "stefano.cudini@gmail.com",

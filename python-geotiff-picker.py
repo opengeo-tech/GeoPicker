@@ -6,9 +6,9 @@ import geotifreader
 from pprint import pprint
 
 
-demfiles = {
-	'dem': 'demfiles/dem.ita.tif',
-	'esp': 'demfiles/esp.ita.tif'
+tiffs = {
+	'dem': 'tiffs/dem.ita.tif',
+	'esp': 'tiffs/esp.ita.tif'
 }
 
 urls = (
@@ -21,15 +21,15 @@ class latlon2val:
 	def GET(self, path):
 		params = web.input()
 		web.header('Content-Type', 'application/json')
-		web.header('Server', 'python-dem-picker')
+		web.header('Server', 'python-geotiff-picker')
 		out = {}
 
 		if params.has_key('lat') and params.has_key('lon'):
-			out[path] = geotifreader.latlngFromFile(demfiles[path], float(params.lat), float(params.lon) )
+			out[path] = geotifreader.latlngFromFile(tiffs[path], float(params.lat), float(params.lon) )
 		
 		elif params.has_key('locs'):
 			locs = [[float(c) for c in ll.split(',')] for ll in params.locs.split('|')]
-			out[path] = geotifreader.locsFromFile(demfiles[path], locs)
+			out[path] = geotifreader.locsFromFile(tiffs[path], locs)
 
 		else:
 			out = {'err': 'lat,lon or locs params not found'}
