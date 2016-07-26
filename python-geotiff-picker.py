@@ -12,7 +12,8 @@ tiffs = {
 }
 
 urls = (
-	"/(dem|esp)/", 'latlon2val'
+	"/(dem|esp)/",
+	"latlon2val"
 )
 
 app = web.application(urls, globals())
@@ -32,7 +33,7 @@ class latlon2val:
 			out[path] = geotifreader.locsFromFile(tiffs[path], locs)
 
 		else:
-			out = {'err': 'lat,lon or locs params not found'}
+			out = {'err': 'latl,gon or locs params not found'}
 
 		return json.dumps(out)
 
