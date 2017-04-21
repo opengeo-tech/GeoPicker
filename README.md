@@ -5,18 +5,18 @@ Fiule raster *GeoTiff* data picker
 
 with http interface
 
-#Requirements
+# Requirements
 
 * http://webpy.org (started by [Aaron Swartz](http://www.aaronsw.com/))
 * http://trac.osgeo.org/gdal/wiki/GdalOgrInPython
 
-#Setup
+# Setup
 
 ```sudo apt-get install python-webpy python-gdal```
 
 copy GeoTiff files in directory **./tiffs/**
 
-#Usage
+# Usage
 
 **run web interface:**
 ```
@@ -42,6 +42,6 @@ $ curl "http://localhost/dem/?locs=42.5,12.50|42.6,12.250|42.3,12.43|42.13,12.66
 }
 ```
 
-#Source
+# Source
 
 * [Github](https://github.com/stefanocudini/python-geotiff-picker)
