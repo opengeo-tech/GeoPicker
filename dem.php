@@ -10,7 +10,7 @@ $lat = filter_input(
             );
 $lon = filter_input(
               INPUT_GET, 
-              'lon', 
+              'lng', 
               FILTER_SANITIZE_NUMBER_FLOAT, 
               FILTER_FLAG_ALLOW_FRACTION
             );
