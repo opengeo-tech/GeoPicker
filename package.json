@@ -1,5 +1,5 @@
 {
-  "name": "python-geotiff-picker",
+  "name": "geotiff-picker",
   "version": "0.0.2",
   "description": "Digital Elevation Model data picker, with http interface",
   "repository": {
