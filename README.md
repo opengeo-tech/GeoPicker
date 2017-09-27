@@ -1,9 +1,9 @@
-Python GeoTiff Picker
+GeoTiff Picker
 ==========
 
 Fiule raster *GeoTiff* data picker
 
-with http interface
+with API Restful/CLI interface
 
 # Requirements
 
@@ -44,4 +44,4 @@ $ curl "http://localhost/dem/?locs=42.5,12.50|42.6,12.250|42.3,12.43|42.13,12.66
 
 # Source
 
-* [Github](https://github.com/stefanocudini/python-geotiff-picker)
+* [Github](https://github.com/stefanocudini/geotiff-picker)
