@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+<title></title> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<link href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" rel="stylesheet" type="text/css" />
+<style>
+/*	@import url('style.css'); */
+#map {
+	position: absolute;
+	width: 100%;
+	top:0;
+	bottom:0;
+}
+</style>
+</head>
+
+<body>
+
+<div id="map">
+</div>
+
+<script src="//unpkg.com/underscore@1.9.1/underscore.js"></script>
+<script src="//unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+<script src="//unpkg.com/leaflet@1.4.0/dist/leaflet-src.js"></script>
+<script>
+var cen = [46.0651,11.1528],
+	zom =13;
+var m = L.marker(cen,{draggable:true});
+
+L.map('map', {
+	center: cen,
+	zoom: zom,
+	layers: [m, L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png') ]
+});
+
+m.on('drag', _.debounce(function(e) {
+
+
+	var ll = e.target.getLatLng(),
+		data = {
+			loc: ll,
+		};
+
+	e.target.bindPopup('<pre>'+JSON.stringify(data,"\t",4)+'</pre>').openPopup();
+
+},50));
+</script> 
+</body>
+</html>

@@ -5,6 +5,10 @@ Fiule raster *GeoTiff* data picker
 
 with API Restful/CLI interface
 
+# Demo
+
+* [Demo](demo.html)
+
 # Requirements
 
 * http://webpy.org (started by [Aaron Swartz](http://www.aaronsw.com/))
