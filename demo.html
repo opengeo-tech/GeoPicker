@@ -31,7 +31,7 @@ var cen = [46.0651,11.1528],
 	zom =13;
 
 var m = L.marker(cen,{draggable:true})
-	.bindPopup('Drag it!').openPopup();
+m.bindPopup('Drag it!').openPopup();
 
 L.map('map', {
 	center: cen,
