@@ -1,6 +1,6 @@
 <?php
 
-$file = 'tiffs/italia_dem_30m.tif';
+$file = 'tiffs/italia_slope_30m.tif';
 
 $lat = filter_input(
               INPUT_GET, 
