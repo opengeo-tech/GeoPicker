@@ -7,7 +7,7 @@ with API Restful/CLI interface
 
 # Demo
 
-* [Demo](demo.html)
+* [Demo](https://labs.easyblog.it/maps/geotiff-picker/demo.html)
 
 # Requirements
 
