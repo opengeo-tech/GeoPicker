@@ -1,149 +1,115 @@
-<!DOCTYPE  html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    
-    <title>doc</title>
-    <style>
-      /*github.com style (c) Vasily Polovnyov <vast@whiteants.net>*/
-      pre code {
-        display: block; padding: 0.5em;
-        color: #333;
-        background: #f8f8ff
-      }
-      pre .comment,
-      pre .template_comment,
-      pre .diff .header,
-      pre .javadoc {
-        color: #998;
-        font-style: italic
-      }
-      pre .keyword,
-      pre .css .rule .keyword,
-      pre .winutils,
-      pre .javascript .title,
-      pre .nginx .title,
-      pre .subst,
-      pre .request,
-      pre .status {
-        color: #333;
-        font-weight: bold
-      }
-      pre .number,
-      pre .hexcolor,
-      pre .ruby .constant {
-        color: #099;
-      }
-      pre .string,
-      pre .tag .value,
-      pre .phpdoc,
-      pre .tex .formula {
-        color: #d14
-      }
-      pre .title,
-      pre .id {
-        color: #900;
-        font-weight: bold
-      }
-      pre .javascript .title,
-      pre .lisp .title,
-      pre .clojure .title,
-      pre .subst {
-        font-weight: normal
-      }
-      pre .class .title,
-      pre .haskell .type,
-      pre .vhdl .literal,
-      pre .tex .command {
-        color: #458;
-        font-weight: bold
-      }
-      pre .tag,
-      pre .tag .title,
-      pre .rules .property,
-      pre .django .tag .keyword {
-        color: #000080;
-        font-weight: normal
-      }
-      pre .attribute,
-      pre .variable,
-      pre .lisp .body {
-        color: #008080
-      }
-      pre .regexp {
-        color: #009926
-      }
-      pre .class {
-        color: #458;
-        font-weight: bold
-      }
-      pre .symbol,
-      pre .ruby .symbol .string,
-      pre .lisp .keyword,
-      pre .tex .special,
-      pre .prompt {
-        color: #990073
-      }
-      pre .built_in,
-      pre .lisp .title,
-      pre .clojure .built_in {
-        color: #0086b3
-      }
-      pre .preprocessor,
-      pre .pi,
-      pre .doctype,
-      pre .shebang,
-      pre .cdata {
-        color: #999;
-        font-weight: bold
-      }
-      pre .deletion {
-        background: #fdd
-      }
-      pre .addition {
-        background: #dfd
-      }
-      pre .diff .change {
-        background: #0086b3
-      }
-      pre .chunk {
-        color: #aaa
-      }
-    </style>
-  </head>
-  <body>  
-    <h1 id="geotiff-picker">GeoTiff Picker</h1>
-<p>Fiule raster <em>GeoTiff</em> data picker</p>
-<p>with API Restful/CLI interface</p>
-<h1 id="demo">Demo</h1>
-<ul>
-<li><a href="demo.html">Demo</a></li>
-</ul>
-<h1 id="requirements">Requirements</h1>
-<ul>
-<li><a href="http://webpy.org">http://webpy.org</a> (started by <a href="http://www.aaronsw.com/">Aaron Swartz</a>)</li>
-<li><a href="http://trac.osgeo.org/gdal/wiki/GdalOgrInPython">http://trac.osgeo.org/gdal/wiki/GdalOgrInPython</a></li>
-</ul>
-<h1 id="setup">Setup</h1>
-<p><code>sudo apt-get install python-webpy python-gdal</code></p>
-<p>copy GeoTiff files in directory <strong>./tiffs/</strong></p>
-<h1 id="usage">Usage</h1>
-<p><strong>run web interface:</strong></p>
-<pre><code>$ ./python-geotiff-picker.py 80</code></pre>
-<p><strong>pick data via http:</strong></p>
-<pre><code>$ curl &quot;http://localhost/dem/?lat=42.5&amp;lon=12.5&quot;</code></pre>
-<p><strong>multiple coordinates at same time</strong></p>
-<pre><code>$ curl &quot;http://localhost/dem/?locs=42.5,12.50|42.6,12.250|42.3,12.43|42.13,12.66&quot;</code></pre>
-<p><em>return json:</em></p>
-<pre><code>{
-    &quot;dem&quot;:[
-        100.0, 76.0, 99.0, 45.0
-    ]
-}</code></pre>
-<h1 id="source">Source</h1>
-<ul>
-<li><a href="https://github.com/stefanocudini/geotiff-picker">Github</a></li>
-</ul>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+    <title>Digital Terrain Model Picker</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+    <link href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" rel="stylesheet" type="text/css" />
+<style>
+body {
+    margin:0
+}
+#map {
+	position: absolute;
+	width: 100%;
+	top:0;
+	bottom:0;
+}
+.btn-share {
+    font-size:16px;
+    text-decoration:none;
+    display:block;
+    text-align:right;
+}
+.leaflet-popup.loading .leaflet-popup-content {
+    background: no-repeat center center url('data:image/gif;base64,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');
+    color:rgba(0,0,0,0.2)
+}
+</style>
+</head>
 
-  </body>
+<body>
+
+<div id="map">
+</div>
+
+<script src="//unpkg.com/underscore@1.9.1/underscore.js"></script>
+<script src="//unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+<script src="//unpkg.com/leaflet@1.4.0/dist/leaflet-src.js"></script>
+<script src="//unpkg.com/clipboard@2.0.4/dist/clipboard.js"></script>
+<script>
+
+var url = "https://labs.easyblog.it/maps/geotiff-picker/{type}?lat={lat}&lng={lng}";
+
+var cen = [46.0651,11.1528],
+	zom =13;
+
+var m = L.marker(cen,{draggable:true})
+
+var d1,d2,d3;
+
+function pickData(ll) {
+
+    d1 && d1.abort();
+    d2 && d2.abort();
+    d3 && d3.abort();
+
+    d1 = $.getJSON(L.Util.template(url, _.extend({},ll,{type: 'dem'}) )),
+    d2 = $.getJSON(L.Util.template(url, _.extend({},ll,{type: 'aspect'}) )),
+    d3 = $.getJSON(L.Util.template(url, _.extend({},ll,{type: 'slope'}) ));
+
+    //console.log(d1,d2,d3)
+
+    var $self = $(m._popup._container);
+
+    $self.addClass('loading');
+
+	$.when(d1, d2, d3).done(function(dem, asp, slo) {
+
+		var data = {
+				lat: ll.lat,
+				lng: ll.lng,
+				dem: dem[0].val,
+				aspect: asp[0].val,
+				slope: slo[0].val
+			},
+            text = JSON.stringify(data,"\t",4);
+
+        $self.removeClass('loading');
+        
+		m.bindPopup('<pre>'+text+'</pre><a href="#" class="btn-share">Copy</a>').openPopup();
+       console.log($self.find('.btn-share'));
+        
+    var c = new ClipboardJS($self.find('.btn-share')[0], {
+            text: function() {
+	            return text;
+            }
+        }).on('success', function() {
+            $self.find('.btn-share').text('Copied!');
+            setTimeout(function() {
+                $self.find('.btn-share').text('Copy');
+            },1000);
+        });
+
+	});
+}
+var map = L.map('map', {
+	center: cen,
+	zoom: zom,
+	layers: [
+        m, L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
+    ]
+}).on('click', function(e) {
+	m.setLatLng(e.latlng);
+	pickData(e.latlng);
+});
+
+m.bindPopup('Drag it to pick data!').openPopup();
+	
+m.on('drag', _.debounce(function(e) {
+
+ pickData(e.target.getLatLng())
+
+},25));
+</script> 
+</body>
 </html>
