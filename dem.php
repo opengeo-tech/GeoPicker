@@ -1,6 +1,6 @@
 <?php
 
-$file = 'tiffs/italia_dem_30m.tif';
+$file = 'tiffs/dem.tif';
 
 $lat = filter_input(
               INPUT_GET, 
@@ -17,10 +17,10 @@ $lon = filter_input(
 
 $cmd = "gdallocationinfo $file -geoloc $lon $lat -valonly";
 
-$o = shell_exec($cmd);
+$o = trim(shell_exec($cmd));
 
 header('Content-Type: application/json');
-
-echo json_encode(array('val'=>round($o)));
+$o = is_numeric($o) ? round($o) : null;
+echo json_encode(array('val'=>$o));
 
 ?>
