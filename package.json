@@ -6,11 +6,11 @@
     "type": "git",
     "url": "git@github.com:stefanocudini/python-geotiff-picker.git"
   },
-  "homepage": "http://labs.easyblog.it/python-geotiff-picker/",
+  "homepage": "https://opengeo.tech/python-geotiff-picker/",
   "author": {
     "name": "Stefano Cudini",
     "email": "stefano.cudini@gmail.com",
-    "url": "http://labs.easyblog.it/"
+    "url": "https://opengeo.tech/"
   },
   "license": "MIT",
   "keywords": [
