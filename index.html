@@ -51,33 +51,25 @@ body {
 <script src="//unpkg.com/clipboard@2.0.4/dist/clipboard.js"></script>
 <script>
 
-var url = "https://opengeo.tech/maps/geotiff-picker/{type}?lat={lat}&lng={lng}";
-
 var cen = [46.0651,11.1528],
-/*    bbox = [
-        [49.0002778,3.9997222],
-        [43.0000000,3.9997222],
-        [49.0002778,17.000000],
-        [43.0000000,17.000000]
-    ],*/
     bbox = [4.493408203125001,43.092960677116295,16.896972656250004,48.94415123418794],
 	zom =13;
 
 var m = L.marker(cen,{draggable:true})
 
-var d1,d2,d3;
 
-function pickData(ll) {
+var d1,d2,d3;
+function pickData(loc) {
 
     d1 && d1.abort();
     d2 && d2.abort();
     d3 && d3.abort();
 
-    d1 = $.getJSON(L.Util.template(url, _.extend({},ll,{type: 'dem'}) )),
-    d2 = $.getJSON(L.Util.template(url, _.extend({},ll,{type: 'aspect'}) )),
-    d3 = $.getJSON(L.Util.template(url, _.extend({},ll,{type: 'slope'}) ));
+    const geturl = d => {return `/maps/geotiff-picker/${d.type}?zone=${d.zone}&lat=${d.lat}&lng=${d.lng}`};
 
-    //console.log(d1,d2,d3)
+    d1 = $.getJSON(geturl({zone: 'italy', type: 'dem', ...loc}));
+    d2 = $.getJSON(geturl({zone: 'italy', type: 'aspect', ...loc}));
+    d3 = $.getJSON(geturl({zone: 'italy', type: 'slope', ...loc}));
 
     var $self = $(m._popup._container);
 
@@ -86,8 +78,8 @@ function pickData(ll) {
 	$.when(d1, d2, d3).done(function(dem, asp, slo) {
 
 		var data = {
-				lat: ll.lat,
-				lng: ll.lng,
+				lat: loc.lat,
+				lng: loc.lng,
 				dem: dem[0].val,
 				aspect: asp[0].val,
 				slope: slo[0].val
@@ -97,9 +89,8 @@ function pickData(ll) {
         $self.removeClass('loading');
         
 		m.bindPopup('<pre>'+text+'</pre><a href="#" class="btn-share">Copy</a>').openPopup();
-       console.log($self.find('.btn-share'));
         
-    var c = new ClipboardJS($self.find('.btn-share')[0], {
+    	var c = new ClipboardJS($self.find('.btn-share')[0], {
             text: function() {
 	            return text;
             }
@@ -132,11 +123,25 @@ var map = L.map('map', {
 
 m.bindPopup('Drag it to pick data!').openPopup();
 	
-m.on('drag', _.debounce(function(e) {
+m.on('drag', debounce(function(e) {
 
  pickData(e.target.getLatLng())
 
 },25));
+
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function() {
+  	var context = this, args = arguments;
+  	clearTimeout(timeout);
+  	timeout = setTimeout(function() {
+  		timeout = null;
+  		if (!immediate) func.apply(context, args);
+  	}, wait);
+  	if (immediate && !timeout) func.apply(context, args);
+  };
+}
+
 </script> 
 </body>
 </html>

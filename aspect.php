@@ -1,6 +1,13 @@
 <?php
 
-$file = 'tiffs/aspect.tif';
+$zone = filter_input(
+              INPUT_GET, 
+              'zone', 
+              FILTER_SANITIZE_STRING, 
+              FILTER_FLAG_STRIP_LOW | FILTER_FLAG_ENCODE_AMP
+            );
+
+$file = 'tiffs/'.($zone==='alps'?'alps':'italy').'/aspect_30m.tif';
 
 $lat = filter_input(
               INPUT_GET, 
