@@ -1,8 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml"> 
-<head> 
-    <title>Digital Terrain Model Picker</title> 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Digital Terrain Model Picker</title>
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="msapplication-tap-highlight" content="no">
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
     <link href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" rel="stylesheet" type="text/css" />
 <style>
 body {
@@ -28,12 +31,14 @@ body {
 	position: absolute;
 	top: 0;
 	right: 0;
+	height: 100px;
+	width: auto;
 	border: 0;
 	filter: alpha(opacity=80);
 	-khtml-opacity: .8;
 	-moz-opacity: .8;
-	opacity: .8;	
-    z-index:20000	
+	opacity: .8;
+    z-index:20000
 }
 </style>
 </head>
@@ -87,9 +92,9 @@ function pickData(loc) {
             text = JSON.stringify(data,"\t",4);
 
         $self.removeClass('loading');
-        
+
 		m.bindPopup('<pre>'+text+'</pre><a href="#" class="btn-share">Copy</a>').openPopup();
-        
+
     	var c = new ClipboardJS($self.find('.btn-share')[0], {
             text: function() {
 	            return text;
@@ -122,7 +127,7 @@ var map = L.map('map', {
 });
 
 m.bindPopup('Drag it to pick data!').openPopup();
-	
+
 m.on('drag', debounce(function(e) {
 
  pickData(e.target.getLatLng())
@@ -142,6 +147,6 @@ function debounce(func, wait, immediate) {
   };
 }
 
-</script> 
+</script>
 </body>
 </html>

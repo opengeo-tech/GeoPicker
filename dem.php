@@ -28,6 +28,6 @@ $o = trim(shell_exec($cmd));
 
 header('Content-Type: application/json');
 $o = is_numeric($o) ? round($o) : null;
-echo json_encode(array('val'=>$o));
+echo json_encode(array('val'=>$o,'cmd'=>$cmd));
 
 ?>
