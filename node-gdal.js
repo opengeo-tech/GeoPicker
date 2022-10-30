@@ -20,11 +20,11 @@ const pointPadova= {
 	]
 }
 
-var dataset = gdal.open(file);
+var rasterdata = gdal.open(file);
 
-var band = dataset.bands.get(1);
+var band = rasterdata.bands.get(1);
 
-var coordinateTransform = new gdal.CoordinateTransformation(gdal.SpatialReference.fromEPSG(4326), dataset);
+var coordinateTransform = new gdal.CoordinateTransformation(gdal.SpatialReference.fromEPSG(4326), rasterdata);
 
 var pt = coordinateTransform.transformPoint(pointPadova.coordinates[0], pointPadova.coordinates[1]);
 
