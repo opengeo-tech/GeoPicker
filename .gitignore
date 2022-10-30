@@ -1,3 +1,5 @@
 tiffs
 *.pyc
 node_modules
+data
+
