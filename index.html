@@ -133,7 +133,7 @@ m.on('drag', debounce(function(e) {
 
 },25));
 
-$.getJSON('italy.geojson').done(geo=>{
+$.getJSON('data/italy.geojson').done(geo=>{
 	console.log(geo)
 	L.geoJSON(geo, {
 		style: ({fill:false,color:'red'})

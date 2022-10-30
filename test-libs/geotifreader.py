@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-#http://geoinformaticstutorial.blogspot.it/2012/09/reading-raster-data-with-python-and-gdal.html
-#http://www.gis.usu.edu/~chrisg/python/2009/lectures/ospy_slides4.pdf
 
 from osgeo import gdal,ogr
 from osgeo.gdalconst import *
@@ -82,7 +80,7 @@ def locsFromFile(filename, locs):
 	return vals
 
 if __name__ == "__main__":
-	
+
 	lat = 42.243713
 	lon = 12.502742
 
