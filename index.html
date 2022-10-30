@@ -6,7 +6,8 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="msapplication-tap-highlight" content="no">
 <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
-    <link href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" rel="stylesheet" type="text/css" />
+    <link href="//unpkg.com/leaflet@1.4.0/dist/leaflet.css" rel="stylesheet" type="text/css" />
+    <link href="//unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" rel="stylesheet" type="text/css" />
 <style>
 body {
     margin:0
@@ -54,13 +55,27 @@ body {
 <script src="//unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
 <script src="//unpkg.com/leaflet@1.4.0/dist/leaflet-src.js"></script>
 <script src="//unpkg.com/clipboard@2.0.4/dist/clipboard.js"></script>
+<script src="//unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
 <script>
 
 var cen = [46.0651,11.1528],
     bbox = [4.493408203125001,43.092960677116295,16.896972656250004,48.94415123418794],
 	zom =13;
 
-var m = L.marker(cen,{draggable:true})
+var markerPick = L.marker(cen,{draggable:true})
+
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function() {
+  	var context = this, args = arguments;
+  	clearTimeout(timeout);
+  	timeout = setTimeout(() => {
+  		timeout = null;
+  		if (!immediate) func.apply(context, args);
+  	}, wait);
+  	if (immediate && !timeout) func.apply(context, args);
+  };
+}
 
 var d1,d2,d3;
 function pickData(loc) {
@@ -75,11 +90,11 @@ function pickData(loc) {
     d2 = $.getJSON(geturl({zone: 'italy', type: 'aspect', ...loc}));
     d3 = $.getJSON(geturl({zone: 'italy', type: 'slope', ...loc}));
 
-    var $self = $(m._popup._container);
+    var $self = $(markerPick._popup._container);
 
     $self.addClass('loading');
 
-	$.when(d1, d2, d3).done(function(dem, asp, slo) {
+	$.when(d1, d2, d3).done((dem, asp, slo) => {
 
 		var data = {
 				lat: loc.lat,
@@ -92,15 +107,15 @@ function pickData(loc) {
 
         $self.removeClass('loading');
 
-		m.bindPopup('<pre>'+text+'</pre><a href="#" class="btn-share">Copy</a>').openPopup();
+		markerPick.bindPopup('<pre>'+text+'</pre><a href="#" class="btn-share">Copy</a>').openPopup();
 
     	var c = new ClipboardJS($self.find('.btn-share')[0], {
             text: function() {
 	            return text;
             }
-        }).on('success', function() {
+        }).on('success', e => {
             $self.find('.btn-share').text('Copied!');
-            setTimeout(function() {
+            setTimeout(() => {
                 $self.find('.btn-share').text('Copy');
             },1000);
         });
@@ -118,40 +133,76 @@ var map = L.map('map', {
 	center: cen,
 	zoom: zom,
 	layers: [
-        m, baselayer
+        markerPick, baselayer
     ]
-}).on('click', function(e) {
-	m.setLatLng(e.latlng);
+}).on('click', e => {
+	markerPick.setLatLng(e.latlng);
 	pickData(e.latlng);
 });
 
-m.bindPopup('Drag it to pick data!').openPopup();
+markerPick.bindPopup('Drag it to pick data!').openPopup();
 
-m.on('drag', debounce(function(e) {
+markerPick.on('drag', debounce(e => {
 
  pickData(e.target.getLatLng())
 
 },25));
 
-$.getJSON('italy.geojson').done(geo=>{
-	console.log(geo)
+$.getJSON('italy.geojson').done( geo => {
 	L.geoJSON(geo, {
 		style: ({fill:false,color:'red'})
 	}).addTo(map)
 })
 
-function debounce(func, wait, immediate) {
-  var timeout;
-  return function() {
-  	var context = this, args = arguments;
-  	clearTimeout(timeout);
-  	timeout = setTimeout(function() {
-  		timeout = null;
-  		if (!immediate) func.apply(context, args);
-  	}, wait);
-  	if (immediate && !timeout) func.apply(context, args);
-  };
-}
+
+// Initialise the FeatureGroup to store editable layers
+var editableLayers = L.featureGroup().addTo(map);
+
+var drawOpts = {
+  position: 'topleft',
+  draw: {
+
+    polyline: {
+    	shapeOptions: {
+        color: '#f357a1',
+        weight: 10
+          }
+    },
+    circle: false,
+    circlemarker: false,
+    rectangle: false,
+    polygon: false,
+    marker: false
+  },
+  edit: {
+    featureGroup: editableLayers,
+    remove: true
+  }
+};
+
+// Initialise the draw control and pass it the FeatureGroup of editable layers
+var drawControl = new L.Control.Draw(drawOpts);
+map.addControl(drawControl);
+
+var editableLayers = new L.FeatureGroup();
+map.addLayer(editableLayers);
+
+map
+.on('draw:drawstart', e => {
+	markerPick.remove()
+})
+.on('draw:drawstop', e => {
+	markerPick.addTo(map)
+})
+.on('draw:created', e => {
+
+  if (e.layerType === 'polyline') {
+  	let geoPoly = e.layer.toGeoJSON()
+    console.log(JSON.stringify(geoPoly))
+  }
+
+  editableLayers.addLayer(e.layer);
+});
 
 </script>
 </body>
