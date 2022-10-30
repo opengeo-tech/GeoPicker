@@ -9,7 +9,7 @@ with API Restful/CLI interface
 
 * [Demo](https://opengeo.tech/maps/geotiff-picker/demo.html)
 
-# Requirements
+# Python Requirements
 
 * http://webpy.org (started by [Aaron Swartz](http://www.aaronsw.com/))
 * http://trac.osgeo.org/gdal/wiki/GdalOgrInPython
