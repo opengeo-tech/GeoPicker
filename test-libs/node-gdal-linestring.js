@@ -1,10 +1,10 @@
 
 
 const fs = require('fs');
-const gdal = require("gdal");
+const gdal = require("gdal-next");
 const {coordEach} = require('@turf/meta');
 
-const file = process.argv[2] || './data/trentino-altoadige_10m.tif';
+const file = process.argv[2] || '../data/trentino-altoadige_30m.tif';
 
 const point = {
 	"type": "Point",
@@ -14,30 +14,34 @@ const point = {
 	]
 }
 
-const linestring = JSON.parse(fs.readFileSync('./data/traccia_calisio_50pt.geojson','utf-8'));
+const linestring = JSON.parse(fs.readFileSync('../data/traccia_calisio_50pt.geojson','utf-8'));
 
 const rasterdata = gdal.open(file);
 const band = rasterdata.bands.get(1);
+
 const coordinateTransform = new gdal.CoordinateTransformation(gdal.SpatialReference.fromEPSG(4326), rasterdata);
 
+console.time();
 
-var pt = coordinateTransform.transformPoint(pointPadova.coordinates[0], pointPadova.coordinates[1]);
+coordEach(linestring, async loc => { //loc,coordIndex,featureIndex,multiFeatureIndex,geometryIndex)
 
-let pixelVal;
-try {
-	pixelVal = band.pixels.get(pt.x, pt.y)
-}
-catch(err) {
-	console.log(err)
-}
+	//const props = {coordIndex,featureIndex,multiFeatureIndex,geometryIndex}
 
-console.log(pixelVal);
+	const {x, y} = coordinateTransform.transformPoint(loc[0], loc[1]);
 
-coordEach(linestring, (loc,coordIndex,featureIndex,multiFeatureIndex,geometryIndex) => {
+	try {
 
-	const props = {coordIndex,featureIndex,multiFeatureIndex,geometryIndex}
+		loc[2] = band.pixels.get(x, y);
+	}
+	catch(err) {
+		console.log(err)
+	}
 
-	console.log(loc, props)
-	loc[2]=0
-})
+	//console.log(loc, props)
+});
 
+
+console.log(JSON.stringify(linestring,null,4))
+
+
+console.timeEnd();
