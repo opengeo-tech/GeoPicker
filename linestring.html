@@ -211,18 +211,9 @@ map
 .on('draw:drawstop', e => {
 	markerPick.addTo(map)
 })
-.on('draw:created', e => {
+/*.on('draw:created', e => {
   editableLayers.addLayer(e.layer);
-  /*
-  FAKE RANDOM ELEVATION
-  let lastp = 500
-  geo.geometry.coordinates.forEach(loc => {
-    //.geometry
-    loc[2]= lastp + _.random(-10, 20);
-    lastp = loc[2]
-    console.log(loc)
-  })*/
-})
+})*/
 .on('draw:drawvertex', e => {
 
 //	let geo = e.layer.toGeoJSON();
@@ -232,7 +223,7 @@ map
     return f.geometry.coordinates
   });
 
-  let geoline = {
+  let georeq = {
     type: 'Feature',
     properties: {},
     geometry: {
@@ -241,21 +232,34 @@ map
     }
   }
 
+  console.log('REQ',georeq.geometry)
+
   $.ajax({
     url: 'http://localhost:3000/elevation',
     type: 'POST',
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify(geoline),
-  }).done(geoRes => {
+    data: JSON.stringify(georeq),
+  }).done(geores => {
 
-    console.log(geoRes)
+    console.log('RES',geores)
 
     controlElevation.clear()
-    layerElevation.addData(geoRes);
+
+    layerElevation.addData(geores);
+
+    editableLayers.addLayer(layerElevation);
   })
 
-
+  /*
+  FAKE RANDOM ELEVATION
+  let lastp = 500
+  geo.geometry.coordinates.forEach(loc => {
+    //.geometry
+    loc[2]= lastp + _.random(-10, 20);
+    lastp = loc[2]
+    console.log(loc)
+  })*/
 });
 
 

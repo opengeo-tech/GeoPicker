@@ -1,7 +1,8 @@
 
 const fs = require('fs');
 const gdal = require('gdal-next');
-const {coordEach} = require('@turf/meta');
+const {coordEach, featureReduce} = require('@turf/meta');
+const lineChunk = require('@turf/line-chunk');
 
 function setElevation(geojson, fileRaster, opts = {}) {
 
@@ -27,6 +28,33 @@ function setElevation(geojson, fileRaster, opts = {}) {
 	return geojson;
 }
 
+function denisify(geojson) {
+	//https://turfjs.org/docs/#lineChunk
+	const lineChunks = lineChunk(geojson, 30, {units:'meters'})
+
+	let coordinates = [];
+
+/*	return featureReduce(lineChunks, (previousValue, currentFeature) => {
+	  //=previousValue
+	  //=currentFeature
+	  //=featureIndex
+	  return coordinates.concat(currentFeature.geometry.coordinates)
+	});*/
+	lineChunks.features.forEach(f => {
+		f.geometry.coordinates.pop()
+		coordinates = coordinates.concat(f.geometry.coordinates)
+	})
+
+	return {
+		type:'Feature',
+		properties: {},
+		geometry: {
+			type: 'LineString',
+			coordinates
+		}
+	}
+}
+
 
 if (require.main === module) {
 	const { Console } = require("console");
@@ -47,6 +75,7 @@ if (require.main === module) {
 else {
   module.exports = {
   	gdal,
+  	denisify,
     setElevation
   };
 }
