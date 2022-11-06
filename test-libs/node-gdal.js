@@ -3,19 +3,21 @@ const fs = require('fs');
 const gdal = require('gdal-next');
 const {coordEach} = require('@turf/meta');
 
-function setElevation(geojson, fileRaster, band = 1, epsg = 4326) {
+function setElevation(geojson, fileRaster, opts = {}) {
+
+	const {band = 1, epsg = 4326} = opts;
 
 	const rasterdata = gdal.open(fileRaster)
-		, Band = rasterdata.bands.get(band)
-		, transform = new gdal.CoordinateTransformation(gdal.SpatialReference.fromEPSG(epsg), rasterdata);
+		, rasterband = rasterdata.bands.get(band)
+		, crs = gdal.SpatialReference.fromEPSG(epsg)
+		, transform = new gdal.CoordinateTransformation(crs, rasterdata);
 
 	coordEach(geojson, async loc => { //FeatureCollection | Feature | Geometry
 
 		const {x, y} = transform.transformPoint(loc[0], loc[1]);
 
 		try {
-
-			loc[2] = Band.pixels.get(x, y);
+			loc.push(rasterband.pixels.get(x, y));
 		}
 		catch(err) {
 			console.log(err)

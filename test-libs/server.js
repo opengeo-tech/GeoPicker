@@ -9,7 +9,7 @@ const port = 3000;
 const fileRaster = process.argv[2] || '../data/trentino-altoadige_30m.tif'
 
 const app = fastify({
-  logger: true
+	logger: true
 })
 
 app.register(cors);
