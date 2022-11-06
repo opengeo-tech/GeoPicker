@@ -1,8 +1,10 @@
 
 const fs = require('fs');
 const gdal = require('gdal-next');
-const {coordEach, featureReduce} = require('@turf/meta');
+/*const {coordEach, featureReduce} = require('@turf/meta');
 const lineChunk = require('@turf/line-chunk');
+*/
+const turf = require('@turf/turf');
 
 function setElevation(geojson, fileRaster, opts = {}) {
 
@@ -13,7 +15,7 @@ function setElevation(geojson, fileRaster, opts = {}) {
 		, crs = gdal.SpatialReference.fromEPSG(epsg)
 		, transform = new gdal.CoordinateTransformation(crs, rasterdata);
 
-	coordEach(geojson, async loc => { //FeatureCollection | Feature | Geometry
+	turf.coordEach(geojson, async loc => { //FeatureCollection | Feature | Geometry
 
 		const {x, y} = transform.transformPoint(loc[0], loc[1]);
 
@@ -30,7 +32,7 @@ function setElevation(geojson, fileRaster, opts = {}) {
 
 function denisify(geojson) {
 	//https://turfjs.org/docs/#lineChunk
-	const lineChunks = lineChunk(geojson, 30, {units:'meters'})
+	const lineChunks = turf.lineChunk(geojson, 30, {units:'meters'})
 
 	let coordinates = [];
 
