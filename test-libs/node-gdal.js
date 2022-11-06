@@ -1,39 +1,50 @@
-const gdal = require("gdal");
 
 const fs = require('fs');
+const gdal = require('gdal-next');
+const {coordEach} = require('@turf/meta');
 
-const file = process.argv[2] || './data/trentino-altoadige_90m.tif';
+function setElevation(geojson, fileRaster, band = 1, epsg = 4326) {
 
-const point = {
-	"type": "Point",
-	"coordinates": [
-	  11.0,
-	  46.0
-	]
+	const rasterdata = gdal.open(fileRaster)
+		, Band = rasterdata.bands.get(band)
+		, transform = new gdal.CoordinateTransformation(gdal.SpatialReference.fromEPSG(epsg), rasterdata);
+
+	coordEach(geojson, async loc => { //FeatureCollection | Feature | Geometry
+
+		const {x, y} = transform.transformPoint(loc[0], loc[1]);
+
+		try {
+
+			loc[2] = Band.pixels.get(x, y);
+		}
+		catch(err) {
+			console.log(err)
+		}
+	});
+
+	return geojson;
 }
 
-const pointPadova= {
-	"type": "Point",
-	"coordinates": [
-		11.703113376110231,
-		45.305530526197494
-	]
+
+if (require.main === module) {
+	const { Console } = require("console");
+	const console = new Console(process.stderr);
+
+	console.time();
+
+	const fileRaster = process.argv[2] || '../data/trentino-altoadige_30m.tif';
+	const fileLine = process.argv[3] || '../data/traccia_calisio_50pt.geojson';
+	const geojson = JSON.parse(fs.readFileSync(fileLine,'utf-8'));
+
+	setElevation(geojson, fileRaster);
+
+	process.stdout.write(JSON.stringify(geojson,null,4));
+
+	console.timeEnd();
 }
-
-var rasterdata = gdal.open(file);
-
-var band = rasterdata.bands.get(1);
-
-var coordinateTransform = new gdal.CoordinateTransformation(gdal.SpatialReference.fromEPSG(4326), rasterdata);
-
-var pt = coordinateTransform.transformPoint(pointPadova.coordinates[0], pointPadova.coordinates[1]);
-
-let pixelVal;
-try {
-	pixelVal = band.pixels.get(pt.x, pt.y)
+else {
+  module.exports = {
+  	gdal,
+    setElevation
+  };
 }
-catch(err) {
-	console.log(err)
-}
-
-console.log(pixelVal);

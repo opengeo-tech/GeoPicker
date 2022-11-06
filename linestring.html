@@ -83,6 +83,8 @@ function debounce(func, wait, immediate) {
 var data1,data2,data3;
 function pickData(loc) {
 
+  return
+
     data1 && data1.abort();
     data2 && data2.abort();
     data3 && data3.abort();
@@ -151,11 +153,11 @@ markerPick.on('drag', debounce(e => {
 
 },25));
 
-$.getJSON('italy.geojson').done( geo => {
+/*$.getJSON('italy.geojson').done( geo => {
 	L.geoJSON(geo, {
 		style: ({fill:false,color:'red'})
 	}).addTo(map)
-})
+})*/
 
 var controlElevation = new L.Control.Elevation({
   width: 600,
@@ -165,6 +167,8 @@ var controlElevation = new L.Control.Elevation({
 });
 map.addControl(controlElevation);
 
+
+// https://github.com/MrMufflon/Leaflet.Elevation
 var layerElevation = L.geoJson([], {
     onEachFeature: controlElevation.addData.bind(controlElevation)
 }).addTo(map);
@@ -208,23 +212,50 @@ map
 	markerPick.addTo(map)
 })
 .on('draw:created', e => {
-
-	let geoLine = e.layer.toGeoJSON();
-
-  console.log(JSON.stringify(geoLine))
-
   editableLayers.addLayer(e.layer);
   /*
   FAKE RANDOM ELEVATION
   let lastp = 500
-  geoLine.geometry.coordinates.forEach(loc => {
+  geo.geometry.coordinates.forEach(loc => {
     //.geometry
     loc[2]= lastp + _.random(-10, 20);
     lastp = loc[2]
     console.log(loc)
   })*/
+})
+.on('draw:drawvertex', e => {
 
-  layerElevation.addData(geoLine);
+//	let geo = e.layer.toGeoJSON();
+  let geo = e.layers.toGeoJSON();
+
+  let coordinates = geo.features.map(f => {
+    return f.geometry.coordinates
+  });
+
+  let geoline = {
+    type: 'Feature',
+    properties: {},
+    geometry: {
+      type: 'LineString',
+      coordinates
+    }
+  }
+
+  $.ajax({
+    url: 'http://localhost:3000/elevation',
+    type: 'POST',
+    dataType: 'json',
+    contentType: 'application/json; charset=utf-8',
+    data: JSON.stringify(geoline),
+  }).done(geoRes => {
+
+    console.log(geoRes)
+
+    controlElevation.clear()
+    layerElevation.addData(geoRes);
+  })
+
+
 });
 
 
