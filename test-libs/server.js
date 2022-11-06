@@ -7,7 +7,7 @@ const {setElevation, denisify} = require('./node-gdal');
 
 const port = 3000;
 
-const fileRaster = process.argv[2] || '../data/trentino-altoadige_30m.tif'
+const fileRaster = process.argv[2] || '../data/trentino-altoadige_10m.tif'
 
 const app = fastify({
 	logger: {

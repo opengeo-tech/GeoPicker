@@ -83,8 +83,6 @@ function debounce(func, wait, immediate) {
 var data1,data2,data3;
 function pickData(loc) {
 
-  return
-
     data1 && data1.abort();
     data2 && data2.abort();
     data3 && data3.abort();
@@ -140,10 +138,11 @@ var map = L.map('map', {
 	layers: [
         markerPick, baselayer
     ]
-}).on('click', e => {
+})
+/*.on('click', e => {
 	markerPick.setLatLng(e.latlng);
 	pickData(e.latlng);
-});
+});*/
 
 markerPick.bindPopup('Drag it to pick data!').openPopup();
 
@@ -160,8 +159,8 @@ markerPick.on('drag', debounce(e => {
 })*/
 
 var controlElevation = new L.Control.Elevation({
-  width: 600,
-  height: 200,
+  width: 800,
+  height: 400,
   position: 'bottomright',
   //collapsed: true
 });
@@ -170,6 +169,10 @@ map.addControl(controlElevation);
 
 // https://github.com/MrMufflon/Leaflet.Elevation
 var layerElevation = L.geoJson([], {
+    style: () => ({
+      color: '#f357a1',
+      weight: 10
+    }),
     onEachFeature: controlElevation.addData.bind(controlElevation)
 }).addTo(map);
 
@@ -193,6 +196,7 @@ var drawOpts = {
   },
   edit: {
     featureGroup: editableLayers,
+    edit: true,
     remove: true
   }
 };
