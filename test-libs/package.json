@@ -4,9 +4,9 @@
   "description": "Digital Elevation Model data picker, with http interface",
   "repository": {
     "type": "git",
-    "url": "git@github.com:opengeo-tech/geotiff-picker.git"
+    "url": "git@github.com:stefanocudini/python-geotiff-picker.git"
   },
-  "homepage": "https://opengeo.tech/maps/geotiff-picker/",
+  "homepage": "https://opengeo.tech/python-geotiff-picker/",
   "author": {
     "name": "Stefano Cudini",
     "email": "stefano.cudini@gmail.com",
@@ -15,16 +15,18 @@
   "license": "MIT",
   "keywords": [
     "gis",
-    "geotiff",
     "maps",
     "python",
     "bash",
     "api"
   ],
-  "devDependencies": {
-    "grunt": "^1.5.3",
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-clean": "^0.5.0",
-    "grunt-markdown": "^0.6.1"
+  "dependencies": {
+    "@fastify/cors": "^8.1.1",
+    "@turf/meta": "^6.5.0",
+    "fastify": "^4.9.2",
+    "gdal": "^0.11.1",
+    "gdal-next": "^2.8.0",
+    "geoblaze": "^1.1.0",
+    "togpx": "^0.5.4"
   }
 }
