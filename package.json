@@ -4,9 +4,9 @@
   "description": "Digital Elevation Model data picker, with http interface",
   "repository": {
     "type": "git",
-    "url": "git@github.com:stefanocudini/python-geotiff-picker.git"
+    "url": "git@github.com:opengeo-tech/geotiff-picker.git"
   },
-  "homepage": "https://opengeo.tech/python-geotiff-picker/",
+  "homepage": "https://opengeo.tech/maps/geotiff-picker/",
   "author": {
     "name": "Stefano Cudini",
     "email": "stefano.cudini@gmail.com",
