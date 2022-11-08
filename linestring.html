@@ -89,12 +89,11 @@ body {
 <script src="//unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
 <script src="//unpkg.com/d3@3.5.17/d3.min.js"></script>
 <script src="//unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.min.js"></script>
-<script src="//unpkg.com/leaflet-pather@0.1.17/dist/pather.js"></script>
 <script>
 
-var cen = [46.0651,11.1528]
+var center = [46.0651,11.1528]
   , bbox = [4.493408203125001,43.092960677116295,16.896972656250004,48.94415123418794]
-  , zom = 13;
+  , zoom = 13;
 
 var baselayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
 	subdomains: 'abcd',
@@ -104,11 +103,9 @@ var baselayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{
 });
 
 var map = L.map('map', {
-	center: cen,
-	zoom: zom,
-	layers: [
-       baselayer
-    ]
+	center,
+	zoom,
+	layers: [baselayer]
 });
 
 // https://github.com/MrMufflon/Leaflet.Elevation
@@ -127,42 +124,10 @@ var layerElevation = L.geoJson([], {
     onEachFeature: controlElevation.addData.bind(controlElevation)
 }).addTo(map);
 
-const editLayers = L.layerGroup([]).addTo(map)
-
 var editableLayers = L.featureGroup().addTo(map);
 
-var pather = L.pather({
-    strokeWidth: 1,
-    smoothFactor: 5,
-    mode: L.Pather.MODE.CREATE | L.Pather.MODE.EDIT,
-    pathColour: 'red'
-})
-.on('created', e => {
-
-  const georeq = e.polyline.polyline.toGeoJSON()
-  console.log(georeq)
-
-  $.ajax({
-    url: 'http://localhost:3000/elevation',
-    type: 'POST',
-    dataType: 'json',
-    contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify(georeq),
-  }).done(geores => {
-
-    console.log('RES',geores)
-
-    controlElevation.clear();
-
-    layerElevation.addData(geores);
-
-    editLayers.addLayer(layerElevation);
-  })
-
-})
-.addTo(editLayers)
 //editLayers
-/*new L.Control.Draw({
+new L.Control.Draw({
   position: 'topleft',
   draw: {
     polyline: {
@@ -182,7 +147,7 @@ var pather = L.pather({
     edit: false,
     remove: false
   }
-}).addTo(map);*/
+}).addTo(map);
 
 map
 .on('draw:created', e => {
@@ -222,16 +187,6 @@ map
 
     editableLayers.addLayer(layerElevation);
   })
-
-  /*
-  FAKE RANDOM ELEVATION
-  let lastp = 500
-  geo.geometry.coordinates.forEach(loc => {
-    //.geometry
-    loc[2]= lastp + _.random(-10, 20);
-    lastp = loc[2]
-    console.log(loc)
-  })*/
 });
 
 
