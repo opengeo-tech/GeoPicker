@@ -5,7 +5,7 @@ const cors = require('@fastify/cors');
 const pino = require('pino');
 
 
-const {setElevation, denisify} = require('./node-gdal');
+const {setElevation, getElevation, denisify} = require('./node-gdal');
 
 const port = 3000;
 
@@ -26,6 +26,10 @@ app.post('/elevation', async req => {
   //return setElevation(req.body);
   //
   return setElevation(denisify(req.body), fileRaster);
+});
+
+app.get('/:raster/:band/pixel', async req => {
+	const point = setElevation(req.params, fileRaster)
 });
 
 app.get('/', async (req,res) => {
