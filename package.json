@@ -13,6 +13,9 @@
     "url": "https://opengeo.tech/"
   },
   "license": "MIT",
+  "bin": {
+    "geotiff-picker": "./bin/geotiff-picker"
+  },
   "keywords": [
     "gis",
     "geotiff",

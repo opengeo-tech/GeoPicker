@@ -6,9 +6,40 @@ const lineChunk = require('@turf/line-chunk');
 */
 const turf = require('@turf/turf');
 
+function densify(geojson, opts) {
+	//https://turfjs.org/docs/#lineChunk
+	const lineChunks = turf.lineChunk(geojson, 30, {units:'meters'})
+
+	let coordinates = [];
+
+/*	return featureReduce(lineChunks, (previousValue, currentFeature) => {
+	  //=previousValue
+	  //=currentFeature
+	  //=featureIndex
+	  return coordinates.concat(currentFeature.geometry.coordinates)
+	});*/
+	lineChunks.features.forEach(f => {
+		f.geometry.coordinates.pop()
+		coordinates = coordinates.concat(f.geometry.coordinates)
+	})
+
+	return {
+		type:'Feature',
+		properties: {},
+		geometry: {
+			type: 'LineString',
+			coordinates
+		}
+	}
+}
+
 function setElevation(geojson, fileRaster, opts = {}) {
 
-	const {band = 1, epsg = 4326} = opts;
+	const {band = 1, epsg = 4326, densify = false} = opts;
+
+	if (densify !== false) {
+		geojson = densify(geojson, densify);
+	}
 
 	const rasterdata = gdal.open(fileRaster)
 		, rasterband = rasterdata.bands.get(band)
@@ -65,35 +96,9 @@ function getElevation(locs, fileRaster, opts = {}) {
 	}
 }
 
-function denisify(geojson) {
-	//https://turfjs.org/docs/#lineChunk
-	const lineChunks = turf.lineChunk(geojson, 30, {units:'meters'})
-
-	let coordinates = [];
-
-/*	return featureReduce(lineChunks, (previousValue, currentFeature) => {
-	  //=previousValue
-	  //=currentFeature
-	  //=featureIndex
-	  return coordinates.concat(currentFeature.geometry.coordinates)
-	});*/
-	lineChunks.features.forEach(f => {
-		f.geometry.coordinates.pop()
-		coordinates = coordinates.concat(f.geometry.coordinates)
-	})
-
-	return {
-		type:'Feature',
-		properties: {},
-		geometry: {
-			type: 'LineString',
-			coordinates
-		}
-	}
-}
-
 module.exports = {
 	gdal,
-	denisify,
-  setElevation
+	densify,
+  setElevation,
+  getElevation
 };
