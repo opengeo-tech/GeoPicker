@@ -1,25 +1,6 @@
 {
-  "name": "geotiff-picker",
-  "version": "0.0.3",
-  "description": "Digital Elevation Model data picker, with http interface",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:stefanocudini/python-geotiff-picker.git"
-  },
-  "homepage": "https://opengeo.tech/python-geotiff-picker/",
-  "author": {
-    "name": "Stefano Cudini",
-    "email": "stefano.cudini@gmail.com",
-    "url": "https://opengeo.tech/"
-  },
-  "license": "MIT",
-  "keywords": [
-    "gis",
-    "maps",
-    "python",
-    "bash",
-    "api"
-  ],
+  "name": "geotiff-picker-tests",
+  "version": "1.0.0",
   "dependencies": {
     "gdal": "^0.11.1",
     "gdal-next": "^2.8.0",

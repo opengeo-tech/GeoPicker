@@ -1,12 +1,12 @@
 {
   "name": "geotiff-picker",
-  "version": "0.0.3",
-  "description": "Digital Elevation Model data picker, with http interface",
+  "version": "1.0.0",
+  "description": "Geotiff data picker, with http rest interface",
   "repository": {
     "type": "git",
-    "url": "git@github.com:stefanocudini/python-geotiff-picker.git"
+    "url": "git@github.com:opengeo-tech/geotiff-picker.git"
   },
-  "homepage": "https://opengeo.tech/python-geotiff-picker/",
+  "homepage": "https://opengeo.tech/maps/geotiff-picker/",
   "author": {
     "name": "Stefano Cudini",
     "email": "stefano.cudini@gmail.com",
@@ -17,17 +17,14 @@
     "geotiff-picker": "./bin/geotiff-picker"
   },
   "keywords": [
-    "gis",
     "geotiff",
+    "rest",
     "maps",
-    "python",
-    "bash",
-    "api"
+    "gdal",
+    "api",
+    "gis"
   ],
-  "devDependencies": {
-    "grunt": "^1.5.3",
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-clean": "^0.5.0",
-    "grunt-markdown": "^0.6.1"
+  "dependencies": {
+    "gdal-next": "^2.8.0"
   }
 }
