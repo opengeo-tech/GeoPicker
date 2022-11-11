@@ -5,7 +5,7 @@ const cors = require('@fastify/cors');
 const pino = require('pino');
 
 
-const {setElevation, getElevation, densify} = require('./node-gdal');
+const {setElevation, getElevation, densify} = require('../lib');
 
 const port = 3000;
 
@@ -14,10 +14,10 @@ const fileRaster = process.argv[2] || '../data/trentino-altoadige_90m.tif'
 const app = fastify({
 	logger: {
 		transport: {
-	    	target: 'pino-pretty'
-	  	}
+			target: 'pino-pretty'
+		}
 	}
-})
+});
 
 app.register(cors);
 

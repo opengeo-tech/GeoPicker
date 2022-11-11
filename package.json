@@ -13,9 +13,17 @@
     "url": "https://opengeo.tech/"
   },
   "license": "MIT",
+  "main": "./lib/index.js",
   "bin": {
     "geotiff-picker": "./bin/geotiff-picker"
   },
+  "scripts": {
+    "preinstall": "cd server && npm install",
+    "start": "nodemon -w server -w lib server/index.js"
+  },
+  "files": [
+    "lib/"
+  ],
   "keywords": [
     "geotiff",
     "rest",
@@ -25,6 +33,10 @@
     "gis"
   ],
   "dependencies": {
+    "@turf/turf": "^6.5.0",
     "gdal-next": "^2.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }
