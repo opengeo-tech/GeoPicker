@@ -7,7 +7,7 @@ with API Restful/CLI interface
 
 # Demo
 
-* [Demo](https://opengeo.tech/maps/geotiff-picker/demo.html)
+* [Demo](https://opengeo.tech/maps/geotiff-picker/)
 
 # Python Requirements
 
