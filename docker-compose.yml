@@ -6,9 +6,9 @@ networks:
 
 services:
 
-  geotiff-picker:
-    container_name: geotiff-picker
-    image:   geotiff-picker:latest
+  geotiff:
+    container_name: geotiff
+    image:   geotiff:latest
     build:
       context: ./
     ports:

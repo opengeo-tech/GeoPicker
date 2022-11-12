@@ -1,13 +1,26 @@
-FROM node:18.12-alpine
+FROM node:18.12-alpine as node
+
+FROM osgeo/gdal:alpine-small-latest
+#https://github.com/OSGeo/gdal/blob/master/docker/alpine-small/Dockerfile
+
+
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/bin/npm /usr/local/bin/npm
+COPY --from=node /usr/local/bin/npx /usr/local/bin/npx
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --from=node /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
+
+
+ENV NODE_PATH=/usr/local/lib/node_modules
+RUN ls /usr/local/lib/node_modules
 
 WORKDIR /home
 
+
 COPY ./ ./
+#RUN npm version
+# RUN cd server && npm install
 
-RUN apk add --no-cache --virtual .gyp build-base cmake python3 make g++ gdal gdal-dev
-#RUN apk add gdal-dev --virtual .gyp python
-RUN npm install gdal-next --build-from-source --shared_gdal
-#--build-from-source
 RUN npm install
-
-CMD ["node", "server/index.js"]
+CMD ["sh"]
+#CMD ["node", "server/index.js"]
