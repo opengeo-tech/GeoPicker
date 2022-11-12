@@ -15,11 +15,10 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "bin": {
-    "geotiff-picker": "./bin/geotiff-picker",
+    "geotiff-picker": "./bin/geotiff-picker-cli.js",
     "geotiff-picker-server": "./bin/geotiff-picker-server.sh"
   },
   "scripts": {
-    "__postinstall": "cd server && npm install",
     "start": "NODE_ENV=dev nodemon -w server -w lib server/index.js"
   },
   "files": [

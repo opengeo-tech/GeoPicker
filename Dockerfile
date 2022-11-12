@@ -22,8 +22,9 @@ WORKDIR /home
 COPY ./ ./
 
 #RUN npm install gdal-next --shared_gdal
-RUN npm install gdal-next
+#RUN npm install gdal-next
 RUN npm install
+RUN cd server && npm install
 
 EXPOSE 8080
 
