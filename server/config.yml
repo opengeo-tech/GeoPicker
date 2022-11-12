@@ -37,3 +37,6 @@ linestring:
 densify:
   length: 90
   units: 'meters'
+
+errors:
+  densify_nobody: "send a post with geojson in body"

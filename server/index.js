@@ -30,15 +30,15 @@ fastify.register(cors, instance => {
 
 //ENDPOINTS
 
+fastify.get('/densify', (req,res) => {
+	return res.code(400).send({status: config.errors.densify_nobody})
+});
+
 fastify.post('/densify', async req => {
 
   const densify = !!req.params.densify || config.densify;
-
+console.log(req.body)
   return densify(req.body, densify);
-});
-
-fastify.post('/pixel', async req => {
-
 });
 
 fastify.post('/:raster/:band/pixel', async req => {
@@ -63,9 +63,9 @@ fastify.get('/', async (req,res) => {
 	const status = 'OK';
 
 	res.send({
+		status,
 		name,
 		version,
-		status,
 		gdal: gdal.version
 	})
 });

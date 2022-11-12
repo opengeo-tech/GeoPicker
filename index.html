@@ -91,7 +91,9 @@ body {
 <script src="//unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.min.js"></script>
 <script>
 
-var center = [46.0651,11.1528]
+const baseUrl = location.origin;
+
+const center = [46.0651,11.1528]
   , bbox = [4.493408203125001,43.092960677116295,16.896972656250004,48.94415123418794]
   , zoom = 13;
 
@@ -172,7 +174,7 @@ map
   console.log('REQ',georeq.geometry)
 
   $.ajax({
-    url: 'http://localhost:3000/elevation',
+    url: `${baseUrl}/densify`,
     type: 'POST',
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
