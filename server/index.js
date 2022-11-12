@@ -1,8 +1,9 @@
 
-const fs = require('fs');
-const fastify = require('fastify');
-const cors = require('@fastify/cors');
-const pino = require('pino');
+const fs = require('fs')
+		, path = require('path')
+		, fastify = require('fastify')
+		, cors = require('@fastify/cors')
+		, pino = require('pino');
 
 
 const {setElevation, getElevation, densify} = require('../lib');
@@ -10,6 +11,8 @@ const {setElevation, getElevation, densify} = require('../lib');
 const port = 3000;
 
 const fileRaster = process.argv[2] || '../data/trentino-altoadige_90m.tif'
+
+const pagepath = path.resolve(__dirname,'../index.html');
 
 const app = fastify({
 	logger: {
@@ -31,7 +34,7 @@ app.get('/:raster/:band/pixel', async req => {
 });
 
 app.get('/', async (req,res) => {
-	const stream = fs.createReadStream('../linestring.html');
+	const stream = fs.createReadStream(pagepath);
 	return res.type('text/html').send(stream);
 });
 

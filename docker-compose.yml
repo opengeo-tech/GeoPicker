@@ -1,0 +1,18 @@
+version: '3'
+
+networks:
+  default:
+    driver: bridge
+
+services:
+
+  geotiff-picker:
+    container_name: geotiff-picker
+    image:   geotiff-picker:latest
+    build:
+      context: ./
+    ports:
+      - "8080:3000"
+    # environment:
+    #   - LOG_REQUEST=true
+    #   - MAX_PARALLEL_REQUESTS=10
