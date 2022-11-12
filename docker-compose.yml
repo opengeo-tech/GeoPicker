@@ -8,11 +8,13 @@ services:
 
   geotiff:
     container_name: geotiff
-    image:   geotiff:latest
+    image: geotiff:latest
     build:
       context: ./
     ports:
-      - "8080:3000"
+      - "8080:8080"
+    volumes:
+      - "./data:/data"
     # environment:
     #   - LOG_REQUEST=true
     #   - MAX_PARALLEL_REQUESTS=10

@@ -70,10 +70,10 @@ fastify.get('/', async (req,res) => {
 	})
 });
 
-fastify.listen({port: config.port}, err => {
+fastify.listen(config.port, err => {
 	if (err) {
 		fastify.log.error(err);
 		process.exit(1)
 	}
-	console.log(`Starting GeotiffPicker... ${version}\nConfig:\n`, JSON.stringify(config,null,4));
+	console.log(`GeotiffPicker ${version} \nConfig:\n`, JSON.stringify(config,null,4));
 });
