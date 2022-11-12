@@ -1,0 +1,39 @@
+environments:
+  default: prod
+#   #default environment if NODE_ENV is not defined
+
+prod:
+  port: 8080
+dev:
+  port: 9090
+
+cors:
+  origin: '*'
+  optionsSuccessStatus: 200
+  #some legacy browsers (IE11, various SmartTVs) choke on 2
+
+logger:
+  transport:
+    target: 'pino-pretty'
+
+geotiffs:
+  basepath: '../data/'
+  default: 'trentino-altoadige_90m.tif'
+  files:
+    - name: 'dem'
+      path: 'trentino-altoadige_90m.tif'
+
+pixel:
+  max_locations: 10000
+  #maximum number of locations picked in a single request
+  prec_digits: 5
+  #number of digits precision returned in geojson coordinates
+
+linestring:
+  max_locations: 10000
+  prec_digits: 5
+  #number of digits precision returned in geojson coordinates
+
+densify:
+  length: 90
+  units: 'meters'

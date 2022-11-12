@@ -20,16 +20,9 @@ RUN ln -s ../lib/node_modules/npm/bin/npx-cli.js npx
 
 WORKDIR /home
 
-RUN npm install express
-RUN echo "const e = require('express')();e.get('/',(req,res)=>{res.send({ciao:'mondo'})}).listen(3000)" > index.js
+COPY ./ ./
 
-CMD ["node","index.js"]
-
-#COPY ./ ./
-#RUN npm version
-# RUN cd server && npm install
-
-#RUN npm install
+RUN npm install
 
 #CMD ["sh"]
-#CMD ["node", "server/index.js"]
+CMD ["node", "server/index.js"]

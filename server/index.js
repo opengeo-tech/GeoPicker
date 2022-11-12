@@ -1,41 +1,79 @@
 
 const fs = require('fs')
 		, path = require('path')
-		, fastify = require('fastify')
+		, fastifyjs = require('fastify')
+    	//, dotenv = require('dotenv').config()
+    	, configyml = require('@stefcud/configyml')
 		, cors = require('@fastify/cors')
 		, pino = require('pino');
 
+const {setElevation, getElevation, densify, gdal} = require('../lib');
 
-const {setElevation, getElevation, densify} = require('../lib');
+const basepath = process.cwd()
+    , {name, version} = require(`${basepath}/package.json`);
 
-const port = 3000;
+const config = configyml({basepath: __dirname});
 
 const fileRaster = process.argv[2] || '../data/trentino-altoadige_90m.tif'
 
-const pagepath = path.resolve(__dirname,'../index.html');
+const pagemap = path.resolve(__dirname,'../index.html');
 
-const app = fastify({
-	logger: {
-		transport: {
-			target: 'pino-pretty'
-		}
-	}
+const fastify = fastifyjs({
+	logger: config.logger
 });
 
-app.register(cors);
-
-app.post('/elevation', async req => {
-
-  return setElevation(req.body, fileRaster, {densify: req.params.densify});
+fastify.register(cors, instance => {
+    return (req, cb) => {
+        cb(null, config.cors);
+    }
 });
 
-app.get('/:raster/:band/pixel', async req => {
-	const point = setElevation(req.params, fileRaster)
+//ENDPOINTS
+
+fastify.post('/densify', async req => {
+
+  const densify = !!req.params.densify || config.densify;
+
+  return densify(req.body, densify);
 });
 
-app.get('/', async (req,res) => {
-	const stream = fs.createReadStream(pagepath);
+fastify.post('/pixel', async req => {
+
+});
+
+fastify.post('/:raster/:band/pixel', async req => {
+
+  const densify = !!req.params.densify || config.densify;
+
+  return setElevation(req.body, fileRaster, {densify});
+});
+
+fastify.get('/:raster/:band/pixel', async req => {
+	const point = getElevation(req.params, fileRaster)
+});
+
+fastify.get('/map.html', async (req,res) => {
+	const stream = fs.createReadStream(pagemap);
 	return res.type('text/html').send(stream);
 });
 
-app.listen({port});
+fastify.get('/', async (req,res) => {
+
+	//TODO check geotiffs paths
+	const status = 'OK';
+
+	res.send({
+		name,
+		version,
+		status,
+		gdal: gdal.version
+	})
+});
+
+fastify.listen({port: config.port}, err => {
+	if (err) {
+		fastify.log.error(err);
+		process.exit(1)
+	}
+	console.log(`Starting GeotiffPicker... ${version}\nConfig:\n`, JSON.stringify(config,null,4));
+});

@@ -2,6 +2,8 @@
   "name": "geotiff-picker-server",
   "version": "1.0.0",
   "dependencies": {
+    "@stefcud/configyml": "^1.0.1",
+    "dotenv": "^16.0.3",
     "@fastify/cors": "^8.1.1",
     "fastify": "^4.9.2",
     "pino": "^8.7.0",
