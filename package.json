@@ -19,18 +19,22 @@
     "geotiff-picker-server": "./bin/geotiff-picker-server.sh"
   },
   "scripts": {
-    "preinstall": "cd server && npm install",
+    "__postinstall": "cd server && npm install",
     "start": "NODE_ENV=dev nodemon -w server -w lib server/index.js"
   },
   "files": [
     "lib/"
   ],
+  "engines": {
+    "node": ">= 16"
+  },
   "keywords": [
     "geotiff",
-    "rest",
+    "geojson",
+    "raster",
     "maps",
     "gdal",
-    "api",
+    "ogr",
     "gis"
   ],
   "dependencies": {
