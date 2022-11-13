@@ -26,6 +26,4 @@ COPY ./ ./
 RUN npm install
 RUN cd server && npm install
 
-EXPOSE 8080
-
 CMD ["node", "server/index.js"]

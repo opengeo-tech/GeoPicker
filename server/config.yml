@@ -6,6 +6,7 @@ prod:
   port: 8080
 dev:
   port: 9090
+  datapath: 'tests/data/'
 
 cors:
   origin: '*'
@@ -16,12 +17,20 @@ logger:
   transport:
     target: 'pino-pretty'
 
-geotiffs:
-  basepath: '../data/'
-  default: 'trentino-altoadige_90m.tif'
-  files:
-    - name: 'dem'
-      path: 'trentino-altoadige_90m.tif'
+datapath: '/data/'
+rasters:
+  default:
+    path: trentino-altoadige_dem_90m.tif
+    #epsg: 4326
+    #band: 1
+  elevation:
+    path: trentino-altoadige_dem_90m.tif
+  dem:
+    path: trentino-altoadige_dem_90m.tif
+  # aspect:
+  #   path: trentino-altoadige_aspect_90m.tif
+  # slope:
+  #   path: trentino-altoadige_slope_90m.tif
 
 pixel:
   max_locations: 10000
@@ -39,4 +48,5 @@ densify:
   units: 'meters'
 
 errors:
+  nodatadir: "data directory not exists"
   densify_nobody: "send a post with geojson in body"
