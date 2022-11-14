@@ -1,5 +1,5 @@
 tiffs
 *.pyc
 node_modules
-data
+tests/data
 
