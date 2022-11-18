@@ -10,7 +10,8 @@ services:
     container_name: geotiff
     image: geotiff:latest
     build:
-      context: ./
+      context: ../
+      dockerfile: ./server/Dockerfile
     ports:
       - "8080:8080"
     volumes:

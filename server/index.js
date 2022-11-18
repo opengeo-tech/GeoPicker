@@ -1,16 +1,15 @@
 
 const fs = require('fs')
 		, path = require('path')
-		, fastifyjs = require('fastify')
+		, Fastify = require('fastify')
+		, cors = require('@fastify/cors')
     	//, dotenv = require('dotenv').config()
     , configyml = require('@stefcud/configyml')
-		, cors = require('@fastify/cors')
 		, pino = require('pino');
 
-const {setElevation, getElevation, densify, gdal} = require(path.resolve(__dirname,'../lib'));
+const {setElevation, getElevation, densify, gdal} = require('geotiff-picker');
 
-const basepath = process.cwd()
-    , {name, version} = require(`${basepath}/package.json`);
+const {name, version} = require(`${__dirname}/package.json`);
 
 const config = configyml({basepath: __dirname});
 
@@ -28,7 +27,7 @@ if (!fs.existsSync(config.datapath)) {
   console.warn(status)
 }
 
-const fastify = fastifyjs({
+const fastify = Fastify({
 	logger: config.logger
 });
 
@@ -87,7 +86,7 @@ fastify.get('/', async (req,res) => {
 	})
 });
 
-fastify.listen(config.port, err => {
+fastify.listen({port: config.port, host: '0.0.0.0'}, err => {
 	if (err) {
 		fastify.log.error(err);
 		process.exit(1)
