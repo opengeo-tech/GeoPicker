@@ -4,9 +4,11 @@ environments:
 
 prod:
   port: 8080
+  host: 0.0.0.0
 dev:
   port: 9090
-  datapath: 'tests/data/'
+  host: 127.0.0.1
+  datapath: tests/data/
 
 cors:
   origin: '*'

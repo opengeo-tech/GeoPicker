@@ -2,11 +2,11 @@
   "name": "geotiff-picker-server",
   "version": "1.0.0",
   "dependencies": {
+    "@fastify/autoload": "^5.5.0",
+    "@fastify/cors": "^8.1.1",
     "@stefcud/configyml": "^1.0.1",
     "dotenv": "^16.0.3",
-    "@fastify/cors": "^8.1.1",
     "fastify": "^4.9.2",
-    "geotiff-picker": "../",
     "pino": "^8.7.0",
     "pino-pretty": "^9.1.1"
   }
