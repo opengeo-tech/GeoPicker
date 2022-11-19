@@ -21,6 +21,8 @@ WORKDIR /home
 
 COPY ./ ./
 
+#RUN npm install gdal-next@2.8.0 --shared_gdal --loglevel verbose
+
 RUN npm install
 RUN cd server && npm install
 
