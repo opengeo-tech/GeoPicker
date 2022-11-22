@@ -1,26 +1,25 @@
 
 const fs = require('fs')
-		, path = require('path')
-		, Fastify = require('fastify')
-		, cors = require('@fastify/cors')
-		, autoload = require('@fastify/autoload')
-    , dotenv = require('dotenv').config()
-    , configyml = require('@stefcud/configyml')
-		, pino = require('pino');
+	, path = require('path')
+	, Fastify = require('fastify')
+	, cors = require('@fastify/cors')
+	, autoload = require('@fastify/autoload')
+	, dotenv = require('dotenv').config()
+	, configyml = require('@stefcud/configyml')
+	, pino = require('pino')
+	, _ = require('lodash');
 
 const {setElevation, getElevation, densify, gdal} = require('../lib');
 
 const {name, version} = require(`${__dirname}/package.json`);
 
-const {listRoutes} = require('./utils');
-
 const config = configyml({basepath: __dirname})
 		, {port, host, logger} = config;
 
+const {listRoutes, datasets} = require('./utils')(config);
+
 //TODO check geotiffs paths
 var status = 'OK';
-
-const defaultRaster = `${config.datapath}${config.rasters.default.path}`;
 
 //TODO funch mapping raster id by config converto to file paths
 
@@ -33,14 +32,14 @@ const fastify = Fastify({
 	logger
 });
 
-
+//TODO make fasty plugin of
 const routes = [];
 fastify
 .addHook('onRoute', route => {
     routes.push(route)
 })
 .addHook('onReady', async () => {
-		console.log('config:', JSON.stringify(config));
+	console.log('config:', JSON.stringify(config,null,4));
     console.log('routes:', listRoutes(routes));
     console.log(`${name} ${version} listening at http://${host}:${port}`);
 });
@@ -60,7 +59,8 @@ fastify.get('/', async (req,res) => {
 		status,
 		name,
 		version,
-		gdal: gdal.version
+		gdal: gdal.version,
+		datasets
 	}
 });
 

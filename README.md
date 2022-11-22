@@ -1,7 +1,7 @@
 GeoTiff Picker
 ==========
 
-Fiule raster *GeoTiff* data picker
+File raster *GeoTiff* data picker
 
 with API Restful/CLI interface
 
@@ -9,24 +9,24 @@ with API Restful/CLI interface
 
 * [Demo](https://opengeo.tech/maps/geotiff-picker/)
 
-# Python Requirements
+## API endpoints
 
-* http://webpy.org (started by [Aaron Swartz](http://www.aaronsw.com/))
-* http://trac.osgeo.org/gdal/wiki/GdalOgrInPython
+|method/url  | description |
+|---|---|
+| GET / | service status, versions, datasets |
 
-# Setup
+| POST /:dataset/:prop/ | if raster prop is band, for shape prop is field |
+| GET /:dataset/:prop/ | |
 
-```sudo apt-get install python-webpy python-gdal```
+| GET /:lat/:lon | |
+| GET /:locations | |
+| POST /geometry | geojson geometry |
 
-copy GeoTiff files in directory **./tiffs/**
+| GET /densify/locations | |
+| POST /densify/geometry | add more points in linestring |
+| POST /measurements/geometry | return direction and length of geometry |
 
-# Usage
 
-**run web interface:**
-```
-$ ./python-geotiff-picker.py 80
-
-```
 
 **pick data via http:**
 ```
@@ -48,4 +48,4 @@ $ curl "http://localhost/dem/?locs=42.5,12.50|42.6,12.250|42.3,12.43|42.13,12.66
 
 # Source
 
-* [Github](https://github.com/stefanocudini/geotiff-picker)
+* [Github](https://github.com/opengeo-tech/geotiff-picker)

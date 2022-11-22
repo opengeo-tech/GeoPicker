@@ -23,5 +23,6 @@ COPY ./ ./
 
 RUN npm install
 RUN cd server && npm install
+RUN rm -fr node_modules/gdal-next/src
 
 CMD ["node", "server/index.js"]

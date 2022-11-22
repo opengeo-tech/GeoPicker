@@ -16,6 +16,14 @@ services:
       - "8080:8080"
     volumes:
       - "./tests/data:/data"
-    # environment:
-    #   - LOG_REQUEST=true
-    #   - MAX_PARALLEL_REQUESTS=10
+
+  buster:
+    container_name: geotiff-buster
+    image: geotiff-buster-slim:latest
+    build:
+      context: ../
+      dockerfile: ./server/Dockerfile.buster-slim
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./tests/data:/data"

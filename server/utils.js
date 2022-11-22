@@ -1,4 +1,9 @@
 
+const fs = require('fs')
+    , path = require('path')
+    , _ = require('lodash');
+
+
 function getRouteConfig(r) {
   return r.config ?? {}
 }
@@ -26,6 +31,31 @@ function listRoutes(routes) {
   return rows;
 }
 
-module.exports = {
-  listRoutes
+function listDatasets(config) {
+  const dats = {
+    default: config.default_dataset
+  };
+  for (const [key, val] of Object.entries(config.datasets)) {
+
+    const file = path.join(config.datapath, val.path);
+    if (fs.existsSync(file)) {
+      dats[ key ] = {
+        band: 1,
+        pixel: 30,
+        bbox: []
+        //TODO fill use gdal
+      }
+    }
+    else {
+      console.warn(`dataset ${file} not exists`)
+    }
+  }
+  //TODO decore with bands of each raster and fields of each shapes
+
+  return dats;
 }
+
+module.exports = config => ({
+  listRoutes,
+  datasets: listDatasets(config)
+})
