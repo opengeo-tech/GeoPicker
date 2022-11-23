@@ -15,15 +15,17 @@ services:
     ports:
       - "8080:8080"
     volumes:
+      - "./server/config.yml:/server/config.yml"
       - "./tests/data:/data"
 
-  buster:
-    container_name: geotiff-buster
-    image: geotiff-buster-slim:latest
+  geotiff-test:
+    container_name: geotiff-test
+    #image: geotiff:latest
     build:
       context: ../
-      dockerfile: ./server/Dockerfile.buster-slim
+      dockerfile: ./server/Dockerfile.alpine
     ports:
       - "8080:8080"
     volumes:
+      - "./server/config.yml:/server/config.yml"
       - "./tests/data:/data"
