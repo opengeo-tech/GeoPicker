@@ -15,7 +15,17 @@ services:
     ports:
       - "8080:8080"
     volumes:
+      - "./server/config.yml:/server/config.yml"
       - "./tests/data:/data"
-    # environment:
-    #   - LOG_REQUEST=true
-    #   - MAX_PARALLEL_REQUESTS=10
+
+  geotiff-test:
+    container_name: geotiff-test
+    #image: geotiff:latest
+    build:
+      context: ../
+      dockerfile: ./server/Dockerfile.alpine
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./server/config.yml:/server/config.yml"
+      - "./tests/data:/data"

@@ -1,26 +1,27 @@
 
 const fs = require('fs')
-		, path = require('path')
-		, Fastify = require('fastify')
-		, cors = require('@fastify/cors')
-    	//, dotenv = require('dotenv').config()
-    , configyml = require('@stefcud/configyml')
-		, pino = require('pino');
+	, path = require('path')
+	, Fastify = require('fastify')
+	, cors = require('@fastify/cors')
+	, autoload = require('@fastify/autoload')
+	, dotenv = require('dotenv').config()
+	, configyml = require('@stefcud/configyml')
+	, pino = require('pino')
+	, _ = require('lodash');
 
-const {setElevation, getElevation, densify, gdal} = require('geotiff-picker');
+const {setElevation, getElevation, densify, gdal} = require('../lib');
 
 const {name, version} = require(`${__dirname}/package.json`);
 
-const config = configyml({basepath: __dirname});
+const config = configyml({basepath: __dirname})
+		, {port, host, logger} = config;
+
+const {listRoutes, datasets} = require('./utils')(config);
 
 //TODO check geotiffs paths
 var status = 'OK';
 
-const defaultRaster = `${config.datapath}${config.rasters.default.path}`;
-
 //TODO funch mapping raster id by config converto to file paths
-
-const pagemap = path.resolve(__dirname,'../index.html');
 
 if (!fs.existsSync(config.datapath)) {
   status = config.errors.nodatadir;
@@ -28,68 +29,44 @@ if (!fs.existsSync(config.datapath)) {
 }
 
 const fastify = Fastify({
-	logger: config.logger
+	logger
 });
 
-fastify.register(cors, instance => {
+//TODO make fasty plugin of
+const routes = [];
+fastify
+.addHook('onRoute', route => {
+    routes.push(route)
+})
+.addHook('onReady', async () => {
+	console.log('config:', JSON.stringify(config,null,4));
+    console.log('routes:', listRoutes(routes));
+    console.log(`${name} ${version} listening at http://${host}:${port}`);
+});
+
+fastify.register(cors, () => {
     return (req, cb) => {
         cb(null, config.cors);
     }
 });
 
-//ENDPOINTS
-//TODO check paramers types, length
-//
-fastify.get('/densify', (req,res) => {
-	return res.code(400).send({status: config.errors.densify_nobody})
-});
-
-fastify.post('/densify', async req => {
-  const densify = !!req.params.densify || config.densify;
-	console.log(req.body)
-  return densify(req.body, densify);
-});
-
-fastify.post('/:raster/:band/pixel', async req => {
-
-  const densify = !!req.params.densify || config.densify;
-
-  return setElevation(req.body, defaultRaster, {densify});
-});
-
-fastify.get('/:raster/:band/pixel', async req => {
-	const point = getElevation(req.params, defaultRaster)
-});
-
-fastify.get('/pixel/:locs', async req => {
-	const locs = req.params.locs.split(',').map(parseFloat);
-		return getElevation(locs, defaultRaster);
-});
-
-fastify.get('/pixel/:lat/:lon', async req => {
-		const loc = [req.params.lat, req.params.lon].map(parseFloat);
-		fastify.log.info({loc})
-		return getElevation(loc, defaultRaster);
-});
-
-fastify.get('/map.html', async (req,res) => {
-	const stream = fs.createReadStream(pagemap);
-	return res.type('text/html').send(stream);
+fastify.register(autoload, {
+	dir: path.join(__dirname, 'routes')
 });
 
 fastify.get('/', async (req,res) => {
-	res.send({
+	return {
 		status,
 		name,
 		version,
-		gdal: gdal.version
-	})
+		gdal: gdal.version,
+		datasets
+	}
 });
 
-fastify.listen({port: config.port, host: '0.0.0.0'}, err => {
+fastify.listen({port, host}, err => {
 	if (err) {
 		fastify.log.error(err);
 		process.exit(1)
 	}
-	console.log(`GeotiffPicker ${version} \nConfig:\n`, JSON.stringify(config,null,4));
 });

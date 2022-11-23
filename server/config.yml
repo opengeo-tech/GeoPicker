@@ -4,9 +4,11 @@ environments:
 
 prod:
   port: 8080
+  host: 0.0.0.0
 dev:
   port: 9090
-  datapath: 'tests/data/'
+  host: 127.0.0.1
+  datapath: tests/data/
 
 cors:
   origin: '*'
@@ -18,19 +20,21 @@ logger:
     target: 'pino-pretty'
 
 datapath: '/data/'
-rasters:
-  default:
-    path: trentino-altoadige_dem_90m.tif
-    #epsg: 4326
-    #band: 1
-  elevation:
-    path: trentino-altoadige_dem_90m.tif
+default_dataset: dem
+datasets:
   dem:
     path: trentino-altoadige_dem_90m.tif
-  # aspect:
-  #   path: trentino-altoadige_aspect_90m.tif
-  # slope:
-  #   path: trentino-altoadige_slope_90m.tif
+    band: 1
+  elevation:
+    path: trentino-altoadige_dem_90m.tif
+  aspect:
+    path: trentino-altoadige_aspect_90m.tif
+  slope:
+    path: trentino-altoadige_slope_90m.tif
+  #TODO manage shape
+  #  admins:
+  #   path: a-shape-file.shp
+  #   densify_field: admin0
 
 pixel:
   max_locations: 10000
