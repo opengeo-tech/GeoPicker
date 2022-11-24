@@ -19,14 +19,14 @@
     "geotiff-picker-server": "./bin/geotiff-picker-server.sh"
   },
   "scripts": {
-    "dev": "NODE_ENV=dev nodemon server/index.js",
+    "dev": "NODE_ENV=dev nodemon -w lib -w server server/index.js",
     "start": "node server/index.js"
   },
   "files": [
     "lib/"
   ],
   "engines": {
-    "node": ">= 16"
+    "node": ">= 12"
   },
   "keywords": [
     "geotiff",

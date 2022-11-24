@@ -1,18 +1,21 @@
 
 module.exports = async fastify => {
 
-	fastify.post('/:raster/:band/pixel', async req => {
-		const densify = !!req.params.densify || config.densify;
-		return setElevation(req.body, defaultRaster, {densify});
+	const {defaultDataset, gp} = fastify
+		, {setElevation, getElevation} = gp;
+
+
+/*	fastify.post('/:raster/:band/pixel', async req => {
+		return setElevation(req.body, defaultDataset);
 	});
 
 	fastify.get('/:raster/:band/pixel', async req => {
-		const point = getElevation(req.params, defaultRaster)
+		const point = getElevation(req.params, defaultDataset)
 	});
-
+*/
 	fastify.get('/pixel/:lat/:lon', async req => {
 		const loc = [req.params.lat, req.params.lon].map(parseFloat);
 		fastify.log.info({loc});
-		return getElevation(loc, defaultRaster);
+		return getElevation(loc, defaultDataset);
 	});
 }

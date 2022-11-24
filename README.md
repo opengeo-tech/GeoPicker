@@ -18,14 +18,14 @@ with API Restful/CLI interface
 | POST /:dataset/:prop/ | if raster prop is band, for shape prop is field |
 | GET /:dataset/:prop/ | |
 
-| GET /:lat/:lon | |
+| GET /pixel/:lat/:lon | |
 | GET /:locations | |
 | POST /geometry | geojson geometry |
 
-| GET /densify/locations | |
+| GET /densify/:locations | |
 | POST /densify/geometry | add more points in linestring |
 | POST /meta/geometry | return direction and length of geometry |
-
+| GET /within/:lat/:lon | checl lat lon inside the default dataset |
 
 
 **pick data via http:**

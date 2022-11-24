@@ -1,4 +1,7 @@
 
+//TODO rewrite as fastify plugin
+//
+//
 const fs = require('fs')
     , path = require('path')
     , _ = require('lodash');
@@ -55,7 +58,7 @@ function listDatasets(config) {
   return dats;
 }
 
-module.exports = config => ({
+module.exports = {
   listRoutes,
-  datasets: listDatasets(config)
-})
+  listDatasets
+}

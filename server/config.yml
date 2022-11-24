@@ -8,7 +8,7 @@ prod:
 dev:
   port: 9090
   host: 127.0.0.1
-  datapath: tests/data/
+  datapath: ./tests/data
 
 cors:
   origin: '*'
@@ -19,12 +19,13 @@ logger:
   transport:
     target: 'pino-pretty'
 
-datapath: '/data/'
+datapath: '/data'
 default_dataset: dem
 datasets:
   dem:
     path: trentino-altoadige_dem_90m.tif
     band: 1
+    epsg: 4326
   elevation:
     path: trentino-altoadige_dem_90m.tif
   aspect:
@@ -52,5 +53,6 @@ densify:
   units: 'meters'
 
 errors:
-  nodatadir: "data directory not exists"
-  densify_nobody: "send a post with geojson in body"
+  nodatadir: "Data directory not exists"
+  nodefaultdataset: "Default dataset file not exists"
+  densify_nobody: "Send a post with geojson in body"
