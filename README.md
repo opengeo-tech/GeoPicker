@@ -24,7 +24,7 @@ with API Restful/CLI interface
 
 | GET /densify/locations | |
 | POST /densify/geometry | add more points in linestring |
-| POST /measurements/geometry | return direction and length of geometry |
+| POST /meta/geometry | return direction and length of geometry |
 
 
 

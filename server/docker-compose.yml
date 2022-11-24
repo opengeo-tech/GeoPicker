@@ -7,8 +7,8 @@ networks:
 services:
 
   geotiff:
-    container_name: geotiff
-    image: geotiff:latest
+    container_name: geotiff-picker
+    image: geotiff-picker:latest
     build:
       context: ../
       dockerfile: ./server/Dockerfile
@@ -18,12 +18,13 @@ services:
       - "./server/config.yml:/server/config.yml"
       - "./tests/data:/data"
 
-  geotiff-test:
-    container_name: geotiff-test
-    #image: geotiff:latest
+  test:
+    container_name: geotiff-picker-test
+    image: geotiff-picker-test:latest
     build:
       context: ../
       dockerfile: ./server/Dockerfile.alpine
+      #dockerfile: ./server/Dockerfile.osgeo
     ports:
       - "8080:8080"
     volumes:

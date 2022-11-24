@@ -39,7 +39,7 @@
   ],
   "dependencies": {
     "@turf/turf": "^6.5.0",
-    "gdal-next": "^2.8.0",
+    "gdal-async": "^3.5.3",
     "lodash": "^4.17.21"
   }
 }
