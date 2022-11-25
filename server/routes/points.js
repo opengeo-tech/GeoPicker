@@ -14,8 +14,16 @@ module.exports = async fastify => {
 	});
 */
 	fastify.get('/pixel/:lat/:lon', async req => {
-		const loc = [req.params.lat, req.params.lon].map(parseFloat);
+
+		const loc = [req.params.lat, req.params.lon].map(parseFloat)
+			, [lat, lon] = loc;
+
 		fastify.log.info({loc});
-		return getElevation(loc, defaultDataset);
+
+		return {
+			lat,
+			lon,
+			val: getElevation(loc, defaultDataset)
+		}
 	});
 }

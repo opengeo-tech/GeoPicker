@@ -110,6 +110,21 @@ var map = L.map('map', {
 	zoom
 });
 
+var tooltip = L.tooltip()
+    .setLatLng(map.getCenter())
+    .setContent(map.getCenter().toString())
+    .addTo(map);
+
+map.on('mousemove', _.debounce(e => {
+  const {latlng} = e, {lat,lng} = latlng;
+  //console.log(lat, lng)
+
+  $.getJSON(`http://localhost:9090/pixel/${lat}/${lng}`).done(res => {
+    tooltip.setLatLng(latlng).setContent(`<b>${res.val}m</b> ${res.lat}, ${res.lon}`)
+  })
+
+},10))
+
 // https://github.com/MrMufflon/Leaflet.Elevation
 var controlElevation = new L.Control.Elevation({
   width: 700,
@@ -188,7 +203,7 @@ map
     layerElevation.addData(geores);
 
     editableLayers.addLayer(layerElevation);
-  })
+  });
 });
 
 
