@@ -74,8 +74,8 @@ fastify.register(autoload, {
 
 fastify.get('/', async (req,res) => {
 	return {
-		name,
 		status,
+		name,
 		version,
 		gdal: gdal.version,
 		datasets: listDatasets(config)

@@ -119,7 +119,7 @@ map.on('mousemove', _.debounce(e => {
   const {latlng} = e, {lat,lng} = latlng;
   //console.log(lat, lng)
 
-  $.getJSON(`http://localhost:9090/pixel/${lat}/${lng}`).done(res => {
+  $.getJSON(`http://localhost:8080/pixel/${lat}/${lng}`).done(res => {
     tooltip.setLatLng(latlng).setContent(`<b>${res.val}m</b> ${res.lat}, ${res.lon}`)
   })
 

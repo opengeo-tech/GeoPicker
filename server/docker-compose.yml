@@ -15,18 +15,18 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - "./server/config.yml:/server/config.yml"
-      - "./tests/data:/data"
-
-  test:
-    container_name: geotiff-picker-test
-    image: geotiff-picker-test:latest
-    build:
-      context: ../
-      dockerfile: ./server/Dockerfile.alpine
-      #dockerfile: ./server/Dockerfile.osgeo
-    ports:
-      - "8080:8080"
-    volumes:
       - "./config.yml:/server/config.yml"
       - "../tests/data:/data"
+
+  # test:
+  #   container_name: geotiff-picker-test
+  #   image: geotiff-picker-test:latest
+  #   build:
+  #     context: ../
+  #     dockerfile: ./server/Dockerfile.alpine
+  #     #dockerfile: ./server/Dockerfile.osgeo
+  #   ports:
+  #     - "8081:8080"
+  #   volumes:
+  #     - "./config.yml:/server/config.yml"
+  #     - "../tests/data:/data"
