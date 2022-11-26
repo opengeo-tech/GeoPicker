@@ -84,10 +84,9 @@ fastify.get('/', async (req,res) => {
 
 if (config.envId==='dev') {
 	const file = path.resolve(`${__dirname}/../index.html`)
-	console.log('enabled test page', file);
-	const stream = fs.createReadStream(file);
 
 	fastify.get('/test', async (req,res) => {
+		const stream = fs.createReadStream(file);
 		await res.type('text/html').send(stream)
 	});
 }
