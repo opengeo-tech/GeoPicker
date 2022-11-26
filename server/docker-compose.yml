@@ -15,7 +15,10 @@ services:
     ports:
       - "8080:8080"
     volumes:
+      - "../index.html:/server/index.html"
       - "../tests/data:/data"
+    environment:
+      - DEMO_PAGE=true
 
   # test:
   #   container_name: geotiff-picker-test

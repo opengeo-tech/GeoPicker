@@ -1,5 +1,7 @@
-FROM node:16-buster-slim
+FROM node:18-buster-slim
 
+#TODO test, now not work
+#FROM node:18-alpine
 # RUN apt-get -yqq update \
 #     && DEBIAN_FRONTEND=noninteractive apt-get -yqq install \
 # 	build-essential \

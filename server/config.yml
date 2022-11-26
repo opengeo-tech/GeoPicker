@@ -19,6 +19,9 @@ logger:
   transport:
     target: 'pino-pretty'
 
+demopage: ${DEMO_PAGE}
+#from environment vars
+
 datapath: '/data'
 default_dataset: dem
 datasets:

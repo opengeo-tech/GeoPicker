@@ -82,12 +82,15 @@ fastify.get('/', async (req,res) => {
 	}
 });
 
-if (config.envId==='dev') {
-	const file = path.resolve(`${__dirname}/../index.html`)
+if (config.demopage) {
 
-	fastify.get('/test', async (req,res) => {
-		const stream = fs.createReadStream(file);
-		await res.type('text/html').send(stream)
+	const htmlpath = path.resolve(`${__dirname}/../index.html`)
+		, html = fs.readFileSync(htmlpath).toString();
+
+    console.log('Demo page available at path: /test', htmlpath, html);
+
+	fastify.get('/test', async (req, res) => {
+		await res.type('text/html').send(html)
 	});
 }
 
