@@ -11,6 +11,8 @@ written in Nodejs GDAL and Fastify
 
 ## Rest API endpoints
 
+it's work in progress...
+
 |method/url  | description |
 |---|---|
 | GET / | service status, versions, datasets |
