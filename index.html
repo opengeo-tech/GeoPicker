@@ -110,22 +110,6 @@ var map = L.map('map', {
 	zoom
 });
 
-var tooltip = L.tooltip()
-    .setLatLng(map.getCenter())
-    .setContent(map.getCenter().toString())
-    .addTo(map);
-
-map.on('mousemove', _.debounce(e => {
-  const {latlng} = e,
-  {lat,lng} = latlng;
-  //console.log(lat, lng)
-  let baseUrl = 'http://opengeo.tech:8080'
-  $.getJSON(`${baseUrl}/pixel/${lat}/${lng}`).done(res => {
-    tooltip.setLatLng(latlng).setContent(`<b>${res.val}m</b> ${res.lat}, ${res.lon}`)
-  })
-
-},5));
-
 // https://github.com/MrMufflon/Leaflet.Elevation
 var controlElevation = new L.Control.Elevation({
   width: 700,
@@ -207,6 +191,57 @@ map
   });
 });
 
+
+
+const btn = (() => {
+
+    var control = new L.Control({position:'topleft'});
+
+    function pickValue(e) {
+      const {latlng} = e
+          , [lat, lng] = [latlng.lat, latlng.lng].map(n => L.Util.formatNum(n, 4))
+          , url = `${baseUrl}/pixel/${lat}/${lng}`;
+
+      $.getJSON(url).done(res => {
+        control._tooltip
+          .setLatLng(latlng)
+          .setContent(`<b>${res.val}m</b> <br>${res.lat}, ${res.lon}`)
+      });
+    }
+
+    control.onAdd = map =>  {
+
+      control._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
+
+      var div = $('<label class="leaflet-control"></label>');
+      div.text(' Enable Mouse Picker ');
+      div.css({
+        float: 'left',
+        height: '25px',
+        cursor: 'pointer',
+        background: '#fff',
+      });
+      var check = $('<input type="checkbox" />').prependTo(div)
+
+      check.on('change', e => {
+        const checked = check.is(':checked');
+
+        if (checked) {
+          control._tooltip.setLatLng(map.getCenter()).addTo(map);
+          map.on('mousemove', pickValue, this);
+        }
+        else {
+          map.off('mousemove', pickValue, this);
+          control._tooltip.removeFrom(map)
+        }
+      })
+
+      return div[0];
+    };
+    return control;
+  })();
+
+map.addControl(btn);
 
 </script>
 </body>
