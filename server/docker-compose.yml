@@ -15,7 +15,6 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - "./config.yml:/server/config.yml"
       - "../tests/data:/data"
 
   # test:
@@ -28,5 +27,4 @@ services:
   #   ports:
   #     - "8081:8080"
   #   volumes:
-  #     - "./config.yml:/server/config.yml"
   #     - "../tests/data:/data"

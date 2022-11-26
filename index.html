@@ -119,7 +119,7 @@ map.on('mousemove', _.debounce(e => {
   const {latlng} = e,
   {lat,lng} = latlng;
   //console.log(lat, lng)
-
+  let baseUrl = 'http://opengeo.tech:8080'
   $.getJSON(`${baseUrl}/pixel/${lat}/${lng}`).done(res => {
     tooltip.setLatLng(latlng).setContent(`<b>${res.val}m</b> ${res.lat}, ${res.lon}`)
   })
@@ -131,7 +131,7 @@ var controlElevation = new L.Control.Elevation({
   width: 700,
   height: 400,
   position: 'bottomright',
-  collapsed: false
+  collapsed: true
 }).addTo(map);
 
 var layerElevation = L.geoJson([], {
