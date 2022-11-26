@@ -14,14 +14,11 @@ written in Nodejs GDAL and Fastify
 |method/url  | description |
 |---|---|
 | GET / | service status, versions, datasets |
-
 | POST /:dataset/:prop/ | if raster prop is band, for shape prop is field |
 | GET /:dataset/:prop/ | |
-
 | GET /pixel/:lat/:lon | |
 | GET /:locations | |
 | POST /geometry | geojson geometry |
-
 | GET /densify/:locations | |
 | POST /densify/geometry | add more points in linestring |
 | POST /meta/geometry | return direction and length of geometry |
