@@ -1,5 +1,5 @@
 {
-  "name": "geotiff-picker-tests",
+  "name": "geo-picker-tests",
   "version": "1.0.0",
   "dependencies": {
     "gdal": "^0.11.1",

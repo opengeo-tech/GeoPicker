@@ -1,14 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Digital Terrain Model Picker</title>
+<title>Geo-Picker</title>
+<meta name="description" content="Geospatial data picker via fast http rest interface">
 <meta charset="utf-8">
 <meta name="format-detection" content="telephone=no">
 <meta name="msapplication-tap-highlight" content="no">
 <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
-    <link href="//unpkg.com/leaflet@1.4.0/dist/leaflet.css" rel="stylesheet" type="text/css" />
-    <link href="//unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" rel="stylesheet" type="text/css" />
-    <link href="//unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.css" rel="stylesheet" type="text/css" />
+<link href="//unpkg.com/leaflet@1.4.0/dist/leaflet.css" rel="stylesheet" type="text/css" />
+<link href="//unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" rel="stylesheet" type="text/css" />
+<link href="//unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.css" rel="stylesheet" type="text/css" />
 <style>
 body {
     margin:0
@@ -42,12 +43,9 @@ body {
 	opacity: .8;
     z-index:20000
 }
-
-
 .map.mode-create {
     cursor: crosshair;
 }
-
 .map div.elbow {
     transition: background-color .25s;
     border: 2px solid white;
@@ -57,7 +55,6 @@ body {
     pointer-events: none;
     background-color: #555;
 }
-
 .map.mode-edit div.elbow {
     cursor: move;
     pointer-events: all;
@@ -80,7 +77,9 @@ body {
 <div id="map">
 </div>
 
-<a href="https://github.com/stefanocudini/geotiff-picker"><img id="ribbon" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+<a href="https://github.com/opengeo-tech/geo-picker">
+  <img id="ribbon" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
+</a>
 
 <script src="//unpkg.com/underscore@1.9.1/underscore.js"></script>
 <script src="//unpkg.com/jquery@3.3.1/dist/jquery.js"></script>

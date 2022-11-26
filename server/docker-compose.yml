@@ -6,9 +6,9 @@ networks:
 
 services:
 
-  geotiff:
-    container_name: geotiff-picker
-    image: geotiff-picker:latest
+  geopicker:
+    container_name: geo-picker
+    image: geo-picker:latest
     build:
       context: ../
       dockerfile: ./server/Dockerfile
@@ -21,13 +21,15 @@ services:
       - DEMO_PAGE=true
 
   # test:
-  #   container_name: geotiff-picker-test
-  #   image: geotiff-picker-test:latest
+  #   container_name: geo-picker-test
+  #   image: geo-picker-test:latest
   #   build:
   #     context: ../
-  #     dockerfile: ./server/Dockerfile.alpine
-  #     #dockerfile: ./server/Dockerfile.osgeo
+  #     dockerfile: ./tests/Dockerfile.alpine
+  #     #dockerfile: ./tests/Dockerfile.osgeo
   #   ports:
   #     - "8081:8080"
   #   volumes:
   #     - "../tests/data:/data"
+  #   environment:
+  #     - DEMO_PAGE=true

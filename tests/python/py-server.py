@@ -22,12 +22,12 @@ class latlon2val:
 	def GET(self, path):
 		params = web.input()
 		web.header('Content-Type', 'application/json')
-		web.header('Server', 'python-geotiff-picker')
+		web.header('Server', 'python-geo-picker')
 		out = {}
 
 		if params.has_key('lat') and params.has_key('lon'):
 			out[path] = geotifreader.latlngFromFile(tiffs[path], float(params.lat), float(params.lon) )
-		
+
 		elif params.has_key('locs'):
 			locs = [[float(c) for c in ll.split(',')] for ll in params.locs.split('|')]
 			out[path] = geotifreader.locsFromFile(tiffs[path], locs)

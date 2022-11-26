@@ -1,5 +1,5 @@
 {
-  "name": "geotiff-picker-server",
+  "name": "geo-picker-server",
   "version": "1.0.0",
   "engines": {
     "node": ">= 16"

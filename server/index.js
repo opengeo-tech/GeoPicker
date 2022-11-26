@@ -20,10 +20,8 @@ const config = configyml({basepath: __dirname})
 const utils = require('./plugins/utils')
 	, {listRoutes, listDatasets} = utils;
 
-//TODO check geotiffs paths
 var status = 'OK';
 
-//TODO funch mapping raster id by config converto to file paths
 const fastify = Fastify({
 	logger
 });

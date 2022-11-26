@@ -1,15 +1,15 @@
-GeoTiff Picker
+Geo-Picker
 ==========
 
-File raster *GeoTiff* data picker
+Geospatial data picker via fast http rest interface
 
-with API Restful/CLI interface
+written in Nodejs GDAL and Fastify
 
 # Demo
 
-* [Demo](https://opengeo.tech/maps/geotiff-picker/)
+* [Demo](https://opengeo.tech/geo-picker/)
 
-## API endpoints
+## Rest API endpoints
 
 |method/url  | description |
 |---|---|
@@ -25,17 +25,17 @@ with API Restful/CLI interface
 | GET /densify/:locations | |
 | POST /densify/geometry | add more points in linestring |
 | POST /meta/geometry | return direction and length of geometry |
-| GET /within/:lat/:lon | checl lat lon inside the default dataset |
+| GET /within/:lat/:lon | check if lat lon inside the default dataset |
 
 
 **pick data via http:**
 ```
-$ curl "http://localhost/dem/?lat=42.5&lon=12.5"
+$ curl "http://localhost:9090/pixel/42.1/11.1
 ```
 
 **multiple coordinates at same time**
 ```
-$ curl "http://localhost/dem/?locs=42.5,12.50|42.6,12.250|42.3,12.43|42.13,12.66"
+$ curl "http://localhost:9090/pixel/?locs=42.5,12.50|42.6,12.250|42.3,12.43|42.13,12.66"
 ```
 *return json:*
 ```
@@ -48,4 +48,4 @@ $ curl "http://localhost/dem/?locs=42.5,12.50|42.6,12.250|42.3,12.43|42.13,12.66
 
 # Source
 
-* [Github](https://github.com/opengeo-tech/geotiff-picker)
+* [Github](https://github.com/opengeo-tech/geo-picker)

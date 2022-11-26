@@ -1,5 +1,4 @@
-tiffs
-*.pyc
 node_modules
+*.pyc
 tests/data
 
