@@ -19,7 +19,7 @@
     "geo-picker-server": "./bin/geo-picker-server.sh"
   },
   "scripts": {
-    "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -w lib -w server server/index.js",
+    "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -w lib -w server -w index.html server/index.js",
     "start": "node server/index.js"
   },
   "files": [

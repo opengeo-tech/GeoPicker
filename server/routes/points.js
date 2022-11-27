@@ -13,10 +13,10 @@ module.exports = async fastify => {
 		const point = getElevation(req.params, defaultDataset)
 	});
 */
-	fastify.get('/pixel/:lat/:lon', async req => {
+	fastify.get('/pixel/:lon/:lat', async req => {
 
-		const loc = [req.params.lat, req.params.lon].map(parseFloat)
-			, [lat, lon] = loc;
+		const loc = [req.params.lon, req.params.lat].map(parseFloat)
+			, [lon, lat] = loc;
 
 		fastify.log.info({loc});
 

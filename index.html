@@ -19,6 +19,9 @@ body {
 	width: 100%;
 	top:0;
 	bottom:0;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 .btn-share {
     font-size:16px;
@@ -34,34 +37,45 @@ body {
 	position: absolute;
 	top: 0;
 	right: 0;
-	height: 100px;
+	height: 120px;
 	width: auto;
 	border: 0;
 	filter: alpha(opacity=80);
 	-khtml-opacity: .8;
 	-moz-opacity: .8;
 	opacity: .8;
-    z-index:20000
+  z-index:20000
 }
 
 /*L.pather*/
 #map div.elbow {
     transition: background-color .25s;
-    border: 2px solid white;
+    border: 2px solid red;
     outline: none;
-    box-shadow: 0 0 3px rgba(0, 0, 0, .1);
     border-radius: 50%;
     pointer-events: none;
     background-color: #555;
 }
-#map .mode-edit div.elbow {
+#map div.elbow:hover {
+    border: 2px solid white;
+}
+#map.mode-edit div.elbow {
     cursor: move;
     pointer-events: all;
     background-color: orangered;
 }
-#map svg {
+#map svg.pather {
     position: absolute;
     z-index: 1001;
+}
+.leaflet-left.leaflet-top .leaflet-control-btn {
+  float: left;
+  height: 22px;
+  line-height: 25px;
+  cursor: pointer;
+  border-radius: 2px;
+  background: #fff;
+  padding: 2px;
 }
 </style>
 </head>
@@ -99,6 +113,7 @@ var baselayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{
 });
 
 var map = L.map('map', {
+  attributionControl: false,
   layers: [baselayer],
 	center,
 	zoom
@@ -106,11 +121,12 @@ var map = L.map('map', {
 
 // https://github.com/MrMufflon/Leaflet.Elevation
 var controlElevation = new L.Control.Elevation({
-  width: 700,
-  height: 400,
+  width: 600,
+  height: 300,
   position: 'bottomright',
-  collapsed: true
-}).addTo(map);
+  collapsed: false
+})
+.addTo(map);
 
 var layerElevation = L.geoJson([], {
     style: () => ({
@@ -168,7 +184,7 @@ map
   console.log('REQ',georeq.geometry)
 
   $.ajax({
-    url: `${baseUrl}/densify`,
+    url: `${baseUrl}/pixel/geometry`,
     type: 'POST',
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
@@ -189,22 +205,29 @@ map
 //
 var pather = L.pather({
     strokeWidth: 1,
-    smoothFactor: 2,
-    mode: L.Pather.MODE.CREATE | L.Pather.MODE.EDIT,
+    smoothFactor: 3,
+    mode: L.Pather.MODE.ALL,
+    /*ALL,APPEND,CREATE,DELETE,EDIT,EDIT_APPEND,VIEW*/
     pathColour: 'red'
 })
 .on('created', e => {
+  const {polyline} = e.polyline;
 
-  pather.setMode(L.Pather.MODE.EDIT)
+  const georeq = polyline.toGeoJSON()
+  console.log(polyline)
 
-  const georeq = e.polyline.polyline.toGeoJSON()
-  console.log(georeq)
+  //editableLayers.clearLayers();
+  editableLayers.addLayer(polyline)
 
-  editableLayers.remove(e.polyline);
+  pather.addTo(editableLayers);
+  pather.setMode(L.Pather.MODE.ALL)
   //layerElevation.addData(georeq);
 })
-.addTo(editableLayers)
-
+.on('edited', e => {
+    const {polyline} = e.polyline;
+    console.log(e)
+})
+.addTo(editableLayers);
 
 //checkbox to enable mouse picker
 const btn = (() => {
@@ -213,8 +236,8 @@ const btn = (() => {
 
     function pickValue(e) {
       const {latlng} = e
-          , [lat, lng] = [latlng.lat, latlng.lng].map(n => L.Util.formatNum(n, 4))
-          , url = `${baseUrl}/pixel/${lat}/${lng}`;
+          , [lng, lat] = [latlng.lng, latlng.lat].map(n => L.Util.formatNum(n, 4))
+          , url = `${baseUrl}/pixel/${lng}/${lat}`;
 
       $.getJSON(url).done(res => {
         control._tooltip
@@ -227,14 +250,7 @@ const btn = (() => {
 
       control._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
 
-      var div = $('<label class="leaflet-control"></label>');
-      div.text(' Enable Mouse Picker ');
-      div.css({
-        float: 'left',
-        height: '25px',
-        cursor: 'pointer',
-        background: '#fff',
-      });
+      var div = $('<label class="leaflet-control-btn">Mouse Move Picker</label>');
       var check = $('<input type="checkbox" />').prependTo(div)
 
       check.on('change', e => {
@@ -256,6 +272,17 @@ const btn = (() => {
   })();
 
 map.addControl(btn);
+
+//button clear all layers
+var clearControl = L.control({position:'topleft'});
+clearControl.onAdd = map =>  {
+  var div = $('<a class="leaflet-control-btn">Clear All</a>').on('click', e => {
+    editableLayers.clearLayers().addLayer(pather);
+    pather.setMode(L.Pather.MODE.CREATE)
+  });
+  return div[0];
+};
+map.addControl(clearControl);
 
 </script>
 </body>

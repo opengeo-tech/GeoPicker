@@ -9,12 +9,17 @@ module.exports = async fastify => {
 	});
 
 	fastify.post('/densify/geometry', async req => {
-		const densify = !!req.params.densify || config.densify;
+		const densify = !!req.query.densify || config.densify;
 		console.log(req.body)
 		return densify(req.body, densify);
 	});
 
+/*	fastify.post('/simplify/geometry', async req => {
+		const simplify = !!req.query.simplify || config.simplify;
+		console.log(req.body)
+		return simplify(req.body, simplify);
+	});*/
 /*	fastify.post('/meta', (req,res) => {
-		return {densify:1}//res.code(400).send({status: config.errors.densify_nobody})
+		return meta(req.body)
 	});*/
 }

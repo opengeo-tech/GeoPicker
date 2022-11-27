@@ -1,11 +1,12 @@
 
 module.exports = async fastify => {
 
-	const {setElevation, getElevation} = fastify.gp;
+	const {defaultDataset, gp} = fastify
+		, {setElevation, getElevation} = gp;
 
-	fastify.get('/pixel/:locs', async req => {
-		const locs = req.params.locs.split(',').map(parseFloat);
-		return getElevation(locs, defaultRaster);
+	fastify.post('/pixel/geometry', async req => {
+console.log(req.body)
+		return setElevation(req.body, defaultDataset);
 	});
 }
 /*
