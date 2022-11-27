@@ -273,6 +273,7 @@ controlFreehand.onAdd = map =>  {
     const checked = check.is(':checked');
     if (checked) {
       pather.addTo(editableLayers);
+      pather.setMode(L.Pather.MODE.ALL)
     }
     else {
       pather.removeFrom(editableLayers);
@@ -287,8 +288,9 @@ var controlClear = L.control({position:'topleft'});
 controlClear.onAdd = map =>  {
   var div = $('<a class="leaflet-control-btn">Clear All</a>');
   div.on('click', e => {
-    editableLayers.clearLayers().addLayer(pather);
-    pather.setMode(L.Pather.MODE.CREATE)
+    e.stopImmediatePropagation();
+    layerElevation.clearLayers();
+    editableLayers.clearLayers();
   });
   return div[0];
 };
