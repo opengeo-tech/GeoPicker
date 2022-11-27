@@ -77,6 +77,11 @@ body {
   background: #fff;
   padding: 2px;
 }
+.leaflet-editing-icon {
+  border-radius: 50%;
+  background: blue;
+  outline: none;
+}
 </style>
 </head>
 
@@ -227,62 +232,68 @@ var pather = L.pather({
     const {polyline} = e.polyline;
     console.log(e)
 })
-.addTo(editableLayers);
 
 //checkbox to enable mouse picker
-const btn = (() => {
 
-    var control = new L.Control({position:'topleft'});
-
-    function pickValue(e) {
-      const {latlng} = e
-          , [lng, lat] = [latlng.lng, latlng.lat].map(n => L.Util.formatNum(n, 4))
-          , url = `${baseUrl}/pixel/${lng}/${lat}`;
-
-      $.getJSON(url).done(res => {
-        control._tooltip
-          .setLatLng(latlng)
-          .setContent(`<b>${res.val}m</b> <br>${res.lat}, ${res.lon}`)
-      });
+var controlMouse = new L.Control({position:'topleft'});
+controlMouse._pickValue = function(e) {
+  const {latlng} = e
+      , [lng, lat] = [latlng.lng, latlng.lat].map(n => L.Util.formatNum(n, 4))
+      , url = `${baseUrl}/pixel/${lng}/${lat}`;
+  $.getJSON(url).done(res => {
+    controlMouse._tooltip
+      .setLatLng(latlng)
+      .setContent(`<b>${res.val}m</b> <br>${res.lat}, ${res.lon}`)
+  });
+};
+controlMouse.onAdd = map =>  {
+  controlMouse._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
+  var div = $('<label class="leaflet-control-btn">Mouse Move Picker</label>');
+  var check = $('<input type="checkbox" />').prependTo(div)
+  check.on('change', e => {
+    const checked = check.is(':checked');
+    if (checked) {
+      controlMouse._tooltip.setLatLng(map.getCenter()).addTo(map);
+      map.on('mousemove', controlMouse._pickValue, this);
     }
+    else {
+      map.off('mousemove', controlMouse._pickValue, this);
+      controlMouse._tooltip.removeFrom(map)
+    }
+  })
+  return div[0];
+};
+map.addControl(controlMouse);
 
-    control.onAdd = map =>  {
-
-      control._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
-
-      var div = $('<label class="leaflet-control-btn">Mouse Move Picker</label>');
-      var check = $('<input type="checkbox" />').prependTo(div)
-
-      check.on('change', e => {
-        const checked = check.is(':checked');
-
-        if (checked) {
-          control._tooltip.setLatLng(map.getCenter()).addTo(map);
-          map.on('mousemove', pickValue, this);
-        }
-        else {
-          map.off('mousemove', pickValue, this);
-          control._tooltip.removeFrom(map)
-        }
-      })
-
-      return div[0];
-    };
-    return control;
-  })();
-
-map.addControl(btn);
+//enable Pather layer
+var controlFreehand = new L.Control({position:'topleft'});
+controlFreehand.onAdd = map =>  {
+  controlFreehand._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
+  var div = $('<label class="leaflet-control-btn">Freehand Draw line</label>');
+  var check = $('<input type="checkbox" />').prependTo(div)
+  check.on('change', e => {
+    const checked = check.is(':checked');
+    if (checked) {
+      pather.addTo(editableLayers);
+    }
+    else {
+      pather.removeFrom(editableLayers);
+    }
+  })
+  return div[0];
+};
+map.addControl(controlFreehand);
 
 //button clear all layers
-var clearControl = L.control({position:'topleft'});
-clearControl.onAdd = map =>  {
+var controlClear = L.control({position:'topleft'});
+controlClear.onAdd = map =>  {
   var div = $('<a class="leaflet-control-btn">Clear All</a>').on('click', e => {
     editableLayers.clearLayers().addLayer(pather);
     pather.setMode(L.Pather.MODE.CREATE)
   });
   return div[0];
 };
-map.addControl(clearControl);
+map.addControl(controlClear);
 
 </script>
 </body>
