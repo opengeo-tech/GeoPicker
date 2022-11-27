@@ -70,12 +70,17 @@ body {
 }
 .leaflet-left.leaflet-top .leaflet-control-btn {
   float: left;
-  height: 22px;
-  line-height: 25px;
+  height: 24px;
+  width: 125px;
+  white-space: nowrap;
+  line-height: 28px;
+  vertical-align: middle;
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: 4px;
   background: #fff;
   padding: 2px;
+  border: 2px solid rgba(0,0,0,0.2);
+  background-clip: padding-box;
 }
 .leaflet-editing-icon {
   border-radius: 50%;
@@ -269,7 +274,7 @@ map.addControl(controlMouse);
 var controlFreehand = new L.Control({position:'topleft'});
 controlFreehand.onAdd = map =>  {
   controlFreehand._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
-  var div = $('<label class="leaflet-control-btn">Freehand Draw line</label>');
+  var div = $('<label class="leaflet-control-btn">Draw line freehand</label>');
   var check = $('<input type="checkbox" />').prependTo(div)
   check.on('change', e => {
     const checked = check.is(':checked');
