@@ -43,10 +43,9 @@ body {
 	opacity: .8;
     z-index:20000
 }
-.map.mode-create {
-    cursor: crosshair;
-}
-.map div.elbow {
+
+/*L.pather*/
+#map div.elbow {
     transition: background-color .25s;
     border: 2px solid white;
     outline: none;
@@ -55,19 +54,14 @@ body {
     pointer-events: none;
     background-color: #555;
 }
-.map.mode-edit div.elbow {
+#map .mode-edit div.elbow {
     cursor: move;
     pointer-events: all;
     background-color: orangered;
 }
-
-.map.mode-delete:not(.mode-append) path {
-    cursor: not-allowed;
-     z-index: 40000;
-}
-.map.mode-edit .leaflet-overlay-pane svg {
+#map svg {
     position: absolute;
-    z-index: 40000;
+    z-index: 1001;
 }
 </style>
 </head>
@@ -88,6 +82,7 @@ body {
 <script src="//unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
 <script src="//unpkg.com/d3@3.5.17/d3.min.js"></script>
 <script src="//unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.min.js"></script>
+<script src="//unpkg.com/leaflet-pather@0.1.17/dist/pather.js"></script>
 <script>
 
 const baseUrl = location.origin;
@@ -189,6 +184,26 @@ map
     editableLayers.addLayer(layerElevation);
   });
 });
+
+//L.PATHER
+//
+var pather = L.pather({
+    strokeWidth: 1,
+    smoothFactor: 2,
+    mode: L.Pather.MODE.CREATE | L.Pather.MODE.EDIT,
+    pathColour: 'red'
+})
+.on('created', e => {
+
+  pather.setMode(L.Pather.MODE.EDIT)
+
+  const georeq = e.polyline.polyline.toGeoJSON()
+  console.log(georeq)
+
+  editableLayers.remove(e.polyline);
+  //layerElevation.addData(georeq);
+})
+.addTo(editableLayers)
 
 
 //checkbox to enable mouse picker
