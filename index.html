@@ -176,30 +176,21 @@ map
   editableLayers.addLayer(e.layer);
 })
 .on('draw:drawvertex', e => {
-  let geo = e.layers.toGeoJSON();
 
-  let coordinates = geo.features.map(f => {
-    return f.geometry.coordinates
-  });
-
-  let georeq = {
+  const {features} = e.layers.toGeoJSON();
+  const geo = {
     type: 'Feature',
     properties: {},
     geometry: {
       type: 'LineString',
-      coordinates
+      coordinates: features.map(f => {
+        return f.geometry.coordinates
+      })
     }
   }
+  //feature collection to single feature
 
-  console.log('REQ',georeq.geometry)
-
-  $.ajax({
-    url: `${baseUrl}/pixel/geometry`,
-    type: 'POST',
-    dataType: 'json',
-    contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify(georeq),
-  }).done(geores => {
+  postGeometry(geo).done(geores => {
 
     console.log('RES',geores)
 
@@ -220,23 +211,25 @@ var pather = L.pather({
     /*ALL,APPEND,CREATE,DELETE,EDIT,EDIT_APPEND,VIEW*/
     pathColour: 'red'
 })
-.on('created', e => {
+.on('created edited', e => {
   const {polyline} = e.polyline;
 
-  const georeq = polyline.toGeoJSON()
-  console.log(polyline)
+  const geo = polyline.toGeoJSON();
 
-  //editableLayers.clearLayers();
-  editableLayers.addLayer(polyline)
+  postGeometry(geo).done(geores => {
 
-  pather.addTo(editableLayers);
-  pather.setMode(L.Pather.MODE.ALL)
-  //layerElevation.addData(georeq);
-})
-.on('edited', e => {
-    const {polyline} = e.polyline;
-    console.log(e)
-})
+    console.log('RES',geores)
+
+    controlElevation.clear();
+
+    layerElevation.addData(geores);
+
+    editableLayers.addLayer(layerElevation);
+
+    pather.addTo(editableLayers);
+    pather.setMode(L.Pather.MODE.ALL)
+  });
+});
 
 //checkbox to enable mouse picker
 
@@ -292,7 +285,8 @@ map.addControl(controlFreehand);
 //button clear all layers
 var controlClear = L.control({position:'topleft'});
 controlClear.onAdd = map =>  {
-  var div = $('<a class="leaflet-control-btn">Clear All</a>').on('click', e => {
+  var div = $('<a class="leaflet-control-btn">Clear All</a>');
+  div.on('click', e => {
     editableLayers.clearLayers().addLayer(pather);
     pather.setMode(L.Pather.MODE.CREATE)
   });
@@ -300,6 +294,16 @@ controlClear.onAdd = map =>  {
 };
 map.addControl(controlClear);
 
+
+function postGeometry(geo) {
+  return $.ajax({
+    url: `${baseUrl}/pixel/geometry`,
+    type: 'POST',
+    dataType: 'json',
+    contentType: 'application/json; charset=utf-8',
+    data: JSON.stringify(geo),
+  });
+}
 </script>
 </body>
 </html>
