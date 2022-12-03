@@ -1,3 +1,4 @@
+const S = require('fluent-json-schema');
 
 module.exports = async fastify => {
 
@@ -5,15 +6,24 @@ module.exports = async fastify => {
 		, {setValue, getValue} = gp;
 
 
-/*	fastify.post('/:raster/:band/pixel', async req => {
+/*	fastify.post('/:dataset/:band/pixel', async req => {
 		return setValue(req.body, defaultDataset);
 	});
 
-	fastify.get('/:raster/:band/pixel', async req => {
+	fastify.get('/:dataset/:band/pixel', async req => {
 		const point = getValue(req.params, defaultDataset)
 	});
 */
-	fastify.get('/pixel/:lon/:lat', async req => {
+	fastify.get('/elevation/:lon/:lat', {
+		schema: {
+			params: S.object()
+			    .prop('lon', S.number().required())
+        	.prop('lat', S.number().required()),
+      /*query: S.object()
+        .prop('from', S.integer().minimum(0).default(0))
+        .prop('size', S.integer().minimum(0).default(10)),*/
+		}
+	}, async req => {
 
 		const loc = [req.params.lon, req.params.lat].map(parseFloat)
 			, [lon, lat] = loc;

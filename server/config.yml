@@ -23,14 +23,12 @@ demopage: ${DEMO_PAGE}
 #from environment vars
 
 datapath: '/data'
-default_dataset: dem
+default_dataset: elevation
 datasets:
-  dem:
+  elevation:
     path: trentino-altoadige_dem_90m.tif
     band: 1
     epsg: 4326
-  elevation:
-    path: trentino-altoadige_dem_90m.tif
   aspect:
     path: trentino-altoadige_aspect_90m.tif
   slope:

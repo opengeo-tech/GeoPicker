@@ -9,8 +9,8 @@ const fs = require('fs')
 	, pino = require('pino')
 	, _ = require('lodash');
 
-const gp = require('../lib')
-	, {openFile, gdal} = gp;
+const gpicker = require('../lib')
+	, {openFile, gdal} = gpicker;
 
 const {name, version} = require(`${__dirname}/package.json`);
 
@@ -62,13 +62,15 @@ fastify.register(cors, () => {
     }
 });
 
-fastify.decorate('gp', gp);
+fastify.decorate('gpicker', gpicker);
 fastify.decorate('config', config);
 fastify.decorate('utils', utils);
 
-fastify.register(autoload, {
+/*fastify.register(autoload, {
 	dir: path.join(__dirname, 'routes')
-});
+});*/
+
+fastify.register(require('./routes'));
 
 fastify.get('/', async (req,res) => {
 	return {

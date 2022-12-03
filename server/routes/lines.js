@@ -1,10 +1,11 @@
+const S = require('fluent-json-schema');
 
 module.exports = async fastify => {
 
 	const {defaultDataset, gp} = fastify
 		, {setValue, getValue} = gp;
 
-	fastify.post('/pixel/geometry', async req => {
+	fastify.post('/elevation/geometry', async req => {
 console.log(req.body)
 		return setValue(req.body, defaultDataset);
 	});
