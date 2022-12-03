@@ -2,11 +2,11 @@
 module.exports = async fastify => {
 
 	const {defaultDataset, gp} = fastify
-		, {setElevation, getElevation} = gp;
+		, {setValue, getValue} = gp;
 
 	fastify.post('/pixel/geometry', async req => {
 console.log(req.body)
-		return setElevation(req.body, defaultDataset);
+		return setValue(req.body, defaultDataset);
 	});
 }
 /*

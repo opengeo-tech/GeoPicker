@@ -2,15 +2,15 @@
 module.exports = async fastify => {
 
 	const {defaultDataset, gp} = fastify
-		, {setElevation, getElevation} = gp;
+		, {setValue, getValue} = gp;
 
 
 /*	fastify.post('/:raster/:band/pixel', async req => {
-		return setElevation(req.body, defaultDataset);
+		return setValue(req.body, defaultDataset);
 	});
 
 	fastify.get('/:raster/:band/pixel', async req => {
-		const point = getElevation(req.params, defaultDataset)
+		const point = getValue(req.params, defaultDataset)
 	});
 */
 	fastify.get('/pixel/:lon/:lat', async req => {
@@ -23,7 +23,7 @@ module.exports = async fastify => {
 		return {
 			lat,
 			lon,
-			val: getElevation(loc, defaultDataset)
+			val: getValue(loc, defaultDataset)
 		}
 	});
 }

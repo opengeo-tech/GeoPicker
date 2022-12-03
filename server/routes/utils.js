@@ -1,7 +1,7 @@
 
 module.exports = async fastify => {
 
-	const {setElevation, getElevation, densify} = fastify.gp;
+	const {setValue, getValue, densify} = fastify.gp;
 
 	fastify.get('/densify/:locations', (req,res) => {
 		//TODO
@@ -15,9 +15,6 @@ module.exports = async fastify => {
 	});
 
 /*	fastify.post('/simplify/geometry', async req => {
-		const simplify = !!req.query.simplify || config.simplify;
-		console.log(req.body)
-		return simplify(req.body, simplify);
 	});*/
 /*	fastify.post('/meta', (req,res) => {
 		return meta(req.body)
