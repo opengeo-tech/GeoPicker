@@ -17,15 +17,14 @@ module.exports = async fastify => {
 		}
 	}, async req => {
 
-		const loc = [req.params.lon, req.params.lat].map(parseFloat)
-			, [lon, lat] = loc;
+		console.log('params',req.params);
 
-		fastify.log.info({loc});
+		const {lon, lat} = req.params;
 
 		return {
-			lat,
 			lon,
-			val: getValue(loc, defaultDataset)
+			lat,
+			val: getValue([lon, lat], defaultDataset)
 		}
 	});
 
@@ -43,16 +42,15 @@ module.exports = async fastify => {
 	});
 */
 
-	fastify.get('/densify/:locations', (req,res) => {
-		//TODO
-		return {densify:1}//res.code(400).send({status: config.errors.densify_nobody})
-	});
-
 	fastify.post('/densify/geometry', async req => {
 		const densify = !!req.query.densify || config.densify;
 		console.log(req.body)
 		return densify(req.body, densify);
 	});
+/*	fastify.get('/densify/:locations', (req,res) => {
+		//TODO
+		return {densify:1}//res.code(400).send({status: config.errors.densify_nobody})
+	});*/
 
 	/*fastify.post('/simplify/geometry', async req => {
 	});*/
