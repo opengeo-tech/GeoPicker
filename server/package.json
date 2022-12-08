@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@fastify/cors": "^8.1.1",
+    "@mapbox/polyline": "^1.1.1",
     "@stefcud/configyml": "^1.0.1",
     "dotenv": "^16.0.3",
     "fastify": "^4.10.2",

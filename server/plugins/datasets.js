@@ -47,16 +47,14 @@ module.exports = fp(async fastify => {
 
     const defaultDataset = gpicker.openFile(defaultFile, def.band, def.epsg);
 
-    console.log(`Default dataset loaded: ${defaultFile}`)
-    console.log(JSON.stringify(defaultDataset.info(),null,4));
+    fastify.log.info(JSON.stringify(defaultDataset.info(),null,4), `Default dataset loaded: ${defaultFile}`);
 
     fastify.decorate('defaultDataset', defaultDataset );
   }
   else {
     fastify.status = config.errors.nodefaultdataset;
-    console.warn(config.errors.nodefaultdataset);
+    fastify.log.warn(config.errors.nodefaultdataset);
   }
 
   fastify.decorate('datasets', listDatasets(config));
-
-})
+});

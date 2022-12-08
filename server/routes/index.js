@@ -11,9 +11,9 @@ module.exports = async fastify => {
 		schema: {
 			description: 'Get single location value by coordinates of dataset',
 			params: S.object()
-					.prop('dataset', S.string().enum(Object.keys(config.datasets)).required())
-			    .prop('lon', S.number().required())
-        	.prop('lat', S.number().required()),
+			.prop('dataset', S.string().enum(Object.keys(config.datasets)).required())
+			.prop('lon', S.number().required())
+			.prop('lat', S.number().required()),
 		}
 	}, async req => {
 
@@ -28,7 +28,22 @@ module.exports = async fastify => {
 		}
 	});
 
-	fastify.post('/:dataset/geometry', async req => {
+	fastify.post('/:dataset/geometry', {
+		//https://github.com/opengeo-tech/geo-picker/issues/16
+		schema: {
+			description: 'Post a geojson geometry',
+			body: S.object()
+				.additionalProperties(false)
+        .prop('type', S.string().enum(['LineString','Point']).required())
+        .prop('coordinates', S.array().minItems(1).items(
+        		S.array().minItems(2).required()
+        	).required())
+        //.maxItems(config.linestring.max_locations)
+      /*response: {
+        200: S.object().prop('created', S.boolean())
+      }*/
+		}
+	},async req => {
 		console.log(req.body)
 		return setValue(req.body, defaultDataset);
 	});

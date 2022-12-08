@@ -38,7 +38,7 @@ datasets:
   #   path: a-shape-file.shp
   #   densify_field: admin0
 
-pixel:
+locations:
   max_locations: 10000
   #maximum number of locations picked in a single request
   prec_digits: 5

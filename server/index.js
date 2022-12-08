@@ -4,12 +4,12 @@ const fs = require('fs')
 	, Fastify = require('fastify')
 	//, autoload = require('@fastify/autoload')
 	//, dotenv = require('dotenv').config()
+	//, polyline = require('@mapbox/polyline');
 	, configYml = require('@stefcud/configyml')
 	, pino = require('pino')
 	, _ = require('lodash');
 
-const gpicker = require('../lib')
-	, {openFile, gdal} = gpicker;
+const gpicker = require('../lib');
 
 const {name, version} = require(`${__dirname}/package.json`);
 
@@ -20,9 +20,9 @@ const fastify = Fastify({
 	logger
 });
 
-fastify.decorate('status', 'OK');
 fastify.decorate('gpicker', gpicker);
 fastify.decorate('config', config);
+fastify.decorate('status', 'OK');
 
 fastify.register(require('@fastify/cors'), () => config.cors);
 
@@ -39,12 +39,12 @@ if (config.demopage) {
 
 fastify.get('/', async (req,res) => {
 
-	const {status, datasets} = fastify;
+	const {status, datasets, gpicker} = fastify;
 
 	return {
 		name,
 		version,
-		gdal: gdal.version,
+		gdal: gpicker.gdal.version,
 		status,
 		datasets
 	}
@@ -52,7 +52,7 @@ fastify.get('/', async (req,res) => {
 
 fastify.listen({port, host}, err => {
 
-	console.log('config:', JSON.stringify(config,null,4))
+	fastify.log.info(JSON.stringify(config,null,4), 'config')
 
 	if (err) {
 		fastify.log.error(err);
