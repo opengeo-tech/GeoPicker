@@ -19,8 +19,14 @@
     "geo-picker-server": "./bin/geo-picker-server.sh"
   },
   "scripts": {
+    "lint": "standard",
     "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -w lib -w server -w index.html server/index.js",
     "start": "node server/index.js"
+  },
+  "standard": {
+    "ignore": [
+      "tests","server"
+    ]
   },
   "files": [
     "lib/"
@@ -44,5 +50,9 @@
     "@turf/turf": "^6.5.0",
     "gdal-async": "^3.5.3",
     "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "standard": "^17.0.0",
+    "tap": "^16.3.2"
   }
 }
