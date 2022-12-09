@@ -174,23 +174,32 @@ new L.Control.Draw({
 }).addTo(map);
 
 map
-.on('draw:created', e => {
+/*.on('draw:created', e => {
   editableLayers.addLayer(e.layer);
-})
-.on('draw:drawvertex', e => {
 
-  const {features} = e.layers.toGeoJSON();
-  const geometry = {
-    type: 'LineString',
-    coordinates: features.map(f => {
-      return f.geometry.coordinates
-    })
+  const {geometry} = e.layer.toGeoJSON();
+
+  console.log('created', geometry)
+})*/
+.on('draw:created draw:drawvertex', e => {
+
+  if(e.layers) {
+    const {features} = e.layers.toGeoJSON();
+    var geometry = {
+      type: 'LineString',
+      coordinates: features.map(f => {
+        return f.geometry.coordinates
+      })
+    }
+    //feature collection to single feature
   }
-  //feature collection to single feature
+  else if(e.layer) {
+    var {geometry} = e.layer.toGeoJSON();
+  }
 
   postGeometry(geometry).done(geomres => {
 
-    console.log('RES',geomres)
+    console.log('response',geomres)
 
     controlElevation.clear();
 
@@ -217,15 +226,15 @@ var pather = L.pather({
 
   const {geometry} = polyline.toGeoJSON();
 
-  postGeometry(geometry).done(geores => {
+  postGeometry(geometry).done(geomres => {
 
-    console.log('RES',geores)
+    console.log('response',geomres)
 
     controlElevation.clear();
 
     layerElevation.addData({
       type: 'Feature',
-      geometry: geores
+      geometry: geomres
     });
 
     editableLayers.addLayer(layerElevation);

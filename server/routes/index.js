@@ -33,20 +33,26 @@ module.exports = async fastify => {
 		schema: {
 			description: 'Post a geojson geometry',
 			body: S.object()
-				.additionalProperties(false)
-        .prop('type', S.string().enum(['LineString','Point'])).required()
-        .prop('coordinates', S.array().minItems(1).items(
-        		S.array().minItems(2).items(
-        			S.number()
-        		)
-        	)).required()
-        //.maxItems(config.linestring.max_locations)
+				//.additionalProperties(false)
+				.oneOf([
+						S.object()
+						.prop('type', S.string().const('Point')).required()
+	        	.prop('coordinates', S.array().maxItems(2).items(S.number())).required()
+        	,
+        		S.object()
+	        	.prop('type', S.string().const('LineString')).required()
+	        	.prop('coordinates', S.array().minItems(2).maxItems(config.max_locations).items(
+	        		S.array().maxItems(2).items(S.number())
+	        	)).required()
+				])
+
+        //.maxItems(config.max_locations)
       /*response: {
         200: S.object().prop('created', S.boolean())
       }*/
 		}
 	},async req => {
-		console.log(req.body)
+		console.log('REQUEST',req.body)
 		return setValue(req.body, defaultDataset);
 	});
 
