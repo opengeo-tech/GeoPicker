@@ -1,7 +1,6 @@
 GeoPicker
 ==========
 
-![geopicker](docs/logo.png)
 
 Geospatial data picker via fast http rest interface
 
