@@ -29,7 +29,7 @@ module.exports = async fastify => {
 	});
 
 	fastify.post('/:dataset/geometry', {
-		//https://github.com/opengeo-tech/geo-picker/issues/16
+		//https://github.com/opengeo-tech/geopicker/issues/16
 		schema: {
 			description: 'Post a geojson geometry',
 			body: S.object()

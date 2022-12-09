@@ -1,4 +1,4 @@
-Geo-Picker
+GeoPicker
 ==========
 
 Geospatial data picker via fast http rest interface
@@ -7,7 +7,7 @@ written in Nodejs GDAL and Fastify
 
 # Demo
 
-* [Demo](https://opengeo.tech/geo-picker/)
+* [Demo](https://opengeo.tech/geopicker/)
 
 ## Rest API endpoints
 
@@ -47,4 +47,4 @@ $ curl "http://localhost:9090/pixel/?locs=42.5,12.50|42.6,12.250|42.3,12.43|42.1
 
 # Source
 
-* [Github](https://github.com/opengeo-tech/geo-picker)
+* [Github](https://github.com/opengeo-tech/geopicker)

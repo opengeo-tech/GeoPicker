@@ -1,12 +1,12 @@
 {
-  "name": "geo-picker",
+  "name": "geopicker",
   "version": "1.0.0",
   "description": "Geospatial data picker via fast http rest interface",
   "repository": {
     "type": "git",
-    "url": "git@github.com:opengeo-tech/geo-picker.git"
+    "url": "git@github.com:opengeo-tech/geopicker.git"
   },
-  "homepage": "https://opengeo.tech/geo-picker/",
+  "homepage": "https://opengeo.tech/geopicker/",
   "author": {
     "name": "Stefano Cudini",
     "email": "stefano.cudini@gmail.com",
@@ -15,8 +15,8 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "bin": {
-    "geo-picker": "./bin/geo-picker-cli.js",
-    "geo-picker-server": "./bin/geo-picker-server.sh"
+    "geopicker": "./bin/geopicker-cli.js",
+    "geopicker-server": "./bin/geopicker-server.sh"
   },
   "scripts": {
     "lint": "standard",

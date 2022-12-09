@@ -1,4 +1,7 @@
-
+/*
+ * GeoPicker-server
+ * Copyright Stefano Cudini stefano.cudini@gmail.com
+ */
 const fs = require('fs')
 	, path = require('path')
 	, Fastify = require('fastify')

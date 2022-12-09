@@ -7,8 +7,8 @@ networks:
 services:
 
   geopicker:
-    container_name: geo-picker
-    image: geo-picker:latest
+    container_name: geopicker
+    image: geopicker:latest
     build:
       context: ../
       dockerfile: ./server/Dockerfile
@@ -21,8 +21,8 @@ services:
       - DEMO_PAGE=true
 
   # test:
-  #   container_name: geo-picker-test
-  #   image: geo-picker-test:latest
+  #   container_name: geopicker-test
+  #   image: geopicker-test:latest
   #   build:
   #     context: ../
   #     dockerfile: ./tests/Dockerfile.alpine

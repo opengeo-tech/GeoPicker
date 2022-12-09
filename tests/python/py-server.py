@@ -22,7 +22,7 @@ class latlon2val:
 	def GET(self, path):
 		params = web.input()
 		web.header('Content-Type', 'application/json')
-		web.header('Server', 'python-geo-picker')
+		web.header('Server', 'python-geopicker')
 		out = {}
 
 		if params.has_key('lat') and params.has_key('lon'):
