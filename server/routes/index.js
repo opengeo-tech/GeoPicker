@@ -45,8 +45,6 @@ module.exports = async fastify => {
 	        		S.array().maxItems(2).items(S.number())
 	        	)).required()
 				])
-
-        //.maxItems(config.max_locations)
       /*response: {
         200: S.object().prop('created', S.boolean())
       }*/
