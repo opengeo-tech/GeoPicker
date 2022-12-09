@@ -76,9 +76,22 @@ body {
   cursor: pointer;
   border-radius: 4px;
   background: #fff;
-  padding: 2px;
+  padding: 2px 4px 2px 2px;
   border: 2px solid rgba(0,0,0,0.2);
   background-clip: padding-box;
+  color: black;
+}
+.clear-all {
+    display: inline-block;
+    vertical-align: middle;
+    height: 22px;
+    width: 22px;
+    background-image: url(https://unpkg.com/leaflet-draw@1.0.4/dist/images/spritesheet.svg);
+    background-image: linear-gradient(transparent,transparent),url(https://unpkg.com/leaflet-draw@1.0.4/dist/images/spritesheet.svg);
+    background-repeat: no-repeat;
+    background-size: 300px 30px;
+    background-clip: padding-box;
+    background-position: -245px -4px;
 }
 .leaflet-editing-icon {
   border-radius: 50%;
@@ -191,7 +204,7 @@ map
   postGeometry(geometry);
 });
 
-//L.PATHER freehand draw
+// L.PATHER freehand draw
 //
 var pather = L.pather({
     strokeWidth: 1,
@@ -211,7 +224,7 @@ var pather = L.pather({
   });
 });
 
-//checkbox to enable mouse picker
+// checkbox to enable mouse picker
 
 var controlMouse = new L.Control({position:'topleft'});
 controlMouse._pickValue = function(e) {
@@ -266,8 +279,9 @@ map.addControl(controlFreehand);
 //button clear all layers
 var controlClear = L.control({position:'topleft'});
 controlClear.onAdd = map =>  {
-  var div = $('<a class="leaflet-control-btn">Clear All</a>');
+  var div = $('<a class="leaflet-control-btn"><i class="clear-all"></i>Clear All</a>');
   div.on('click', e => {
+    e.preventDefault()
     e.stopImmediatePropagation();
     layerElevation.clearLayers();
     editableLayers.clearLayers();

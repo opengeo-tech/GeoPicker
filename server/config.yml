@@ -23,8 +23,8 @@ demopage: ${DEMO_PAGE}
 #from environment vars
 
 datapath: '/data'
-default_dataset: elevation
 datasets:
+  default: elevation
   #aliases of same dataset
   dem: elevation
   ele: elevation

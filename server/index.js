@@ -2,26 +2,14 @@
  * GeoPicker-server
  * Copyright Stefano Cudini stefano.cudini@gmail.com
  */
-const fs = require('fs')
-	, path = require('path')
-	, Fastify = require('fastify')
-	//, autoload = require('@fastify/autoload')
-	//, dotenv = require('dotenv').config()
+const Fastify = require('fastify')
 	//, polyline = require('@mapbox/polyline');
-	, configYml = require('@stefcud/configyml')
-	, pino = require('pino')
-	, _ = require('lodash');
-
-const gpicker = require('../lib');
-
-const {name, version} = require(`${__dirname}/package.json`);
-
-const config = configYml({basepath: __dirname})
-	, {port, host, logger} = config;
-
-const fastify = Fastify({
-	logger
-});
+    , configYml = require('@stefcud/configyml')
+    , config = configYml({basepath: __dirname})
+    , {port, host, logger} = config
+    , {name, version} = require(`${__dirname}/package.json`)
+    , gpicker = require('../lib')
+    , fastify = Fastify({logger});
 
 fastify.decorate('gpicker', gpicker);
 fastify.decorate('config', config);
@@ -33,14 +21,14 @@ fastify.register(require('./plugins/datasets'));
 fastify.register(require('./plugins/list-routes'));
 
 fastify.register(require('./routes/index'), {
-	//TODO use dataset in prefix: '/v1'
+	// TODO use dataset in prefix: '/v1'
 });
 
 if (config.demopage) {
 	fastify.register(require('./routes/demo'));
 }
 
-fastify.get('/', async (req,res) => {
+fastify.get('/', async () => {
 
 	const {status, datasets, gpicker} = fastify;
 

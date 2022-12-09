@@ -4,8 +4,6 @@ const fs = require('fs')
 
 module.exports = async fastify => {
 
-  const {config} = fastify;
-
   const htmlpath = path.resolve(`${__dirname}/../../index.html`)
     , html = fs.readFileSync(htmlpath).toString();
 

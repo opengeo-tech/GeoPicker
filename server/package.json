@@ -8,12 +8,9 @@
     "@fastify/cors": "^8.1.1",
     "@mapbox/polyline": "^1.1.1",
     "@stefcud/configyml": "^1.0.1",
-    "dotenv": "^16.0.3",
     "fastify": "^4.10.2",
     "fastify-plugin": "^4.4.0",
     "fluent-json-schema": "^4.0.0",
-    "lodash": "^4.17.21",
-    "pino": "^8.7.0",
     "pino-pretty": "^9.1.1"
   }
 }

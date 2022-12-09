@@ -1,0 +1,42 @@
+{
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "script"
+  },
+  "extends": [
+    "standard",
+    "prettier"
+  ],
+  "ignorePatterns": ["tests"],
+  "rules": {
+    "n/no-path-concat": 0,
+    "one-var": [
+      2,
+      {
+        "const": "always"
+      }
+    ],
+    "comma-style": [
+      2,
+      "first",
+      {
+        "exceptions": {
+          "ArrayExpression": true,
+          "ArrayPattern": true,
+          "ArrowFunctionExpression": true,
+          "CallExpression": true,
+          "FunctionDeclaration": true,
+          "FunctionExpression": true,
+          "ImportDeclaration": true,
+          "ObjectExpression": true,
+          "ObjectPattern": true,
+          "NewExpression": true
+        }
+      }
+    ]
+  }
+}

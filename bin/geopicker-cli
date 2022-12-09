@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+// TODO lib for options
+// TOD add in package
+
+const fs = require('fs')
+  , { Console } = require('console')
+  , console = new Console(process.stderr);
+
+const {setValue, getValue, densify} = require('../lib')
+  , fileRaster = process.argv[2]
+  , fileLine = process.argv[3];
+
+console.time();
+
+const geojson = JSON.parse(fs.readFileSync(fileLine,'utf-8'));
+
+setValue(geojson, fileRaster);
+
+process.stdout.write(JSON.stringify(geojson,null,4));
+
+console.timeEnd();
