@@ -25,6 +25,9 @@ demopage: ${DEMO_PAGE}
 datapath: '/data'
 default_dataset: elevation
 datasets:
+  #aliases of same dataset
+  dem: elevation
+  ele: elevation
   elevation:
     path: trentino-altoadige_dem_90m.tif
     band: 1
@@ -38,17 +41,12 @@ datasets:
   #   path: a-shape-file.shp
   #   densify_field: admin0
 
-locations:
-  max_locations: 10000
-  #maximum number of locations picked in a single request
-  prec_digits: 5
-  #number of digits precision returned in geojson coordinates
+max_locations: 10000
+#maximum number of locations picked in a single request
+prec_digits: 5
+#number of digits precision returned in geojson coordinates
 
-linestring:
-  max_locations: 10000
-  prec_digits: 5
-  #number of digits precision returned in geojson coordinates
-
+#default densify options
 densify:
   length: 90
   units: 'meters'

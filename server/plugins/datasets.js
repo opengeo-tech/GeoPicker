@@ -10,20 +10,27 @@ function listDatasets(config) {
   const dats = {
     default: config.default_dataset
   };
-  for (const [key, val] of Object.entries(config.datasets)) {
+  for (let [key, val] of Object.entries(config.datasets)) {
 
-    const file = path.join(config.datapath, val.path);
-    if (fs.existsSync(file)) {
-      dats[ key ] = {
-        band: 1,
-        pixel: 30,
-        bbox: []
-        //TODO fill use gdal
+    if (val != null && typeof val.valueOf() === 'string' && config.datasets[ val ]) {
+      val = config.datasets[ val ];
+    }
+
+    if(val.path) {
+      let file = path.join(config.datapath, val.path);
+      if (fs.existsSync(file)) {
+        dats[ key ] = {
+          band: 1,
+          pixel: 30,
+          bbox: []
+          //TODO fill use gdal
+        }
+      }
+      else {
+        console.warn(`Dataset ${file} not exists!`)
       }
     }
-    else {
-      console.warn(`Dataset ${file} not exists!`)
-    }
+
   }
   //TODO decore with bands of each raster and fields of each shapes
 
@@ -34,7 +41,6 @@ function listDatasets(config) {
 module.exports = fp(async fastify => {
 
   const {config, gpicker} = fastify;
-
 
   if (!fs.existsSync(config.datapath)) {
     throw config.errors.nodatadir

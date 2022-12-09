@@ -111,6 +111,8 @@ body {
 
 const baseUrl = location.origin;
 
+const dataset = 'elevation';
+
 const center = [46.0651,11.1528]
   , bbox = [4.493408203125001,43.092960677116295,16.896972656250004,48.94415123418794]
   , zoom = 13;
@@ -237,7 +239,7 @@ var controlMouse = new L.Control({position:'topleft'});
 controlMouse._pickValue = function(e) {
   const {latlng} = e
       , [lng, lat] = [latlng.lng, latlng.lat].map(n => L.Util.formatNum(n, 4))
-      , url = `${baseUrl}/pixel/${lng}/${lat}`;
+      , url = `${baseUrl}/${dataset}/${lng}/${lat}`;
   $.getJSON(url).done(res => {
     controlMouse._tooltip
       .setLatLng(latlng)
