@@ -19,17 +19,13 @@
     "geopicker-server": "./bin/geopicker-server.sh"
   },
   "scripts": {
-    "lint": "eslint .",
+    "lint": "npx eslint .",
     "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -w lib -w server -w index.html server/index.js",
     "start": "node server/index.js"
   },
-  "standard": {
-    "ignore": [
-      ".eslintrc.js",
-      "tests",
-      "server"
-    ]
-  },
+  "pre-commit": [
+    "lint"
+  ],
   "files": [
     "lib/"
   ],
@@ -56,8 +52,8 @@
     "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard": "^17.0.0",
+    "pre-commit": "^1.2.2",
     "prettier": "^2.8.1",
-    "standard": "^17.0.0",
     "tap": "^16.3.2"
   }
 }

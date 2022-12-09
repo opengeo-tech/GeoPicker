@@ -50,11 +50,11 @@ module.exports = async fastify => {
       } */
     }
   },async req => {
-    console.log('REQUEST',req.body)
+    console.log('REQUEST',req.body);
     return setValue(req.body, defaultDataset);
   });
 
-/*  fastify.post('/:dataset/:band/pixel', async req => {
+/* fastify.post('/:dataset/:band/pixel', async req => {
     return setValue(req.body, defaultDataset);
   });
 
