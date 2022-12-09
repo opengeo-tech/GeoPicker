@@ -49,25 +49,25 @@ module.exports = async fastify => {
         200: S.object().prop('created', S.boolean())
       } */
     }
-  },async req => {
+  }, async req => {
     console.log('REQUEST',req.body);
     return setValue(req.body, defaultDataset);
   });
 
-/* fastify.post('/:dataset/:band/pixel', async req => {
+  /* fastify.post('/:dataset/:band/pixel', async req => {
     return setValue(req.body, defaultDataset);
   });
 
   fastify.get('/:dataset/:band/pixel', async req => {
     const point = getValue(req.params, defaultDataset)
-  });
-*/
+  }); */
 
   fastify.post('/densify/geometry', async req => {
     const densify = !!req.query.densify || config.densify;
     console.log(req.body)
     return densify(req.body, densify);
   });
+
   /* fastify.get('/densify/:locations', (req,res) => {
     // TODO
     return {densify:1}//res.code(400).send({status: config.errors.densify_nobody})
