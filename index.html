@@ -19,9 +19,7 @@ body {
 	width: 100%;
 	top:0;
 	bottom:0;
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
+  user-select: none;
 }
 .btn-share {
     font-size:16px;
@@ -105,7 +103,7 @@ body {
 <script src="//unpkg.com/clipboard@2.0.4/dist/clipboard.js"></script>
 <script src="//unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
 <script src="//unpkg.com/d3@3.5.17/d3.min.js"></script>
-<script src="//unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.min.js"></script>
+<script src="//unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.src.js"></script>
 <script src="//unpkg.com/leaflet-pather@0.1.17/dist/pather.js"></script>
 <script>
 
@@ -174,16 +172,9 @@ new L.Control.Draw({
 }).addTo(map);
 
 map
-/*.on('draw:created', e => {
-  editableLayers.addLayer(e.layer);
-
-  const {geometry} = e.layer.toGeoJSON();
-
-  console.log('created', geometry)
-})*/
 .on('draw:created draw:drawvertex', e => {
 
-  if(e.layers) {
+  if(e.layers) {  //drawvertex
     const {features} = e.layers.toGeoJSON();
     var geometry = {
       type: 'LineString',
@@ -193,26 +184,14 @@ map
     }
     //feature collection to single feature
   }
-  else if(e.layer) {
+  else if(e.layer) {  //created
     var {geometry} = e.layer.toGeoJSON();
   }
 
-  postGeometry(geometry).done(geomres => {
-
-    console.log('response',geomres)
-
-    controlElevation.clear();
-
-    layerElevation.addData({
-      type: 'Feature',
-      geometry: geomres
-    });
-
-    editableLayers.addLayer(layerElevation);
-  });
+  postGeometry(geometry);
 });
 
-//L.PATHER
+//L.PATHER freehand draw
 //
 var pather = L.pather({
     strokeWidth: 1,
@@ -227,18 +206,6 @@ var pather = L.pather({
   const {geometry} = polyline.toGeoJSON();
 
   postGeometry(geometry).done(geomres => {
-
-    console.log('response',geomres)
-
-    controlElevation.clear();
-
-    layerElevation.addData({
-      type: 'Feature',
-      geometry: geomres
-    });
-
-    editableLayers.addLayer(layerElevation);
-
     pather.addTo(editableLayers);
     pather.setMode(L.Pather.MODE.ALL)
   });
@@ -317,6 +284,26 @@ function postGeometry(geo) {
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
     data: JSON.stringify(geo),
+  })
+  .done(geometry => {
+
+    console.log('response',geometry)
+
+    controlElevation.clear();
+
+    if(geometry.type==='Point') {
+      const [lon,lat,ele] = geometry.coordinates;
+      let m = L.marker([lat,lon]).bindTooltip(`Elevation: ${ele}`,{permanent:true})
+      editableLayers.addLayer(m);
+      return
+    }
+
+    layerElevation.addData({
+      type: 'Feature',
+      geometry
+    });
+
+    editableLayers.addLayer(layerElevation);
   });
 }
 </script>
