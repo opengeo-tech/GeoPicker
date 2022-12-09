@@ -180,25 +180,24 @@ map
 .on('draw:drawvertex', e => {
 
   const {features} = e.layers.toGeoJSON();
-  const geo = {
-    type: 'Feature',
-    properties: {},
-    geometry: {
-      type: 'LineString',
-      coordinates: features.map(f => {
-        return f.geometry.coordinates
-      })
-    }
+  const geometry = {
+    type: 'LineString',
+    coordinates: features.map(f => {
+      return f.geometry.coordinates
+    })
   }
   //feature collection to single feature
 
-  postGeometry(geo).done(geores => {
+  postGeometry(geometry).done(geomres => {
 
-    console.log('RES',geores)
+    console.log('RES',geomres)
 
     controlElevation.clear();
 
-    layerElevation.addData(geores);
+    layerElevation.addData({
+      type: 'Feature',
+      geometry: geomres
+    });
 
     editableLayers.addLayer(layerElevation);
   });
@@ -216,15 +215,18 @@ var pather = L.pather({
 .on('created edited', e => {
   const {polyline} = e.polyline;
 
-  const geo = polyline.toGeoJSON();
+  const {geometry} = polyline.toGeoJSON();
 
-  postGeometry(geo).done(geores => {
+  postGeometry(geometry).done(geores => {
 
     console.log('RES',geores)
 
     controlElevation.clear();
 
-    layerElevation.addData(geores);
+    layerElevation.addData({
+      type: 'Feature',
+      geometry: geores
+    });
 
     editableLayers.addLayer(layerElevation);
 
@@ -301,7 +303,7 @@ map.addControl(controlClear);
 
 function postGeometry(geo) {
   return $.ajax({
-    url: `${baseUrl}/pixel/geometry`,
+    url: `${baseUrl}/${dataset}/geometry`,
     type: 'POST',
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
