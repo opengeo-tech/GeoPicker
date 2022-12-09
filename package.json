@@ -21,7 +21,8 @@
   "scripts": {
     "lint": "npx eslint .",
     "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -w lib -w server -w index.html server/index.js",
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "bench": "node tests/benchmarks.js"
   },
   "pre-commit": [
     "lint"
@@ -49,6 +50,7 @@
     "gdal-async": "^3.5.3"
   },
   "devDependencies": {
+    "autocannon": "^7.10.0",
     "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard": "^17.0.0",
