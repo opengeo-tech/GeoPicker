@@ -14,20 +14,13 @@ written in Nodejs GDAL and Fastify
 
 **pick data via http:**
 ```
-$ curl "http://localhost:9090/pixel/42.1/11.1
+$ curl "http://localhost:9090/elevation/11.123/46.123
 ```
 
 **multiple coordinates at same time**
 ```
-$ curl "http://localhost:9090/pixel/?locs=42.5,12.50|42.6,12.250|42.3,12.43|42.13,12.66"
-```
-*return json:*
-```
-{
-	"dem":[
-		100.0, 76.0, 99.0, 45.0
-	]
-}
+$ curl -X POST -H 'Content-Type: application/json'
+   -d '{"type":"LineString","coordinaes":[...]}' "http://localhost:9090/elevation/geometry"
 ```
 
 # Source
