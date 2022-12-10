@@ -55,7 +55,7 @@ function listDatasets(config) {
 
 
 module.exports = fp(async fastify => {
-console.log(fastify.config)
+
   const {config, gpicker} = fastify
       , {datapath, datasets} = config
       , def = datasets[ datasets.default ] // (datasets.default && typeof datasets.default.valueOf()==='string') ?
