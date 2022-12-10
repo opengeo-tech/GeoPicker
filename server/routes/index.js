@@ -4,16 +4,16 @@ const S = require('fluent-json-schema');
 module.exports = async fastify => {
 
   const {config, defaultDataset, gpicker} = fastify
-      , {setValue, getValue} = gpicker;
-
+      , {setValue, getValue} = gpicker
+      , datasetNames = Object.keys(config.datasets);
 
   fastify.get('/:dataset/:lon/:lat', {
     schema: {
       description: 'Get single location value by coordinates of dataset',
       params: S.object()
-      .prop('dataset', S.string().enum(Object.keys(config.datasets))).required()
-      .prop('lon', S.number()).required()
-      .prop('lat', S.number()).required()
+        .prop('dataset', S.string().enum(datasetNames)).required()
+        .prop('lon', S.number()).required()
+        .prop('lat', S.number()).required()
     }
   }, async req => {
 
@@ -29,11 +29,11 @@ module.exports = async fastify => {
   });
 
   fastify.post('/:dataset/geometry', {
-    // https://github.com/opengeo-tech/geopicker/issues/16
     schema: {
       description: 'Post a geojson geometry',
+      params: S.object()
+        .prop('dataset', S.string().enum(datasetNames)).required(),
       body: S.object()
-        // .additionalProperties(false)
         .oneOf([
             S.object()
             .prop('type', S.string().const('Point')).required()

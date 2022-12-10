@@ -2,10 +2,13 @@
   manage dataset define in config.yml
  */
 const fs = require('fs')
-    , path = require('path');
-
-const fp = require('fastify-plugin');
-
+    , path = require('path')
+    , fp = require('fastify-plugin')
+    , reserved = [
+      'default',
+      'dataset',
+      'meta',
+    ];
 /**
  * listing available datasets and resolves the aliases
  * @param  {[type]} config [description]
@@ -17,19 +20,26 @@ function listDatasets(config) {
   };
   for (let [key, val] of Object.entries(config.datasets)) {
 
+    if (reserved.includes(key)) {
+      console.warn(`${config.errors.nodatasetname} ${key}`)
+      continue;
+    }
+
     // entry is an alias
     if (val != null && typeof val.valueOf() === 'string' && config.datasets[ val ]) {
       val = config.datasets[ val ];
     }
 
     if(val.path) {
+
       const file = path.join(config.datapath, val.path);
+
       if (fs.existsSync(file)) {
         list[ key ] = {
-          band: 1,
-          pixel: 30,
-          bbox: []
-          // TODO fill use gdal
+          path: val.path,
+          band: val.band || 1,
+          pixel: 30, // TODO calc by gdal
+          bbox: []   // TODO calc by gdal
         }
       }
       else {

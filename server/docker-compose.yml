@@ -18,6 +18,7 @@ services:
       - "../tests/data:/data"
     environment:
       - DEMO_PAGE=true
+      #TODO- SWAGGER_PAGE=true
 
   # test:
   #   container_name: geopicker-test

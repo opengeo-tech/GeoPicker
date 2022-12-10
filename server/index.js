@@ -2,14 +2,12 @@
  * GeoPicker-server
  * Copyright Stefano Cudini stefano.cudini@gmail.com
  */
-const Fastify = require('fastify')
-	//, polyline = require('@mapbox/polyline');
-    , configYml = require('@stefcud/configyml')
-    , config = configYml({basepath: __dirname})
-    , {port, host, logger} = config
+const config = require('@stefcud/configyml')({basepath: __dirname})
     , {name, version} = require(`${__dirname}/package.json`)
+    , {port, host, logger} = config
     , gpicker = require('../lib')
-    , fastify = Fastify({logger});
+    , fastify = require('fastify')({logger});
+	// , polyline = require('@mapbox/polyline');
 
 fastify.decorate('gpicker', gpicker);
 fastify.decorate('config', config);
@@ -30,16 +28,22 @@ if (config.demopage) {
 
 fastify.get('/', async () => {
 
-	const {status, datasets, gpicker} = fastify;
+	const {status, gpicker} = fastify;
 
 	return {
 		name,
 		version,
 		gdal: gpicker.gdal.version,
-		status,
-		datasets
+		status
 	}
 });
+
+fastify.get('/datasets', {
+/* TODO schema: {
+      description: 'List datasets available',
+      body: S.object()
+    } */
+}, async () => fastify.datasets);
 
 fastify.listen({port, host}, err => {
 

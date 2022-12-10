@@ -15,7 +15,7 @@
   "rules": {
     "n/no-path-concat": 0,
     "one-var": [
-      2,
+      1,
       {
         "const": "always"
       }

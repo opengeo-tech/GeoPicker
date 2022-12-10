@@ -33,7 +33,8 @@ datasets:
     band: 1
     epsg: 4326
   aspect:
-    path: trentino-altoadige_aspect_90m.tif
+    path: trentino-altoadige_dem_90m.tif
+    band: 2
   slope:
     path: trentino-altoadige_slope_90m.tif
   #TODO manage shape
@@ -54,4 +55,5 @@ densify:
 errors:
   nodatadir: "Data directory not exists"
   nodefaultdataset: "Default dataset file not exists"
+  nodatasetname: "dataset name is reserved"
   densify_nobody: "Send a post with geojson in body"
