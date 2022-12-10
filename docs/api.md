@@ -6,8 +6,8 @@ it's work in progress...
 |method/url  | description |
 |---|---|
 | GET / | service status, versions, datasets |
-| POST /:dataset/:prop/ | if raster prop is band, for shape prop is field |
-| GET /:dataset/:prop/ | |
+| POST /:dataset/ | if raster prop is band, for shape prop is field |
+| GET /:dataset/ | |
 | GET /pixel/:lat/:lon | |
 | GET /:locations | |
 | POST /geometry | geojson geometry |

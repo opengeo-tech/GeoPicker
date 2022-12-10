@@ -26,6 +26,8 @@ function listDatasets(config) {
       const file = path.join(config.datapath, val.path);
       if (fs.existsSync(file)) {
         list[ key ] = {
+          path: val.path,
+          epsg: val.epsg,
           band: 1,
           pixel: 30,
           bbox: []
