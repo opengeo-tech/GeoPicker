@@ -13,6 +13,7 @@
   ],
   "ignorePatterns": ["tests"],
   "rules": {
+    "spaced-comment": 0,
     "n/no-path-concat": 0,
     "one-var": [
       1,

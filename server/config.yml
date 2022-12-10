@@ -37,10 +37,11 @@ datasets:
     band: 2
   slope:
     path: trentino-altoadige_slope_90m.tif
+    #band: * #TODO espose all bands if value is *
   #TODO manage shape
   #  admins:
   #   path: a-shape-file.shp
-  #   densify_field: admin0
+  #   field: admin0
 
 max_locations: 10000
 #maximum number of locations picked in a single request

@@ -33,6 +33,7 @@ module.exports = async fastify => {
       description: 'Post a geojson geometry',
       params: S.object()
         .prop('dataset', S.string().enum(datasetNames)).required(),
+      // TODO query: S.object().prop('band', S.integer().default(1)),
       body: S.object()
         .oneOf([
             S.object()
@@ -50,7 +51,6 @@ module.exports = async fastify => {
       } */
     }
   }, async req => {
-    console.log('REQUEST',req.body);
     return setValue(req.body, defaultDataset);
   });
 
@@ -64,7 +64,6 @@ module.exports = async fastify => {
 
   fastify.post('/densify/geometry', async req => {
     const densify = !!req.query.densify || config.densify;
-    console.log(req.body)
     return densify(req.body, densify);
   });
 
