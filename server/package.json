@@ -12,5 +12,9 @@
     "fastify-plugin": "^4.4.0",
     "fluent-json-schema": "^4.0.0",
     "pino-pretty": "^9.1.1"
+  },
+  "scripts": {
+    "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -w ../lib -w ../index.html index.js",
+    "start": "node index.js"
   }
 }
