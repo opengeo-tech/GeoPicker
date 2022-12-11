@@ -349,7 +349,8 @@ controlFreehand.onAdd = map =>  {
       pather.addTo(editableLayers);
       pather.setMode(L.Pather.MODE.ALL)
 
-      controlDraw._toolbars.draw.disable()
+      controlDraw._toolbars.draw.disable();
+      map.off('mousemove', controlMouse._pickValue, this);
     }
     else {
       pather.removeFrom(editableLayers);
