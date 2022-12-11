@@ -166,9 +166,9 @@ function postGeometry(geo) {
   });
 }
 
-function getLocations(geo) {
+function getLocations(locs) {
 
-  const locations = geo.coordinates
+  const locations = locs
     .map(a => a.map(n => L.Util.formatNum(n,4)) )
     .map(a => a.join(','))
     .join('|');
@@ -358,16 +358,13 @@ map.addControl(controlMouse);
 /**
  * mouse track picker
  */
-var controlMouseTrack = new L.Control({position:'topleft'});
+/*var controlMouseTrack = new L.Control({position:'topleft'});
+controlMouseTrack._locs = [];//buffer of last coordinates
 controlMouseTrack._pickTrack = function(e) {
+
   const {latlng} = e
-      , [lng, lat] = [latlng.lng, latlng.lat].map(n => L.Util.formatNum(n, 4))
-      , url = `${baseUrl}/${dataset}/${locations}`;
-  $.getJSON(url).done(res => {
-    controlMouseTrack._tooltip
-      .setLatLng(latlng)
-      .setContent(`<b>${res.val}m</b> <br>${res.lat}, ${res.lon}`)
-  });
+  //TODO
+  getLocations(locs)
 };
 controlMouseTrack.onAdd = map =>  {
 
@@ -392,7 +389,7 @@ controlMouseTrack.onAdd = map =>  {
   })
   return div[0];
 };
-map.addControl(controlMouseTrack);
+map.addControl(controlMouseTrack);*/
 
 /**
  * button clear all layers
