@@ -28,6 +28,26 @@ module.exports = async fastify => {
     }
   });
 
+  fastify.get('/:dataset/:locations', {
+    schema: {
+      description: 'Get single location value by coordinates of dataset',
+      params: S.object()
+        .prop('dataset', S.string().enum(datasetNames)).required()
+        .prop('locations', S.number()).required()
+    }
+  }, async req => {
+
+    console.log('params',req.params);
+
+    const {lon, lat} = req.params;
+
+    return {
+      lon,
+      lat,
+      val: getValue([lon, lat], defaultDataset)
+    }
+  });
+
   fastify.post('/:dataset/geometry', {
     schema: {
       description: 'Post a geojson geometry',
@@ -53,14 +73,6 @@ module.exports = async fastify => {
   }, async req => {
     return setValue(req.body, defaultDataset);
   });
-
-  /* fastify.post('/:dataset/:band/pixel', async req => {
-    return setValue(req.body, defaultDataset);
-  });
-
-  fastify.get('/:dataset/:band/pixel', async req => {
-    const point = getValue(req.params, defaultDataset)
-  }); */
 
   fastify.post('/densify/geometry', async req => {
     const densify = !!req.query.densify || config.densify;
