@@ -48,7 +48,6 @@ fastify.get('/datasets', {
                 '.*': S.object()
                 .prop('path', S.string())
                 .prop('band', S.integer())
-                .prop('epsg', S.integer())
             })
       }
     }*/

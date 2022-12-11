@@ -3,11 +3,11 @@
  */
 const fs = require('fs')
     , fp = require('fastify-plugin')
-    , reserved = [
+    /*, reserved = [
       'default',
       'dataset',
       'meta',
-    ];
+    ];*/
 
 module.exports = fp(async fastify => {
 
@@ -29,11 +29,6 @@ module.exports = fp(async fastify => {
 
     for (let [key, val] of Object.entries(config.datasets)) {
 
-      if (reserved.includes(key)) {
-        console.warn(`${config.errors.nodatasetname} ${key}`)
-        continue;
-      }
-
       // entry is an alias
       if (val != null && typeof val.valueOf() === 'string' && config.datasets[ val ]) {
         val = config.datasets[ val ];
@@ -45,20 +40,23 @@ module.exports = fp(async fastify => {
 
         if (fs.existsSync(file)) {
 
-
-        gpicker.openFile(defaultFile, def.band, def.epsg);
-
+          const dataset = gpicker.openFile(file, def.band, def.epsg)
+              , meta = dataset.info()
+              , {size} = fs.statSync(file)
 
           list[ key ] = {
             path: val.path,
+            size,
             epsg: val.epsg,
             band: val.band || 1,
-            pixel: 30, // TODO calc by gdal
-            bbox: []   // TODO calc by gdal
+            ...meta
+          }
+          if (key !== 'default') {
+            dataset.close();
           }
         }
         else {
-          console.warn(`Dataset ${file} not exists!`)
+          fastify.log.warn(`Dataset not exists! ${file} `)
         }
       }
 
@@ -76,7 +74,7 @@ module.exports = fp(async fastify => {
 
     const defaultDataset = gpicker.openFile(defaultFile, def.band, def.epsg);
 
-    fastify.log.info(JSON.stringify(defaultDataset.info(),null,4), `Default dataset loaded: ${defaultFile}`);
+    fastify.log.info(`Default dataset loaded: ${defaultFile}`);
 
     fastify.decorate('defaultDataset', defaultDataset );
   }

@@ -98,6 +98,13 @@ body {
   background: blue;
   outline: none;
 }
+.lime-theme .leaflet-control.elevation .background {
+    background-color: rgba(156,194,34,.65);
+}
+.lime-theme .leaflet-control.elevation .area {
+    fill: #ff8800;
+    opacity: .65;
+}
 </style>
 </head>
 
@@ -223,7 +230,7 @@ var layerElevation = L.geoJson([], {
 var editableLayers = L.featureGroup().addTo(map);
 
 //editLayers
-new L.Control.Draw({
+var controlDraw = new L.Control.Draw({
   position: 'topleft',
   draw: {
     polyline: {
@@ -246,6 +253,10 @@ new L.Control.Draw({
 }).addTo(map);
 
 map
+.on('draw:toolbaropened', e => {
+  console.log('toolbaropened',e)
+  $('input[name="drawtype"]').prop('checked', false).triggerHandler('change');
+})
 .on('draw:created draw:drawvertex', e => {
 
   if(e.layers) {  //drawvertex
@@ -272,7 +283,7 @@ var pather = L.pather({
     smoothFactor: 3,
     mode: L.Pather.MODE.ALL,
     /*ALL,APPEND,CREATE,DELETE,EDIT,EDIT_APPEND,VIEW*/
-    pathColour: 'red'
+    pathColour: '#ff8800'
 })
 .on('created edited', e => {
   const {polyline} = e.polyline;
@@ -305,12 +316,16 @@ controlMouse._pickValue = function(e) {
 controlMouse.onAdd = map =>  {
   controlMouse._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
   var div = $('<label class="leaflet-control-btn">Mouse Move Picker</label>');
-  var check = $('<input type="checkbox" />').prependTo(div)
+  var check = $('<input type="radio" name="drawtype" />').prependTo(div)
   check.on('change', e => {
+
     const checked = check.is(':checked');
     if (checked) {
       controlMouse._tooltip.setLatLng(map.getCenter()).addTo(map);
       map.on('mousemove', controlMouse._pickValue, this);
+
+
+      controlDraw._toolbars.draw.disable()
     }
     else {
       map.off('mousemove', controlMouse._pickValue, this);
@@ -326,12 +341,15 @@ var controlFreehand = new L.Control({position:'topleft'});
 controlFreehand.onAdd = map =>  {
   controlFreehand._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
   var div = $('<label class="leaflet-control-btn">Draw line freehand</label>');
-  var check = $('<input type="checkbox" />').prependTo(div)
+  var check = $('<input type="radio" name="drawtype" />').prependTo(div)
   check.on('change', e => {
+
     const checked = check.is(':checked');
     if (checked) {
       pather.addTo(editableLayers);
       pather.setMode(L.Pather.MODE.ALL)
+
+      controlDraw._toolbars.draw.disable()
     }
     else {
       pather.removeFrom(editableLayers);
