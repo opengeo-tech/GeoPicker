@@ -16,6 +16,8 @@ cors:
   #some legacy browsers (IE11, various SmartTVs) choke on 2
 
 logger:
+  level: 'info'
+  #level: 'debug'
   transport:
     target: 'pino-pretty'
 

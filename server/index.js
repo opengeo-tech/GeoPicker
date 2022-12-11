@@ -58,7 +58,7 @@ fastify.get('/datasets', {
 
 fastify.listen({port, host}, err => {
 
-    fastify.log.info(JSON.stringify(config,null,4), 'config')
+    fastify.log.debug(JSON.stringify(config,null,4), 'config')
 
     if (err) {
         fastify.log.error(err);
