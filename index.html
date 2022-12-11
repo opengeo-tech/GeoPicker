@@ -272,36 +272,55 @@ map
   else if(e.layer) {  //created
     var {geometry} = e.layer.toGeoJSON();
   }
-
   postGeometry(geometry);
 });
 
-// L.PATHER freehand draw
-//
+// L.Pather freehand draw
 var pather = L.pather({
     strokeWidth: 1,
     smoothFactor: 3,
-    mode: L.Pather.MODE.ALL,
-    /*ALL,APPEND,CREATE,DELETE,EDIT,EDIT_APPEND,VIEW*/
+    mode: L.Pather.MODE.ALL, // ALL,APPEND,CREATE,DELETE,EDIT,EDIT_APPEND,VIEW
     pathColour: '#ff8800'
 })
 .on('created edited', e => {
-  const {polyline} = e.polyline;
-
-  const {geometry} = polyline.toGeoJSON();
+  const {polyline} = e.polyline
+      , {geometry} = polyline.toGeoJSON();
 
   postGeometry(geometry).done(geomres => {
     pather.addTo(editableLayers);
     pather.setMode(L.Pather.MODE.ALL)
   });
-
-  getLocations(geometry).done(locs => {
-    console.log('response locations', locs)
-  })
 });
 
-// checkbox to enable mouse picker
+/**
+ * Draw line freehand
+ */
+var controlFreehand = new L.Control({position:'topleft'});
+controlFreehand.onAdd = map =>  {
+  controlFreehand._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
+  var div = $('<label class="leaflet-control-btn">Draw line freehand</label>');
+  var check = $('<input type="radio" name="drawtype" />').prependTo(div)
+  check.on('change', e => {
 
+    const checked = check.is(':checked');
+
+    if (checked) {
+      pather.addTo(editableLayers);
+      pather.setMode(L.Pather.MODE.ALL);
+      controlDraw._toolbars.draw.disable();
+      map.off('mousemove', controlMouse._pickValue, this);
+    }
+    else {
+      pather.removeFrom(editableLayers);
+    }
+  })
+  return div[0];
+};
+map.addControl(controlFreehand);
+
+/**
+ * mouse move picker
+ */
 var controlMouse = new L.Control({position:'topleft'});
 controlMouse._pickValue = function(e) {
   const {latlng} = e
@@ -315,16 +334,15 @@ controlMouse._pickValue = function(e) {
 };
 controlMouse.onAdd = map =>  {
   controlMouse._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
-  var div = $('<label class="leaflet-control-btn">Mouse Move Picker</label>');
+  var div = $('<label class="leaflet-control-btn">Mouse Point Picker</label>');
   var check = $('<input type="radio" name="drawtype" />').prependTo(div)
   check.on('change', e => {
 
     const checked = check.is(':checked');
+
     if (checked) {
       controlMouse._tooltip.setLatLng(map.getCenter()).addTo(map);
       map.on('mousemove', controlMouse._pickValue, this);
-
-
       controlDraw._toolbars.draw.disable()
     }
     else {
@@ -336,31 +354,49 @@ controlMouse.onAdd = map =>  {
 };
 map.addControl(controlMouse);
 
-//enable Pather layer
-var controlFreehand = new L.Control({position:'topleft'});
-controlFreehand.onAdd = map =>  {
-  controlFreehand._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
-  var div = $('<label class="leaflet-control-btn">Draw line freehand</label>');
+
+/**
+ * mouse track picker
+ */
+var controlMouseTrack = new L.Control({position:'topleft'});
+controlMouseTrack._pickTrack = function(e) {
+  const {latlng} = e
+      , [lng, lat] = [latlng.lng, latlng.lat].map(n => L.Util.formatNum(n, 4))
+      , url = `${baseUrl}/${dataset}/${locations}`;
+  $.getJSON(url).done(res => {
+    controlMouseTrack._tooltip
+      .setLatLng(latlng)
+      .setContent(`<b>${res.val}m</b> <br>${res.lat}, ${res.lon}`)
+  });
+};
+controlMouseTrack.onAdd = map =>  {
+
+  const maxlocations = 10;
+
+  controlMouseTrack._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
+  var div = $('<label class="leaflet-control-btn">Mouse Track Picker</label>');
   var check = $('<input type="radio" name="drawtype" />').prependTo(div)
   check.on('change', e => {
 
     const checked = check.is(':checked');
-    if (checked) {
-      pather.addTo(editableLayers);
-      pather.setMode(L.Pather.MODE.ALL)
 
-      controlDraw._toolbars.draw.disable();
-      map.off('mousemove', controlMouse._pickValue, this);
+    if (checked) {
+      controlMouseTrack._tooltip.setLatLng(map.getCenter()).addTo(map);
+      map.on('mousemove', controlMouseTrack._pickTrack, this);
+      controlDraw._toolbars.draw.disable()
     }
     else {
-      pather.removeFrom(editableLayers);
+      map.off('mousemove', controlMouseTrack._pickTrack, this);
+      controlMouseTrack._tooltip.removeFrom(map)
     }
   })
   return div[0];
 };
-map.addControl(controlFreehand);
+map.addControl(controlMouseTrack);
 
-//button clear all layers
+/**
+ * button clear all layers
+ */
 var controlClear = L.control({position:'topleft'});
 controlClear.onAdd = map =>  {
   var div = $('<a class="leaflet-control-btn"><i class="clear-all"></i>Clear All</a>');
