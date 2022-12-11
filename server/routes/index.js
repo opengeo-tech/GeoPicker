@@ -17,35 +17,31 @@ module.exports = async fastify => {
     }
   }, async req => {
 
-    console.log('params',req.params);
+    const {/*dataset,*/ lon, lat} = req.params;
 
-    const {lon, lat} = req.params;
-
+    const val = getValue([lon, lat], defaultDataset);
     return {
       lon,
       lat,
-      val: getValue([lon, lat], defaultDataset)
+      val
     }
   });
 
+// TODO https://www.fastify.io/docs/latest/Reference/Server/#maxparamlength
   fastify.get('/:dataset/:locations', {
     schema: {
-      description: 'Get single location value by coordinates of dataset',
+      description: 'Get multiple locations stringified',
       params: S.object()
         .prop('dataset', S.string().enum(datasetNames)).required()
-        .prop('locations', S.number()).required()
+        .prop('locations', S.string()).required()
     }
   }, async req => {
 
-    console.log('params',req.params);
+    console.log('params',req.params.locations);
 
-    const {lon, lat} = req.params;
+    const coordinates = req.params.locations.split('|').map(a=>a.split(',').map(parseFloat));
 
-    return {
-      lon,
-      lat,
-      val: getValue([lon, lat], defaultDataset)
-    }
+    return getValue(coordinates, defaultDataset)
   });
 
   fastify.post('/:dataset/geometry', {

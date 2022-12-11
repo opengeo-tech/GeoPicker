@@ -161,9 +161,12 @@ function postGeometry(geo) {
 
 function getLocations(geo) {
 
-  const locations = geo.coordinates.map(a => a.join(',')).join('|');
+  const locations = geo.coordinates
+    .map(a => a.map(n => L.Util.formatNum(n,4)) )
+    .map(a => a.join(','))
+    .join('|');
 
-  console.log(locations)
+  console.log('getLocations',locations)
 
   return $.ajax({
     url: `${baseUrl}/${dataset}/${locations}`,
