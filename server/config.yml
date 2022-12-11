@@ -38,11 +38,10 @@ datasets:
     epsg: 4326
   slope:
     path: trentino-altoadige_slope_90m.tif
+    #band: * #TODO espose all bands if value is *
   #TODO manage shape
   #  admins:
   #   path: a-shape-file.shp
-  #   field: admin
-  #   densify_field: admin0
 
 max_locations: 10000
 #maximum number of locations picked in a single request
@@ -57,4 +56,5 @@ densify:
 errors:
   nodatadir: "Data directory not exists"
   nodefaultdataset: "Default dataset file not exists"
+  nodatasetname: "dataset name is reserved"
   densify_nobody: "Send a post with geojson in body"

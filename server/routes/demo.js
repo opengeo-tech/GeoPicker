@@ -5,7 +5,7 @@ const fs = require('fs')
 module.exports = async fastify => {
 
   const htmlpath = path.resolve(`${__dirname}/../../index.html`)
-    , html = fs.readFileSync(htmlpath).toString();
+      , html = fs.readFileSync(htmlpath).toString();
 
   fastify.get('/test', async (req, res) => {
     await res.type('text/html').send(html)
