@@ -4,7 +4,7 @@ const S = require('fluent-json-schema');
 module.exports = async fastify => {
 
   const {config, defaultDataset, gpicker} = fastify
-      , {getValue} = gpicker
+      , {getValue, setValue} = gpicker
       , datasetNames = Object.keys(config.datasets);
 
   fastify.get('/:dataset/:lon/:lat', {
@@ -30,18 +30,28 @@ module.exports = async fastify => {
 // TODO https://www.fastify.io/docs/latest/Reference/Server/#maxparamlength
   fastify.get('/:dataset/:locations', {
     schema: {
-      description: 'Get multiple locations stringified',
+      description: 'Get locations stringified',
 /*      params: S.object()
         .prop('dataset', S.string().enum(datasetNames)).required()
         .prop('locations', S.string()).required()*/
     }
   }, async req => {
 
-    console.log('params',req.params.locations);
-
     const coordinates = req.params.locations.split('|').map(a=>a.split(',').map(parseFloat));
 
     return getValue(coordinates, defaultDataset)
+  });
+
+  fastify.post('/:dataset/locations', {
+    schema: {
+      description: 'Get array locations in body',
+/*      params: S.object()
+        .prop('dataset', S.string().enum(datasetNames)).required()
+        .prop('locations', S.string()).required()*/
+    }
+  }, async req => {
+
+    return setValue(req.body, defaultDataset)
   });
 
   /* fastify.get('/densify/:locations', (req,res) => {
