@@ -20,11 +20,9 @@ module.exports = async fastify => {
     const {/*dataset,*/ lon, lat} = req.params
         // TODO use dataset
         , val = getValue([lon, lat], defaultDataset);
-    return {
-      lon,
-      lat,
-      val
-    }
+
+    // TODO maybe omit lon,lat
+    return [lon, lat, val];
   });
 
 // TODO https://www.fastify.io/docs/latest/Reference/Server/#maxparamlength
@@ -37,9 +35,9 @@ module.exports = async fastify => {
     }
   }, async req => {
 
-    const coordinates = req.params.locations.split('|').map(a=>a.split(',').map(parseFloat));
+    const locations = req.params.locations.split('|').map(a=>a.split(',').map(Number));
 
-    return getValue(coordinates, defaultDataset)
+    return getValue(locations, defaultDataset)
   });
 
   fastify.post('/:dataset/locations', {

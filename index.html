@@ -136,6 +136,17 @@ const center = [46.0651,11.1528]
   , zoom = 13;
 
 
+function getLonlat(latlng) {
+  const [lon, lat] = [latlng.lng, latlng.lat].map(n => L.Util.formatNum(n, 4))
+      , url = `${baseUrl}/${dataset}/${lon}/${lat}`;
+
+    console.log('getLonlat', url)
+
+    return $.getJSON(url).done(res => {
+      console.log('response getLonlat', res)
+    });
+}
+
 function postGeometry(geo) {
 
   const url = `${baseUrl}/${dataset}/geometry`;
@@ -171,30 +182,22 @@ function postGeometry(geo) {
   });
 }
 
-function getLonlat(latlng) {
-  const [lon, lat] = [latlng.lng, latlng.lat].map(n => L.Util.formatNum(n, 4))
-      , url = `${baseUrl}/${dataset}/${lon}/${lat}`;
-
-    console.log('getLonlat', url)
-
-    return $.getJSON(url).done(res => {
-      console.log('response getLonlat', res)
-    });
-}
-
 function getLocations(locs) {
 
-  const locations = locs
-    .map(a => a.join(','))
-    .join('|');
+  const locations = locs.map(a => a.join(',')).join('|');
 
   const url = `${baseUrl}/${dataset}/${locations}`;
 
   console.log('getLocations',url)
 
-  return $.getJSON(url).done(coordinates => {
+  return $.getJSON(url).done(values => {
 
-    console.log('response getLocations',coordinates)
+    console.log('response getLocations', locs, values);
+
+    const coordinates = locs.map((loc, k) => {
+      loc.push(values[k]);
+      return loc;
+    });
 
     controlElevation.clear();
 
@@ -334,7 +337,7 @@ var pather = L.pather({
   const {polyline} = e.polyline
       , {geometry} = polyline.toGeoJSON();
 
-  postGeometry(geometry).done(geomres => {
+  postGeometry(geometry).done(() => {
     pather.addTo(editableLayers);
     pather.setMode(L.Pather.MODE.ALL)
   });
@@ -373,9 +376,10 @@ var controlMouse = new L.Control({position:'topleft'});
 controlMouse._pickValue = function(e) {
 
   getLonlat(e.latlng).done(res => {
-      controlMouse._tooltip
-        .setLatLng([res.lat, res.lon])
-        .setContent(`<b>${res.val}m</b> <br>${res.lon}, ${res.lat}`)
+    const [lon, lat, val] = res;
+    controlMouse._tooltip
+      .setLatLng([lat, lon])
+      .setContent(`<b>${val}m</b> <br>${lon}, ${lat}`)
   });
 };
 controlMouse.onAdd = map =>  {
@@ -428,7 +432,7 @@ controlMouseTrack.pickTrack = function(e) {
 
   console.log(coordinates.toString())
 
-  getLocations(coordinates)
+  getLocations(coordinates);
 };
 controlMouseTrack.onAdd = map =>  {
 
