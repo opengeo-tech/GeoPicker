@@ -31,9 +31,9 @@ module.exports = async fastify => {
   fastify.get('/:dataset/:locations', {
     schema: {
       description: 'Get multiple locations stringified',
-      params: S.object()
+/*      params: S.object()
         .prop('dataset', S.string().enum(datasetNames)).required()
-        .prop('locations', S.string()).required()
+        .prop('locations', S.string()).required()*/
     }
   }, async req => {
 

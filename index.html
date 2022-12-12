@@ -137,8 +137,13 @@ const center = [46.0651,11.1528]
 
 
 function postGeometry(geo) {
+
+  const url = `${baseUrl}/${dataset}/geometry`;
+
+  console.log('postGeometry',geo)
+
   return $.ajax({
-    url: `${baseUrl}/${dataset}/geometry`,
+    url,
     type: 'POST',
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
@@ -146,7 +151,7 @@ function postGeometry(geo) {
   })
   .done(geometry => {
 
-    console.log('response',geometry)
+    console.log('response postGeometry',geometry)
 
     controlElevation.clear();
 
@@ -169,33 +174,32 @@ function postGeometry(geo) {
 function getLocations(locs) {
 
   const locations = locs
-    .map(a => a.map(n => L.Util.formatNum(n,4)) )
     .map(a => a.join(','))
     .join('|');
 
-  console.log('getLocations',locations)
+  const url = `${baseUrl}/${dataset}/${locations}`;
 
-  return $.ajax({
-    url: `${baseUrl}/${dataset}/${locations}`,
-    type: 'GET'
-  })
-  .done(locs => {
+  console.log('getLocations',url)
 
-    console.log('response',locs)
-/*
+  return $.getJSON(url).done(coordinates => {
+
+    console.log('response getLocations',coordinates)
+
     controlElevation.clear();
 
+    layerElevation.clearLayers();
     layerElevation.addData({
       type: 'Feature',
       geometry: {
         type: 'LineString',
-        coordinates: locs
+        coordinates
       }
     });
 
-    editableLayers.addLayer(layerElevation);*/
+    editableLayers.addLayer(layerElevation);
   });
 }
+
 var baselayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
 	subdomains: 'abcd',
 	minZoom: 8,
@@ -326,6 +330,7 @@ controlMouse._pickValue = function(e) {
   const {latlng} = e
       , [lng, lat] = [latlng.lng, latlng.lat].map(n => L.Util.formatNum(n, 4))
       , url = `${baseUrl}/${dataset}/${lng}/${lat}`;
+
   $.getJSON(url).done(res => {
     controlMouse._tooltip
       .setLatLng(latlng)
@@ -370,15 +375,19 @@ controlMouseTrack.pickTrack = function(e) {
     locs.shift();
   }
   const lastLoc = locs.at(-1)
-      , {latlng} = e
-      , [lng, lat] = [latlng.lng, latlng.lat].map(n => L.Util.formatNum(n, 4))
+      , {lat, lng} = e.latlng
 
-  if (locs.length===0 ||  latlng.distanceTo(lastLoc) > 120) {
+  if (locs.length===0 || e.latlng.distanceTo(lastLoc) > 80) {
     locs.push([lat,lng]);
   }
-  polylocs.setLatLngs(locs)
-  console.log(locs.toString())
-  //getLocations(locs)
+  polylocs.setLatLngs(locs);
+
+  const {geometry} = polylocs.toGeoJSON(4)
+    , {coordinates} = geometry;
+
+  console.log(coordinates.toString())
+
+  getLocations(coordinates)
 };
 controlMouseTrack.onAdd = map =>  {
 

@@ -20,7 +20,7 @@ https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73
 |  ✔️  | GET  | /datasets            | list available datasets and their attributes |
 |      |      |                      | |
 |  ✔️  | GET  | /:dataset/:lon/:lat  | get single location value of dataset |
-|  ✔️  | GET  | /:dataset/:locations | array of array of coordinates (locations format is `lon,lat|lon,lat|lon,lat`) |
+|  ✔️  | GET  | /:dataset/:locations | accept array of array of coordinates (locations format is `lon,lat|lon,lat|lon,lat`) |
 |  ✔️  | POST | /:dataset/geometry   | geojson geometry Point or LineString |
 |      |      |                      | |
 |  ❌  | GET  | /densify/:locations  | add more points in list of locations |

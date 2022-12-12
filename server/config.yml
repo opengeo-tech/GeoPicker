@@ -5,26 +5,48 @@ environments:
 prod:
   port: 8080
   host: 0.0.0.0
+  datapath: '/data'
+  # to test prod end utside docker datapath: ./tests/data
 dev:
   port: 9090
   host: 127.0.0.1
   datapath: ./tests/data
+  fastifyConf:
+    logger:
+      level: 'debug'
 
 cors:
   origin: '*'
   optionsSuccessStatus: 200
   #some legacy browsers (IE11, various SmartTVs) choke on 2
 
-logger:
-  level: 'info'
-  #level: 'debug'
-  transport:
-    target: 'pino-pretty'
+fastifyConf:
+  #bodyLimit: 1048576 Defines the maximum payload, in bytes
+  maxParamLength: 1024
+  logger:
+    level: 'info'
+    transport:
+      target: 'pino-pretty'
 
 demopage: ${DEMO_PAGE}
 #from environment vars
 
-datapath: '/data'
+max_locations: 10000
+#maximum number of locations picked in a single request
+prec_digits: 5
+#number of digits precision returned in geojson coordinates
+
+#default densify options
+densify:
+  length: 90
+  units: 'meters'
+
+errors:
+  nodatadir: "Data directory not exists"
+  nodefaultdataset: "Default dataset file not exists"
+  nodatasetname: "dataset name is reserved"
+  densify_nobody: "Send a post with geojson in body"
+
 datasets:
   default: elevation
   #aliases of same dataset
@@ -43,19 +65,3 @@ datasets:
   #TODO manage shape
   #  admins:
   #   path: a-shape-file.shp
-
-max_locations: 10000
-#maximum number of locations picked in a single request
-prec_digits: 5
-#number of digits precision returned in geojson coordinates
-
-#default densify options
-densify:
-  length: 90
-  units: 'meters'
-
-errors:
-  nodatadir: "Data directory not exists"
-  nodefaultdataset: "Default dataset file not exists"
-  nodatasetname: "dataset name is reserved"
-  densify_nobody: "Send a post with geojson in body"

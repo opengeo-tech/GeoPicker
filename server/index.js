@@ -3,9 +3,9 @@
  * Copyright Stefano Cudini stefano.cudini@gmail.com
  */
 const config = require('@stefcud/configyml')({basepath: __dirname})
-    , {port, host, logger} = config
+    , {port, host, fastifyConf} = config
     , gpicker = require('../lib')
-    , fastify = require('fastify')({logger})
+    , fastify = require('fastify')(fastifyConf)
     // , S = require('fluent-json-schema')
     // , polyline = require('@mapbox/polyline')
 
