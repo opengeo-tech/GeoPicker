@@ -355,16 +355,30 @@ controlMouse.onAdd = map =>  {
 map.addControl(controlMouse);
 
 
+
+const polylocs = L.polyline([],{color:'red'}).addTo(map)
+
 /**
  * mouse track picker
  */
-/*var controlMouseTrack = new L.Control({position:'topleft'});
-controlMouseTrack._locs = [];//buffer of last coordinates
-controlMouseTrack._pickTrack = function(e) {
+var controlMouseTrack = new L.Control({position:'topleft'});
+controlMouseTrack.locs = [];//buffer of last coordinates
+controlMouseTrack.pickTrack = function(e) {
 
-  const {latlng} = e
-  //TODO
-  getLocations(locs)
+  let {locs} = controlMouseTrack;
+  if(locs.length > 20) {
+    locs.shift();
+  }
+  const lastLoc = locs.at(-1)
+      , {latlng} = e
+      , [lng, lat] = [latlng.lng, latlng.lat].map(n => L.Util.formatNum(n, 4))
+
+  if (locs.length===0 ||  latlng.distanceTo(lastLoc) > 120) {
+    locs.push([lat,lng]);
+  }
+  polylocs.setLatLngs(locs)
+  console.log(locs.toString())
+  //getLocations(locs)
 };
 controlMouseTrack.onAdd = map =>  {
 
@@ -379,17 +393,17 @@ controlMouseTrack.onAdd = map =>  {
 
     if (checked) {
       controlMouseTrack._tooltip.setLatLng(map.getCenter()).addTo(map);
-      map.on('mousemove', controlMouseTrack._pickTrack, this);
+      map.on('mousemove', controlMouseTrack.pickTrack, this);
       controlDraw._toolbars.draw.disable()
     }
     else {
-      map.off('mousemove', controlMouseTrack._pickTrack, this);
+      map.off('mousemove', controlMouseTrack.pickTrack, this);
       controlMouseTrack._tooltip.removeFrom(map)
     }
   })
   return div[0];
 };
-map.addControl(controlMouseTrack);*/
+map.addControl(controlMouseTrack);
 
 /**
  * button clear all layers
