@@ -14,8 +14,8 @@ written in Nodejs GDAL and Fastify
 it's work in progress...
 https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73
 
-|status|method| path          | description  |
-|------|----------------------|--------------|
+|status|method| path                 | description  |
+|------|------|----------------------|--------------|
 |  ✔️  | GET  | /                    | service status, versions, datasets |
 |  ✔️  | GET  | /datasets            | list available datasets and their attributes |
 |      |      |                      | |
