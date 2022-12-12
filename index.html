@@ -171,6 +171,17 @@ function postGeometry(geo) {
   });
 }
 
+function getLonlat(latlng) {
+  const [lon, lat] = [latlng.lng, latlng.lat].map(n => L.Util.formatNum(n, 4))
+      , url = `${baseUrl}/${dataset}/${lon}/${lat}`;
+
+    console.log('getLonlat', url)
+
+    return $.getJSON(url).done(res => {
+      console.log('response getLonlat', res)
+    });
+}
+
 function getLocations(locs) {
 
   const locations = locs
@@ -184,6 +195,38 @@ function getLocations(locs) {
   return $.getJSON(url).done(coordinates => {
 
     console.log('response getLocations',coordinates)
+
+    controlElevation.clear();
+
+    layerElevation.clearLayers();
+    layerElevation.addData({
+      type: 'Feature',
+      geometry: {
+        type: 'LineString',
+        coordinates
+      }
+    });
+
+    editableLayers.addLayer(layerElevation);
+  });
+}
+
+
+function postLocations(locs) {
+
+  console.log('postLocations',url)
+
+  const url = `${baseUrl}/${dataset}/locations`;
+
+  return $.ajax({
+    url,
+    type: 'POST',
+    dataType: 'json',
+    contentType: 'application/json; charset=utf-8',
+    data: JSON.stringify(locs),
+  }).done(coordinates => {
+
+    console.log('response postLocations',coordinates)
 
     controlElevation.clear();
 
@@ -276,6 +319,7 @@ map
   else if(e.layer) {  //created
     var {geometry} = e.layer.toGeoJSON();
   }
+
   postGeometry(geometry);
 });
 
@@ -327,14 +371,11 @@ map.addControl(controlFreehand);
  */
 var controlMouse = new L.Control({position:'topleft'});
 controlMouse._pickValue = function(e) {
-  const {latlng} = e
-      , [lng, lat] = [latlng.lng, latlng.lat].map(n => L.Util.formatNum(n, 4))
-      , url = `${baseUrl}/${dataset}/${lng}/${lat}`;
 
-  $.getJSON(url).done(res => {
-    controlMouse._tooltip
-      .setLatLng(latlng)
-      .setContent(`<b>${res.val}m</b> <br>${res.lat}, ${res.lon}`)
+  getLonlat(e.latlng).done(res => {
+      controlMouse._tooltip
+        .setLatLng([res.lat, res.lon])
+        .setContent(`<b>${res.val}m</b> <br>${res.lon}, ${res.lat}`)
   });
 };
 controlMouse.onAdd = map =>  {

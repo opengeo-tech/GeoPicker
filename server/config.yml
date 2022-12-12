@@ -21,7 +21,6 @@ cors:
   #some legacy browsers (IE11, various SmartTVs) choke on 2
 
 fastifyConf:
-  #bodyLimit: 1048576 Defines the maximum payload, in bytes
   maxParamLength: 1024
   logger:
     level: 'info'

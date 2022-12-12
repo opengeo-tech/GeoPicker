@@ -22,6 +22,7 @@ https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73
 |  ✔️  | GET  | /:dataset/:lon/:lat  | get single location value of dataset |
 |  ✔️  | GET  | /:dataset/:locations | accept array of array of coordinates (locations format is `lon,lat|lon,lat|lon,lat`) |
 |  ✔️  | POST | /:dataset/geometry   | geojson geometry Point or LineString |
+|  ✔️  | POST | /:dataset/locations  | accept array of array of coordinates in body |
 |      |      |                      | |
 |  ❌  | GET  | /densify/:locations  | add more points in list of locations |
 |  ❌  | POST | /densify/geometry    | add more points in linestring |
