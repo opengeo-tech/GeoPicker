@@ -9,8 +9,6 @@ written in Nodejs GDAL and Fastify
 
 * [Demo](https://opengeo.tech/geopicker/)
 
-![track](docs/tracks.gif)
-
 # API Rest endpoints
 
 it's work in progress...
