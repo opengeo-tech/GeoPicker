@@ -37,15 +37,32 @@ Params:
 - d densify
 - p band/property of dataset
 
-**pick data via http:**
-```
-$ curl "http://localhost:9090/elevation/11.123/46.123
+### Usage Examples
+
+#### Pick location data via http get
+
+```bash
+$ curl "http://localhost:9090/elevation/11.123/46.123"
+
+[195]
 ```
 
-**multiple coordinates at same time**
+#### Stringified locations
+
+```bash
+curl "http://localhost:9090/elevation/11.1,46.1|11.2,46.2|11.3,46.3"
+
+[195,1149,1051]
 ```
-$ curl -X POST -H 'Content-Type: application/json'
-   -d '{"type":"LineString","coordinaes":[...]}' "http://localhost:9090/elevation/geometry"
+
+#### Geojson geometry
+
+```bash
+$ curl -X POST -H 'Content-Type: application/json' \
+  -d '{"type":"LineString","coordinates":[[11,46],[11.1,46.1],[11.2,46.2]]}' \
+  "http://localhost:9090/elevation/geometry"
+
+{"type":"LineString","coordinates":[[11,46,930],[11.1,46.1,195],[11.2,46.2,1149]]}
 ```
 
 # Source
