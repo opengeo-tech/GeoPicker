@@ -31,9 +31,10 @@ fastify.register(require('./plugins/list-routes'));
 /**
  * fastify routes
  */
-fastify.register(require('./routes/main'));
-fastify.register(require('./routes/locations'));
+fastify.register(require('./routes/root'));
+fastify.register(require('./routes/lonlat'));
 fastify.register(require('./routes/geometry'));
+fastify.register(require('./routes/locations'));
 
 if (config.demopage) {
     fastify.register(require('./routes/demo'));

@@ -7,31 +7,12 @@ module.exports = async fastify => {
       , {getValue, setValue} = gpicker
       , datasetNames = Object.keys(config.datasets);
 
-  fastify.get('/:dataset/:lon/:lat', {
-    schema: {
-      description: 'Get single location value by coordinates of dataset',
-      params: S.object()
-        .prop('dataset', S.string().enum(datasetNames)).required()
-        .prop('lon', S.number()).required()
-        .prop('lat', S.number()).required()
-    }
-  }, async req => {
-
-    const {/*dataset,*/ lon, lat} = req.params
-        // TODO use dataset
-        , val = getValue([lon, lat], defaultDataset);
-
-    // TODO maybe omit lon,lat
-    return [lon, lat, val];
-  });
-
-// TODO https://www.fastify.io/docs/latest/Reference/Server/#maxparamlength
   fastify.get('/:dataset/:locations', {
     schema: {
       description: 'Get locations stringified',
-/*      params: S.object()
+      params: S.object()
         .prop('dataset', S.string().enum(datasetNames)).required()
-        .prop('locations', S.string()).required()*/
+      //  .prop('locations', S.string()).required()
     }
   }, async req => {
 
@@ -43,9 +24,9 @@ module.exports = async fastify => {
   fastify.post('/:dataset/locations', {
     schema: {
       description: 'Get array locations in body',
-/*      params: S.object()
+      params: S.object()
         .prop('dataset', S.string().enum(datasetNames)).required()
-        .prop('locations', S.string()).required()*/
+      //  .prop('locations', S.string()).required()
     }
   }, async req => {
 

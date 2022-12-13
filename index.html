@@ -69,7 +69,7 @@ body {
 .leaflet-left.leaflet-top .leaflet-control-btn {
   float: left;
   height: 24px;
-  width: 125px;
+  width: 130px;
   white-space: nowrap;
   line-height: 28px;
   vertical-align: middle;
@@ -104,6 +104,10 @@ body {
 .lime-theme .leaflet-control.elevation .area {
     fill: #ff8800;
     opacity: .65;
+}
+big {
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>
 </head>
@@ -192,7 +196,7 @@ function getLocations(locs) {
 
   return $.getJSON(url).done(values => {
 
-    console.log('response getLocations', locs, values);
+    console.log('response getLocations', values);
 
     const coordinates = locs.map((loc, k) => {
       loc.push(values[k]);
@@ -217,7 +221,7 @@ function getLocations(locs) {
 
 function postLocations(locs) {
 
-  console.log('postLocations',url)
+  console.log('postLocations',locs)
 
   const url = `${baseUrl}/${dataset}/locations`;
 
@@ -246,14 +250,14 @@ function postLocations(locs) {
   });
 }
 
-var baselayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
+const baselayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
 	subdomains: 'abcd',
 	minZoom: 8,
 	maxZoom: 16,
 	ext: 'png'
 });
 
-var map = L.map('map', {
+const map = L.map('map', {
   attributionControl: false,
   layers: [baselayer],
 	center,
@@ -261,7 +265,7 @@ var map = L.map('map', {
 });
 
 // https://github.com/MrMufflon/Leaflet.Elevation
-var controlElevation = new L.Control.Elevation({
+const controlElevation = new L.Control.Elevation({
   width: 600,
   height: 300,
   position: 'bottomright',
@@ -269,7 +273,7 @@ var controlElevation = new L.Control.Elevation({
 })
 .addTo(map);
 
-var layerElevation = L.geoJson([], {
+const layerElevation = L.geoJson([], {
     style: () => ({
       color: '#00f',
       weight: 2
@@ -277,10 +281,10 @@ var layerElevation = L.geoJson([], {
     onEachFeature: controlElevation.addData.bind(controlElevation)
 }).addTo(map);
 
-var editableLayers = L.featureGroup().addTo(map);
+const editableLayers = L.featureGroup().addTo(map);
 
 //editLayers
-var controlDraw = new L.Control.Draw({
+const controlDraw = new L.Control.Draw({
   position: 'topleft',
   draw: {
     polyline: {
@@ -327,19 +331,19 @@ map
 });
 
 // L.Pather freehand draw
-var pather = L.pather({
+const controlDrawFree = L.pather({
     strokeWidth: 1,
-    smoothFactor: 3,
+    smoothFactor: 0,
     mode: L.Pather.MODE.ALL, // ALL,APPEND,CREATE,DELETE,EDIT,EDIT_APPEND,VIEW
-    pathColour: '#ff8800'
+    pathColour: '#00f'
 })
 .on('created edited', e => {
   const {polyline} = e.polyline
       , {geometry} = polyline.toGeoJSON();
 
-  postGeometry(geometry).done(() => {
-    pather.addTo(editableLayers);
-    pather.setMode(L.Pather.MODE.ALL)
+  postLocations(geometry.coordinates).done(() => {
+    controlDrawFree.addTo(editableLayers);
+    controlDrawFree.setMode(L.Pather.MODE.ALL)
   });
 });
 
@@ -349,20 +353,20 @@ var pather = L.pather({
 var controlFreehand = new L.Control({position:'topleft'});
 controlFreehand.onAdd = map =>  {
   controlFreehand._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
-  var div = $('<label class="leaflet-control-btn">Draw line freehand</label>');
+  var div = $('<label class="leaflet-control-btn">Draw Line Freehand</label>');
   var check = $('<input type="radio" name="drawtype" />').prependTo(div)
   check.on('change', e => {
 
     const checked = check.is(':checked');
 
     if (checked) {
-      pather.addTo(editableLayers);
-      pather.setMode(L.Pather.MODE.ALL);
+      controlDrawFree.addTo(editableLayers);
+      controlDrawFree.setMode(L.Pather.MODE.ALL);
       controlDraw._toolbars.draw.disable();
       map.off('mousemove', controlMouse._pickValue, this);
     }
     else {
-      pather.removeFrom(editableLayers);
+      controlDrawFree.removeFrom(editableLayers);
     }
   })
   return div[0];
@@ -375,15 +379,19 @@ map.addControl(controlFreehand);
 var controlMouse = new L.Control({position:'topleft'});
 controlMouse._pickValue = function(e) {
 
+  controlMouse._tooltip.setLatLng(e.latlng);
+
   getLonlat(e.latlng).done(res => {
     const [lon, lat, val] = res;
-    controlMouse._tooltip
-      .setLatLng([lat, lon])
-      .setContent(`<b>${val}m</b> <br>${lon}, ${lat}`)
+    controlMouse._tooltip.setContent(`<big>${val}m</big><br>${lon}, ${lat}`)
   });
 };
 controlMouse.onAdd = map =>  {
-  controlMouse._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
+  controlMouse._tooltip = L.tooltip({
+      offset: L.point([0,-10]),
+      direction: 'top'
+    })
+    .setLatLng(map.getCenter()).addTo(map);
   var div = $('<label class="leaflet-control-btn">Mouse Point Picker</label>');
   var check = $('<input type="radio" name="drawtype" />').prependTo(div)
   check.on('change', e => {
@@ -404,8 +412,6 @@ controlMouse.onAdd = map =>  {
 };
 map.addControl(controlMouse);
 
-
-
 const polylocs = L.polyline([],{color:'red'}).addTo(map)
 
 /**
@@ -419,8 +425,9 @@ controlMouseTrack.pickTrack = function(e) {
   if(locs.length > 20) {
     locs.shift();
   }
+
   const lastLoc = locs.at(-1)
-      , {lat, lng} = e.latlng
+      , {lat, lng} = e.latlng;
 
   if (locs.length===0 || e.latlng.distanceTo(lastLoc) > 80) {
     locs.push([lat,lng]);
@@ -429,8 +436,6 @@ controlMouseTrack.pickTrack = function(e) {
 
   const {geometry} = polylocs.toGeoJSON(4)
     , {coordinates} = geometry;
-
-  console.log(coordinates.toString())
 
   getLocations(coordinates);
 };

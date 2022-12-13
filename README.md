@@ -19,8 +19,8 @@ https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73
 |  ✔️  | GET  | /                    |       | object | service status, versions, datasets |
 |  ✔️  | GET  | /datasets            |       | object | list available datasets and their attributes |
 |      |      |                      |       |        |             |
-|  ✔️  | GET  | /:dataset/:lon/:lat  |       | array  | get single location value of dataset |
-|  ✔️  | GET  | /:dataset/:locations |       | array  | locations is a string (format is `lon,lat|lon,lat|lon,lat`) densify not supported|
+|  ✔️  | GET  | /:dataset/:lon/:lat  |       | array  | get single location value of dataset, densify not supported|
+|  ✔️  | GET  | /:dataset/:locations |       | array  | locations is a string (format is `lon,lat|lon,lat|lon,lat`), densify not supported |
 |  ✔️  | POST | /:dataset/geometry   | f,d,p | object | geojson geometry Point or LineString in body
 |  ✔️  | POST | /:dataset/locations  | f,d,p | arrays | accept array or object of locations in body (format is `[[lon,lat],[lon,lat],[lon,lat]]`) |
 |      |      |                      |       |        |             |
