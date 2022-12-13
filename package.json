@@ -1,6 +1,6 @@
 {
   "name": "@opengeo-tech/geopicker",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Geospatial data picker via fast http rest interface",
   "repository": {
     "type": "git",
