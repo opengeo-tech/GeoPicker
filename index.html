@@ -281,6 +281,7 @@ const baselayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain
 
 const map = L.map('map', {
   attributionControl: false,
+  doubleClickZoom: false,
   layers: [baselayer],
 	center,
 	zoom
@@ -402,7 +403,7 @@ const tooltipClick = L.tooltip({
   direction: 'top'
 });
 
-map.on('click', e => {
+map.on('dblclick', e => {
 
   tooltipClick.setLatLng(e.latlng).addTo(map);
 
