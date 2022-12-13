@@ -374,7 +374,6 @@ const controlDrawFree = L.pather({
  */
 var controlFreehand = new L.Control({position:'topleft'});
 controlFreehand.onAdd = map =>  {
-  controlFreehand._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
   var div = $('<label class="leaflet-control-btn">Draw Line Freehand</label>');
   var check = $('<input type="radio" name="drawtype" />').prependTo(div)
   check.on('change', e => {
@@ -435,7 +434,7 @@ controlMouse.onAdd = map =>  {
       offset: L.point([0,-10]),
       direction: 'top'
     })
-    .setLatLng(map.getCenter()).addTo(map);
+    .setLatLng([0,0]).addTo(map);
   var div = $('<label class="leaflet-control-btn">Mouse Point Picker</label>');
   var check = $('<input type="radio" name="drawtype" />').prependTo(div)
   check.on('change', e => {
@@ -443,7 +442,7 @@ controlMouse.onAdd = map =>  {
     const checked = check.is(':checked');
 
     if (checked) {
-      controlMouse._tooltip.setLatLng(map.getCenter()).addTo(map);
+      controlMouse._tooltip.setLatLng([0,0]).addTo(map);
       map.on('mousemove', controlMouse._pickValue, this);
       controlDraw._toolbars.draw.disable()
     }
@@ -487,7 +486,6 @@ controlMouseTrack.onAdd = map =>  {
 
   const maxlocations = 10;
 
-  controlMouseTrack._tooltip = L.tooltip().setLatLng(map.getCenter()).addTo(map);
   var div = $('<label class="leaflet-control-btn">Mouse Track Picker</label>');
   var check = $('<input type="radio" name="drawtype" />').prependTo(div)
   check.on('change', e => {
@@ -495,13 +493,11 @@ controlMouseTrack.onAdd = map =>  {
     const checked = check.is(':checked');
 
     if (checked) {
-      controlMouseTrack._tooltip.setLatLng(map.getCenter()).addTo(map);
       map.on('mousemove', controlMouseTrack.pickTrack, this);
       controlDraw._toolbars.draw.disable()
     }
     else {
       map.off('mousemove', controlMouseTrack.pickTrack, this);
-      controlMouseTrack._tooltip.removeFrom(map)
     }
   })
   return div[0];

@@ -1,5 +1,5 @@
 {
-  "name": "geopicker",
+  "name": "@stefcud/geopicker",
   "version": "1.1.2",
   "description": "Geospatial data picker via fast http rest interface",
   "repository": {
@@ -24,7 +24,7 @@
     "docker-tag": "docker tag geopicker:latest stefcud/geopicker:${npm_package_version}",
     "docker-push": "npm run docker-tag && docker push stefcud/geopicker:${npm_package_version}",
     "docker-up": "cd server && docker-compose up",
-    "postpublish": "npm run docker-push",
+    "postpublish": "npm run docker-build && npm run docker-push",
     "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -w lib -w server -w index.html server/index.js",
     "start": "node server/index.js",
     "bench": "node tests/benchmarks.js"
