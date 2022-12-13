@@ -1,6 +1,6 @@
 {
   "name": "fastify-geopicker",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "engines": {
     "node": ">= 16"
   },
@@ -14,7 +14,6 @@
     "pino-pretty": "^9.1.1"
   },
   "scripts": {
-    "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -w ../lib -w ../index.html index.js",
     "start": "node index.js"
   }
 }
