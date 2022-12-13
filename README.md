@@ -21,6 +21,8 @@ https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73
 |      |      |                      |       |        |             |
 |  ✔️  | GET  | /:dataset/:lon/:lat  |       | array  | get single location value of dataset, densify not supported|
 |  ✔️  | GET  | /:dataset/:locations |       | array  | locations is a string (format is `lon,lat|lon,lat|lon,lat`), densify not supported |
+|      |      |                      |       |        |             |
+|  ✔️  | POST | /:dataset/lonlat     |       | arrays | accept array or object in body |
 |  ✔️  | POST | /:dataset/geometry   | f,d,p | object | geojson geometry Point or LineString in body
 |  ✔️  | POST | /:dataset/locations  | f,d,p | arrays | accept array or object of locations in body (format is `[[lon,lat],[lon,lat],[lon,lat]]`) |
 |      |      |                      |       |        |             |

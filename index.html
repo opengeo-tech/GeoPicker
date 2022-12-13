@@ -140,14 +140,31 @@ const center = [46.0651,11.1528]
   , zoom = 13;
 
 
-function getLonlat(latlng) {
-  const [lon, lat] = [latlng.lng, latlng.lat].map(n => L.Util.formatNum(n, 4))
-      , url = `${baseUrl}/${dataset}/${lon}/${lat}`;
+function getLonlat(lon, lat) {
 
-    console.log('getLonlat', url)
+  const url = `${baseUrl}/${dataset}/${lon}/${lat}`;
 
-    return $.getJSON(url).done(res => {
-      console.log('response getLonlat', res)
+  console.log('getLonlat', url)
+
+  return $.getJSON(url).done(res => {
+    console.log('response getLonlat', res)
+  });
+}
+
+function postLonlat(lon, lat) {
+
+  const url = `${baseUrl}/${dataset}/lonlat`;
+
+    console.log('postLonlat', url)
+
+    return $.ajax({
+      url,
+      type: 'POST',
+      dataType: 'json',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify({lon, lat}),
+    }).done(res => {
+      console.log('response postLonlat', res)
     });
 }
 
@@ -374,6 +391,26 @@ controlFreehand.onAdd = map =>  {
 map.addControl(controlFreehand);
 
 /**
+ * mouse click picker
+ */
+const tooltipClick = L.tooltip({
+  offset: L.point([0,-10]),
+  direction: 'top'
+});
+
+map.on('click', e => {
+
+  tooltipClick.setLatLng(e.latlng).addTo(map);
+
+  const {lng, lat} = e.latlng;
+
+  postLonlat(lng, lat).done(res => {
+      const {lon, lat, val} = res;
+      tooltipClick.setContent(`<big>${val}m</big><br>${lon}<br>${lat}`)
+  });
+})
+
+/**
  * mouse move picker
  */
 var controlMouse = new L.Control({position:'topleft'});
@@ -381,8 +418,10 @@ controlMouse._pickValue = function(e) {
 
   controlMouse._tooltip.setLatLng(e.latlng);
 
-  getLonlat(e.latlng).done(res => {
-    const [lon, lat, val] = res;
+  const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
+
+  getLonlat(lon,lat).done(res => {
+    const [val] = res;
     controlMouse._tooltip.setContent(`<big>${val}m</big><br>${lon}, ${lat}`)
   });
 };
