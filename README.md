@@ -37,7 +37,13 @@ Params:
 - d densify
 - p band/property of dataset
 
+
+
 ### Usage Examples
+
+```bash
+docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 8080:8080 stefcud/geopicker:1.1.2
+```
 
 #### Pick location data via http get
 

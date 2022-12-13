@@ -14,6 +14,9 @@
   },
   "license": "MIT",
   "main": "./lib/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "geopicker": "./bin/geopicker-cli.js",
     "geopicker-server": "./bin/geopicker-server.sh"
