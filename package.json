@@ -20,6 +20,7 @@
   },
   "scripts": {
     "lint": "npx eslint .",
+    "build": "",
     "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -w lib -w server -w index.html server/index.js",
     "start": "node server/index.js",
     "bench": "node tests/benchmarks.js"
