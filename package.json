@@ -23,9 +23,9 @@
   },
   "scripts": {
     "lint": "npx eslint .",
-    "docker-build": "docker build -f server/Dockerfile -t geopicker:latest .",
-    "docker-tag": "docker tag geopicker:latest stefcud/geopicker:${npm_package_version}",
-    "docker-push": "npm run docker-tag && docker push stefcud/geopicker:${npm_package_version}",
+    "docker-build": "docker build -f server/Dockerfile -t stefcud/geopicker:latest .",
+    "docker-tag": "docker tag stefcud/geopicker:latest stefcud/geopicker:${npm_package_version}",
+    "docker-push": "npm run docker-tag && docker push stefcud/geopicker:${npm_package_version} && docker push stefcud/geopicker:latest",
     "docker-up": "cd server && docker-compose up",
     "postpublish": "npm run docker-build && npm run docker-push",
     "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -w lib -w server -w index.html server/index.js",
