@@ -3,11 +3,7 @@ GeoPicker
 
 ![geopicker](docs/logo.png)
 
-Geospatial data picker via fast http rest interface
-
-written in Nodejs GDAL and Fastify
-
-* [Demo](https://opengeo.tech/geopicker/)
+Geospatial data picker via fast http rest interface written in Nodejs GDAL and Fastify
 
 # API Rest endpoints
 
@@ -71,6 +67,13 @@ $ curl -X POST -H 'Content-Type: application/json' \
 {"type":"LineString","coordinates":[[11,46,930],[11.1,46.1,195],[11.2,46.2,1149]]}
 ```
 
-# Source
+# Roadmap
 
-* [Github](https://github.com/opengeo-tech/geopicker)
+for details see the description in the [issues](https://github.com/opengeo-tech/geopicker/issues)
+
+|Status| Goal |
+|------|-------------|
+|  ❌  | limit access by api key |
+|  ❌  | caching responses |
+|  ❌  | support vector format in datasets, such as shapefile  |
+|  ❌  | websocket interface |
