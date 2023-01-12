@@ -114,6 +114,18 @@ big {
   border-radius: 4px;
   border: 2px solid rgba(0,0,0,0.2);
 }
+.leaflet-control-log {
+  border-radius: 4px;
+  border: 2px solid rgba(0,0,0,0.2);
+  background: #ddd;
+  font-size: 16px;
+  min-width: 300px;
+  min-height: 30px;
+  max-height: 90px;
+  float: left;
+  overflow-y: scroll;
+  padding: 4px;
+}
 </style>
 </head>
 
@@ -144,8 +156,12 @@ const center = [46.0651,11.1528]
   , bbox = [4.493408203125001,43.092960677116295,16.896972656250004,48.94415123418794]
   , zoom = 13;
 
+const $divLog = $('<pre class="leaflet-control-log"></pre>');
+
 function logger() {
-  console.log.apply(arguments)
+  console.log.apply(window, arguments)
+  let log = Array.prototype.join.call(arguments,' ')
+  $divLog.prepend(`${log}\n`)
 }
 
 function getLonlat(lon, lat) {
@@ -275,7 +291,7 @@ function postLocations(locs) {
   });
 }
 
-const baselayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
+const baselayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.{ext}', {
 	subdomains: 'abcd',
 	minZoom: 8,
 	maxZoom: 16,
@@ -524,6 +540,12 @@ controlClear.onAdd = map =>  {
 };
 map.addControl(controlClear);
 
+
+var controlLog = L.control({position:'bottomleft'});
+controlLog.onAdd = map =>  {
+  return $divLog[0];
+};
+map.addControl(controlLog);
 </script>
 </body>
 </html>
