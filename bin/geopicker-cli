@@ -1,5 +1,9 @@
 #!/usr/bin/env node
-
+/*
+ * GeoPicker-cli
+ * Copyright Stefano Cudini stefano.cudini@gmail.com
+ * https://opengeo.tech
+ */
 // TODO lib for options
 // TOD add in package
 

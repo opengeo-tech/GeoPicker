@@ -1,6 +1,7 @@
 /*
  * GeoPicker-server
  * Copyright Stefano Cudini stefano.cudini@gmail.com
+ * https://opengeo.tech
  */
 const config = require('@stefcud/configyml')({basepath: __dirname})
     , {port, host, fastifyConf} = config
@@ -12,7 +13,7 @@ const config = require('@stefcud/configyml')({basepath: __dirname})
 /**
  * fastify decorators
  */
-fastify.decorate('pkg', require(`${__dirname}/package.json`));
+fastify.decorate('package', require(`${__dirname}/package.json`));
 fastify.decorate('gpicker', gpicker);
 fastify.decorate('config', config);
 fastify.decorate('status', 'OK');

@@ -3,8 +3,8 @@
 
 module.exports = async fastify => {
 
-  const {status, gpicker, pkg} = fastify
-      , {name, version} = pkg;
+  const {config, status, gpicker, package} = fastify
+      , {name, version} = package;
 
   fastify.get('/', async () => ({
     name,
@@ -14,7 +14,8 @@ module.exports = async fastify => {
   }));
 
   fastify.get('/datasets', {
-      /* TODO define when format is definitive schema: {
+      /* TODO define when format is definitive
+      schema: {
         description: 'List datasets available',
         response: {
           200: S.object()
@@ -25,7 +26,27 @@ module.exports = async fastify => {
               })
         }
       }*/
-  }, async () => {
-      return fastify.datasets;
+  }, async req => {
+    return fastify.datasets;
+  });
+
+  fastify.get('/:dataset', {
+      /* TODO define when format is definitive
+      schema: {
+        description: 'List datasets available',
+        response: {
+          200: S.object()
+              .patternProperties({
+                  '.*': S.object()
+                  .prop('path', S.string())
+                  .prop('band', S.integer())
+              })
+        }
+      }*/
+  }, async req => {
+
+    const {dataset} = req.params
+
+    return fastify.datasets[ dataset ] || config.errors.nodataset;
   });
 }

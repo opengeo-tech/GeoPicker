@@ -13,11 +13,11 @@ module.exports = async fastify => {
         'Surrogate-Control': 'no-store'
       };
 
-  fastify.get('/test', async (req, res) => {
+  fastify.get('/demo', async (req, res) => {
     await res.headers(noCache).type('text/html').send(html)
   });
 
   fastify.addHook('onReady', async () => {
-    console.log('Demo page available at path: /test');
+    console.log('Demo page available at path: /demo');
   });
 }

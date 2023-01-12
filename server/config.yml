@@ -43,7 +43,7 @@ densify:
 errors:
   nodatadir: "Data directory not exists"
   nodefaultdataset: "Default dataset file not exists"
-  nodatasetname: "dataset name is reserved"
+  nodataset: "Dataset name not exists"
   densify_nobody: "Send a post with geojson in body"
 
 datasets:
