@@ -24,13 +24,13 @@ fastify.decorate('status', 'OK');
 fastify.register(require('@fastify/cors'), () => config.cors);
 
 /**
- * fastify plugins configs and utils
+ * fastify Plugins configs and utils
  */
 fastify.register(require('./plugins/datasets'));
 fastify.register(require('./plugins/list-routes'));
 
 /**
- * fastify routes
+ * fastify Routes
  */
 fastify.register(require('./routes/root'));
 fastify.register(require('./routes/lonlat'));
@@ -42,7 +42,9 @@ if (config.demopage) {
 
 fastify.listen({port, host}, err => {
 
-    fastify.log.debug(JSON.stringify(config,null,4), 'config')
+    const {fastifyConf, ...conf} = config;
+
+    fastify.log.debug(JSON.stringify(conf,null,4))
 
     if (err) {
         fastify.log.error(err);

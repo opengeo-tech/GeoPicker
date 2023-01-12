@@ -1,5 +1,7 @@
 // TODO https://github.com/opengeo-tech/geopicker/issues/19
-//
+
+const fp = require('fastify-plugin');
+
 function getRouteConfig(r) {
   return r.config ?? {}
 }
@@ -11,26 +13,27 @@ function listRoutes(routes) {
   }
 
   const list = routes.filter(r => getRouteConfig(r).hide !== true).sort((a, b) => a.url.localeCompare(b.url))
-      //  , hasDescription = list.some(r => 'description' in getRouteConfig(r))
       , hiddenMethods = ['OPTIONS','HEAD']
-      , rows = []
-      , listRoutes = list.filter(r => { return !hiddenMethods.includes(r.method); })
+      , rows = [];
 
-  for (const route of listRoutes) {
+  list
+  .filter(r => { return !hiddenMethods.includes(r.method); })
+  .forEach(route=>{
     rows.push(`${route.method} ${route.path}`);
-  }
+  })
 
   return rows;
 }
 
-module.exports = async fastify => {
+module.exports = fp(async fastify => {
 
   const routes = [];
   fastify
-  .addHook('onRoute', route => {
+  .addHook('onRoute', async route => {
       routes.push(route)
   })
   .addHook('onReady', async () => {
-    fastify.log.debug('routes:', listRoutes(routes));
+    fastify.log.debug('routes:')
+    fastify.log.debug(JSON.stringify(listRoutes(routes),null,4));
   });
-}
+})

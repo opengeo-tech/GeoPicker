@@ -17,6 +17,8 @@ module.exports = async fastify => {
     }
   }, async req => {
 
+console.log('PARAMS',req.params)
+
     const {/*dataset,*/ lon, lat} = req.params
         // TODO use dataset
         , val = getValue([lon, lat], defaultDataset);
