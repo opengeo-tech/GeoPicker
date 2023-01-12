@@ -76,5 +76,6 @@ $ curl -X POST -H 'Content-Type: application/json' \
 |Status| Goal |
 |------|-------------|
 |  ❌  | limit access by api key |
+|  ❌  | caching responses |
 |  ❌  | support vector format in datasets, such as shapefile  |
 |  ❌  | websocket interface |
