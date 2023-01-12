@@ -5,8 +5,6 @@ GeoPicker
 
 Geospatial data picker via fast http rest interface written in Nodejs GDAL and Fastify
 
-[Demo](https://opengeo.tech/geopicker/)
-
 # API Rest endpoints
 
 it's work in progress...
