@@ -33,13 +33,25 @@ Params:
 - d densify
 - p band/property of dataset
 
+### Usage
 
-
-### Usage Examples
+running the official docker image:
 
 ```bash
 docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 8080:8080 stefcud/geopicker
 ```
+
+from source code, requirements glibc(Ubuntu 20.x > ):
+
+```bash
+npm install
+cd server && npm install
+cd -
+npm run dev
+```
+
+
+### Examples requests
 
 #### Pick location data via http get
 
