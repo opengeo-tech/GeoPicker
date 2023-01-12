@@ -28,7 +28,7 @@ fastifyConf:
       target: 'pino-pretty'
 
 demopage: ${DEMO_PAGE}
-#from environment vars
+demopath: '/map'
 
 max_locations: 10000
 #maximum number of locations picked in a single request

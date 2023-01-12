@@ -30,20 +30,7 @@ module.exports = async fastify => {
     return fastify.datasets;
   });
 
-  fastify.get('/:dataset', {
-      /* TODO define when format is definitive
-      schema: {
-        description: 'List datasets available',
-        response: {
-          200: S.object()
-              .patternProperties({
-                  '.*': S.object()
-                  .prop('path', S.string())
-                  .prop('band', S.integer())
-              })
-        }
-      }*/
-  }, async req => {
+  fastify.get('/:dataset', async req => {
 
     const {dataset} = req.params
 

@@ -1,4 +1,5 @@
-
+// TODO https://github.com/opengeo-tech/geopicker/issues/19
+//
 function getRouteConfig(r) {
   return r.config ?? {}
 }

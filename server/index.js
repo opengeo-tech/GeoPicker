@@ -36,7 +36,6 @@ fastify.register(require('./routes/root'));
 fastify.register(require('./routes/lonlat'));
 fastify.register(require('./routes/geometry'));
 fastify.register(require('./routes/locations'));
-
 if (config.demopage) {
     fastify.register(require('./routes/demo'));
 }

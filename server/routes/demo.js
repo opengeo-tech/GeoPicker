@@ -4,7 +4,8 @@ const fs = require('fs')
 
 module.exports = async fastify => {
 
-  const htmlpath = path.resolve(`${__dirname}/../../index.html`)
+  const {config} = fastify
+      , htmlpath = path.resolve(`${__dirname}/../../index.html`)
       , html = fs.readFileSync(htmlpath).toString()
       , noCache = {
         'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
@@ -13,11 +14,11 @@ module.exports = async fastify => {
         'Surrogate-Control': 'no-store'
       };
 
-  fastify.get('/demo', async (req, res) => {
+  fastify.get(config.demopath, async (req, res) => {
     await res.headers(noCache).type('text/html').send(html)
   });
 
   fastify.addHook('onReady', async () => {
-    console.log('Demo page available at path: /demo');
+    console.log(`Demo page available at path: ${config.demopath}`);
   });
 }
