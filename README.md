@@ -71,6 +71,10 @@ $ curl -X POST -H 'Content-Type: application/json' \
 {"type":"LineString","coordinates":[[11,46,930],[11.1,46.1,195],[11.2,46.2,1149]]}
 ```
 
-# Source
+# Roadmap
 
-* [Github](https://github.com/opengeo-tech/geopicker)
+|Status| Goal |
+|------|-------------|
+|  ❌  | limit access by api key |
+|  ❌  | support vector format in datasets, such as shapefile  |
+|  ❌  | websocket interface |
