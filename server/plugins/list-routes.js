@@ -33,7 +33,6 @@ module.exports = fp(async fastify => {
       routes.push(route)
   })
   .addHook('onReady', async () => {
-    fastify.log.debug('routes:')
-    fastify.log.debug(JSON.stringify(listRoutes(routes),null,4));
+    fastify.log.debug(listRoutes(routes));
   });
 })

@@ -10,6 +10,8 @@ const config = require('@stefcud/configyml')({basepath: __dirname})
     // , S = require('fluent-json-schema')
     // , polyline = require('@mapbox/polyline')
 
+fastify.log.debug(config);
+
 /**
  * fastify decorators
  */
@@ -41,11 +43,6 @@ if (config.demopage) {
 }
 
 fastify.listen({port, host}, err => {
-
-    const {fastifyConf, ...conf} = config;
-
-    fastify.log.debug(JSON.stringify(conf,null,4))
-
     if (err) {
         fastify.log.error(err);
         process.exit(1)
