@@ -14,7 +14,7 @@ https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73
 |------|------|----------------------|-------|--------|-------------|
 |  ✔️  | GET  | /                    |       | object | service status, versions, datasets |
 |  ✔️  | GET  | /datasets            |       | object | list available datasets and their attributes |
-|  ✔️  | GET  | /:dataset            |       | object | get dataset attributes |
+|  ✔️  | GET  | /:dataset            |       | object | show attributes of a certain dataset |
 |      |      |                      |       |        |             |
 |  ✔️  | GET  | /:dataset/:lon/:lat  |       | array  | get single location value of dataset, densify not supported|
 |  ✔️  | GET  | /:dataset/:locations |       | array  | locations is a string (format is `lon,lat|lon,lat|lon,lat`), densify not supported |
@@ -42,7 +42,7 @@ running the official docker image:
 docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 8080:8080 stefcud/geopicker
 ```
 
-from source code, requirements glibc(Ubuntu 20.x > ):
+Run from source code in development mode, requirements: nodejs 16.x > and glibc 2.28 (Ubuntu 20.x > ):
 
 ```bash
 npm install
@@ -50,6 +50,10 @@ cd server && npm install
 cd -
 npm run dev
 ```
+
+#### Scripts
+
+
 
 
 ### Examples requests

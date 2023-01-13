@@ -17,10 +17,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "bin": {
-    "geopicker": "./bin/geopicker-cli.js",
-    "geopicker-server": "./bin/geopicker-server.sh"
-  },
   "scripts": {
     "lint": "npx eslint .",
     "docker-build": "docker build -f server/Dockerfile -t stefcud/geopicker:latest .",
@@ -35,6 +31,10 @@
   "pre-commit": [
     "lint"
   ],
+  "bin": {
+    "geopicker": "./bin/geopicker-cli.js",
+    "geopicker-server": "./bin/geopicker-server.sh"
+  },
   "files": [
     "lib/"
   ],

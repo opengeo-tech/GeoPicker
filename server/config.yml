@@ -32,6 +32,7 @@ fastifyConf:
 demopage: ${DEMO_PAGE}
 demopath: '/map'
 
+# TODO group in limits section
 max_locations: 10000
 #maximum number of locations picked in a single request
 prec_digits: 5
