@@ -34,7 +34,7 @@ Params:
 - d densify
 - p band/property of dataset
 
-### Usage
+# Usage
 
 running the official docker image:
 
@@ -51,7 +51,7 @@ cd -
 npm run dev
 ```
 
-#### Scripts
+## Scripts
 
 npm run scriptname
 
@@ -61,9 +61,9 @@ npm run scriptname
 - `dev` run in development mode
 
 
-### Examples requests
+## Examples requests
 
-#### Pick location data via http get
+### Pick single location data via Get
 
 ```bash
 $ curl "http://localhost:9090/elevation/11.123/46.123"
@@ -71,7 +71,7 @@ $ curl "http://localhost:9090/elevation/11.123/46.123"
 [195]
 ```
 
-#### Stringified locations
+### Stringified locations
 
 ```bash
 curl "http://localhost:9090/elevation/11.1,46.1|11.2,46.2|11.3,46.3"
@@ -79,7 +79,7 @@ curl "http://localhost:9090/elevation/11.1,46.1|11.2,46.2|11.3,46.3"
 [195,1149,1051]
 ```
 
-#### Geojson geometry
+### Geojson geometry
 
 ```bash
 $ curl -X POST -H 'Content-Type: application/json' \
