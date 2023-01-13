@@ -46,7 +46,8 @@ errors:
   nodatadir: "Data directory not exists"
   nodefaultdataset: "Default dataset file not exists"
   nodataset: "Dataset name not exists"
-  densify_nobody: "Send a post with geojson in body"
+  densify_nobody: "Require a geojson in body"
+  nolocations: "Require array of locations"
 
 datasets:
   default: elevation

@@ -1,5 +1,6 @@
 
-const S = require('fluent-json-schema');
+const S = require('fluent-json-schema')
+  , Ajv = require('ajv')
 
 module.exports = async fastify => {
 
@@ -7,18 +8,32 @@ module.exports = async fastify => {
       , {getValue, setValue} = gpicker
       , datasetNames = Object.keys(config.datasets);
 
+  function validLocations(locs) {
+    const ajv = new Ajv({ allErrors: true })
+      , schema = S.array().minItems(2).maxItems(config.max_locations).items(
+                  S.array().minItems(2).maxItems(2).items(S.number())
+                )
+      , jschema = schema.valueOf()
+    return ajv.compile(jschema)(locs)
+  }
+
   fastify.get('/:dataset/:locations', {
     schema: {
       description: 'Get locations stringified',
       params: S.object()
         .prop('dataset', S.string().enum(datasetNames)).required()
-      //  .prop('locations', S.string()).required()
+        .prop('locations', S.string()).required()
     }
-  }, async req => {
+  }, async (req, res) => {
 
     const locations = req.params.locations.split('|').map(a=>a.split(',').map(Number));
 
-    return getValue(locations, defaultDataset)
+    if (validLocations(locations)) {
+      return getValue(locations, defaultDataset);
+    }
+    else {
+      res.status(400).send(config.errors.nolocations);
+    }
   });
 
   fastify.post('/:dataset/locations', {
