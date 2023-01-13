@@ -51,9 +51,13 @@ cd -
 npm run dev
 ```
 
+## Configuration
+
+Full configuration options can be found in [docs config](./docs/config.md)
+
 ## Scripts
 
-npm run scriptname
+some useful tools for contributors `npm run <scriptname>`
 
 - `docker-up` run in local docker-compose container
 - `start` run in production mode
