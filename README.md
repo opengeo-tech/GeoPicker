@@ -91,7 +91,7 @@ $ curl -X POST -H 'Content-Type: application/json' \
 
 # Roadmap
 
-for details see the description in the [issues](https://github.com/opengeo-tech/geopicker/issues)
+for details see the descriptions in the [issues](https://github.com/opengeo-tech/geopicker/labels/Roadmap)
 
 |Status| Goal |
 |------|-------------|
