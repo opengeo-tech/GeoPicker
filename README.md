@@ -53,7 +53,12 @@ npm run dev
 
 #### Scripts
 
+npm run scriptname
 
+- `docker-up` run in local docker-compose container
+- `start` run in production mode
+- `bench` run benchmarks
+- `dev` run in development mode
 
 
 ### Examples requests

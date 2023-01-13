@@ -6,7 +6,8 @@ this file is compiled with a special library [configyml](https://github.com/stef
 
 ## Datasets
 
-It is the configuration section that defines the `default dataset` and all other datasets available in the api, note that some of these may be aliases of the same resource named differently
+It is the configuration section that defines the `default dataset` and all other datasets available in the api.
+Note that some of these(ex. `altitude: elevation`,`ele: elevation`) may be aliases of the same resource has more names.
 
 ```yaml
 datapath: '/data'
