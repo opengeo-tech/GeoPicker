@@ -49,6 +49,7 @@ errors:
   nodataset: "Dataset name not exists"
   densify_nobody: "Require a geojson in body"
   nolocations: "Require array of locations"
+  outofbounds: "Location is out of dataset bounds"
 
 datasets:
   default: elevation
