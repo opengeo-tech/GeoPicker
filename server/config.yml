@@ -53,6 +53,10 @@ errors:
 
 datasets:
   default: elevation
+  test:
+    path: test_4611_dem.tif
+    band: 1
+    epsg: 4326
   #aliases of same dataset
   altitude: elevation
   elevation:
