@@ -1,20 +1,19 @@
 
-const S = require('fluent-json-schema')
-  , Ajv = require('ajv')
+const S = require('fluent-json-schema');
 
 module.exports = async fastify => {
 
-  const {config, defaultDataset, gpicker} = fastify
+  const {config, defaultDataset, gpicker, valid} = fastify
       , {getValue, setValue} = gpicker
       , datasetNames = Object.keys(config.datasets);
 
-  function validLocations(locs) {
-    const ajv = new Ajv({ allErrors: true })
-      , schema = S.array().minItems(2).maxItems(config.max_locations).items(
-                  S.array().minItems(2).maxItems(2).items(S.number())
-                )
-      , jschema = schema.valueOf()
-    return ajv.compile(jschema)(locs)
+  function parseLocations(textlocs) {
+    return textlocs
+      .split('|')
+      .map(l => l.split(','))
+      .map(c => {
+        return c.map(parseFloat)
+      });
   }
 
   fastify.get('/:dataset/:locations', {
@@ -22,17 +21,28 @@ module.exports = async fastify => {
       description: 'Get locations stringified',
       params: S.object()
         .prop('dataset', S.string().enum(datasetNames)).required()
-        .prop('locations', S.string()).required()
+        .prop('locations',
+            S.string()
+            // eslint-disable-next-line
+            .pattern(/(?=^([^\|]*\|){1,}[^\|]*$)(?=^([^,]*,){2,}[^,]*$)/)
+            // contains min 1 pipe and 2 commas
+            /*.pattern(/^([^,]*,){2,}[^,]*$/)  // contains min 2 commas
+            .pattern(/^([^\|]*\|){1,}[^\|]*$/) // contains min 1 pipe*/
+          ).required()
     }
   }, async (req, res) => {
 
-    const locations = req.params.locations.split('|').map(a=>a.split(',').map(Number));
+    const locations = parseLocations(req.params.locations);
 
-    if (validLocations(locations)) {
+    if (valid.locations(locations)) {
       return getValue(locations, defaultDataset);
     }
     else {
-      res.status(400).send(config.errors.nolocations);
+      res.status(400).send({
+        statusCode: 400,
+        error: "Bad Request",
+        message: config.errors.nolocations
+      });
     }
   });
 
