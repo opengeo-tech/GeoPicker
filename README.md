@@ -102,5 +102,5 @@ for details see the descriptions in the [issues](https://github.com/opengeo-tech
 |  ❌  | limit access by api key |
 |  ❌  | caching responses |
 |  ❌  | support vector format in datasets, such as shapefile  |
-|  ❌  | supports complex calculations on input geometries |
+|  ❌  | supports complex geometries in input |
 |  ❌  | websocket interface |
