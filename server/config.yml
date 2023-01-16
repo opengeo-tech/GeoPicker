@@ -11,6 +11,7 @@ dev:
   port: 9090
   host: 127.0.0.1
   datapath: ./tests/data
+  input_validation: false
   fastifyConf:
     logger:
       level: 'debug'
