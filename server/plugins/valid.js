@@ -7,14 +7,13 @@ module.exports = fp(async fastify => {
 
   const {config} = fastify
 
-  function locations(locs) {
-    const ajv = new Ajv({ allErrors: true })
-      , schema = S.array().minItems(2).maxItems(config.max_locations).items(
-                  S.array().minItems(2).maxItems(2).items(S.number())
-                )
-      , jschema = schema.valueOf()
+  const ajv = new Ajv({ allErrors: true })
 
-    return ajv.compile(jschema)(locs);
+  function locations(locs) {
+    const schema = S.array().minItems(2).maxItems(config.input_max_locations).items(
+                  S.array().minItems(2).maxItems(2).items(S.number())
+                );
+    return ajv.compile(schema.valueOf())(locs);
   }
 
   fastify.decorate('valid', {

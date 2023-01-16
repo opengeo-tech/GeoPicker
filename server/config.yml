@@ -1,6 +1,6 @@
 environments:
   default: prod
-#   #default environment if NODE_ENV is not defined
+  # default environment if NODE_ENV is not defined
 
 prod:
   port: 8080
@@ -20,7 +20,7 @@ dev:
 cors:
   origin: '*'
   optionsSuccessStatus: 200
-  #some legacy browsers (IE11, various SmartTVs) choke on 2
+  # some legacy browsers (IE11, various SmartTVs) choke on 2
 
 fastifyConf:
   maxParamLength: 1024
@@ -32,13 +32,14 @@ fastifyConf:
 demopage: ${DEMO_PAGE}
 demopath: '/map'
 
-# TODO group in limits section
-max_locations: 10000
-#maximum number of locations picked in a single request
+input_validation: true
+# if false speedup the responses but not valid input locations
+input_max_locations: 10000
+# maximum number of locations picked in a single request
 prec_digits: 5
-#number of digits precision returned in geojson coordinates
+# number of digits precision returned in geojson coordinates
 
-#default densify options
+# default densify options
 densify:
   length: 90
   units: 'meters'
@@ -57,7 +58,7 @@ datasets:
     path: test_4611_dem.tif
     band: 1
     epsg: 4326
-  #aliases of same dataset
+  # aliases of same dataset
   altitude: elevation
   elevation:
     path: trentino-altoadige_dem_90m.tif
@@ -69,7 +70,7 @@ datasets:
     epsg: 4326
   elevation_veneto:
     path: veneto_30m.tif
-    #band: * #TODO espose all bands if value is *
-  #TODO manage shape
+    # band: * # TODO espose all bands if value is *
+  # TODO manage shape
   #  admins:
   #   path: a-shape-file.shp

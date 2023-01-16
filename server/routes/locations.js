@@ -34,13 +34,13 @@ module.exports = async fastify => {
 
     const locations = parseLocations(req.params.locations);
 
-    if (valid.locations(locations)) {
+    if (config.input_validation===false || valid.locations(locations)) {
       return getValue(locations, defaultDataset);
     }
     else {
       res.status(400).send({
         statusCode: 400,
-        error: "Bad Request",
+        error: 'Bad Request',
         message: config.errors.nolocations
       });
     }

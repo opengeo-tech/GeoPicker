@@ -21,7 +21,7 @@ module.exports = async fastify => {
           ,
             S.object()
             .prop('type', S.string().const('LineString')).required()
-            .prop('coordinates', S.array().minItems(2).maxItems(config.max_locations).items(
+            .prop('coordinates', S.array().minItems(2).maxItems(config.input_max_locations).items(
               S.array().maxItems(2).items(S.number())
             )).required()
         ])
