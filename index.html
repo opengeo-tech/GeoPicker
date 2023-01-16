@@ -12,13 +12,14 @@
 <link href="//unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.css" rel="stylesheet" type="text/css" />
 <style>
 body {
-    margin:0
+    margin:0;
+    padding: 0;
 }
 #map {
 	position: absolute;
 	width: 100%;
 	top:0;
-	bottom:0;
+	bottom:80px;
   user-select: none;
 }
 .btn-share {
@@ -114,16 +115,20 @@ big {
   border-radius: 4px;
   border: 2px solid rgba(0,0,0,0.2);
 }
-.leaflet-control-log {
-  border-radius: 4px;
-  border: 2px solid rgba(0,0,0,0.2);
+#log {
+  margin: 0;
+  position: fixed;
+  z-index: 5000;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-family: monospace;
+  font-size: 14px;
   background: #ddd;
-  font-size: 16px;
-  min-width: 300px;
-  min-height: 30px;
-  max-height: 90px;
-  float: left;
+  height: 80px;
   overflow-y: scroll;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
   padding: 4px;
 }
 </style>
@@ -133,6 +138,7 @@ big {
 
 <div id="map">
 </div>
+<pre id="log"></pre>
 
 <a href="https://github.com/opengeo-tech/geopicker">
   <img id="ribbon" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
@@ -156,10 +162,10 @@ const center = [46.0651,11.1528]
   , bbox = [4.493408203125001,43.092960677116295,16.896972656250004,48.94415123418794]
   , zoom = 13;
 
-const $divLog = $('<pre class="leaflet-control-log"></pre>');
+const $divLog = $('#log');
 
 function logger() {
-  console.log.apply(window, arguments)
+  //console.log.apply(window, arguments)
   let log = Array.prototype.join.call(arguments,' ')
   $divLog.prepend(`${log}\n`)
 }
@@ -168,10 +174,10 @@ function getLonlat(lon, lat) {
 
   const url = `${baseUrl}/${dataset}/${lon}/${lat}`;
 
-  logger('getLonlat', url)
+  logger('request get lonlat', url)
 
   return $.getJSON(url).done(res => {
-    logger('response getLonlat', res)
+    logger('response get lonlat', res)
   });
 }
 
@@ -179,7 +185,7 @@ function postLonlat(lon, lat) {
 
   const url = `${baseUrl}/${dataset}/lonlat`;
 
-    logger('postLonlat', url)
+    logger('request post lonlat', url)
 
     return $.ajax({
       url,
@@ -188,7 +194,7 @@ function postLonlat(lon, lat) {
       contentType: 'application/json; charset=utf-8',
       data: JSON.stringify({lon, lat}),
     }).done(res => {
-      logger('response postLonlat', res)
+      logger('response post lonlat', res)
     });
 }
 
@@ -196,7 +202,7 @@ function postGeometry(geo) {
 
   const url = `${baseUrl}/${dataset}/geometry`;
 
-  logger('postGeometry',geo)
+  logger('request post geometry',geo)
 
   return $.ajax({
     url,
@@ -207,7 +213,7 @@ function postGeometry(geo) {
   })
   .done(geometry => {
 
-    logger('response postGeometry',geometry)
+    logger('response post geometry',geometry)
 
     controlElevation.clear();
 
@@ -233,11 +239,11 @@ function getLocations(locs) {
 
   const url = `${baseUrl}/${dataset}/${locations}`;
 
-  logger('getLocations',url)
+  logger('request get locations',url)
 
   return $.getJSON(url).done(values => {
 
-    logger('response getLocations', values);
+    logger('response get locations', values);
 
     const coordinates = locs.map((loc, k) => {
       loc.push(values[k]);
@@ -262,7 +268,7 @@ function getLocations(locs) {
 
 function postLocations(locs) {
 
-  logger('postLocations',locs)
+  logger('request post locations',locs)
 
   const url = `${baseUrl}/${dataset}/locations`;
 
@@ -274,7 +280,7 @@ function postLocations(locs) {
     data: JSON.stringify(locs),
   }).done(coordinates => {
 
-    logger('response postLocations',coordinates)
+    logger('response post locations',coordinates)
 
     controlElevation.clear();
 
@@ -350,7 +356,6 @@ const controlDraw = new L.Control.Draw({
 
 map
 .on('draw:toolbaropened', e => {
-  logger('toolbaropened',e)
   $('input[name="drawtype"]').prop('checked', false).triggerHandler('change');
 })
 .on('draw:created draw:drawvertex', e => {
@@ -540,12 +545,6 @@ controlClear.onAdd = map =>  {
 };
 map.addControl(controlClear);
 
-
-var controlLog = L.control({position:'bottomleft'});
-controlLog.onAdd = map =>  {
-  return $divLog[0];
-};
-map.addControl(controlLog);
 </script>
 </body>
 </html>
