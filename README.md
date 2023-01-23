@@ -99,8 +99,8 @@ for details see the descriptions in the [issues](https://github.com/opengeo-tech
 
 |Status| Goal |
 |------|-------------|
-|  ❌  | limit access by api key |
-|  ❌  | caching responses |
 |  ❌  | support vector format in datasets, such as shapefile  |
-|  ❌  | supports complex geometries in input |
+|  ❌  | supports complex geometries in input 
+|  ❌  | limit access by api key |
+|  ❌  | caching responses ||
 |  ❌  | websocket interface |
