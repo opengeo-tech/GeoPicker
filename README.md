@@ -3,7 +3,7 @@ GeoPicker
 
 ![geopicker](docs/logo.png)
 
-Geospatial data picker via fast http rest interface written in Nodejs GDAL and Fastify
+Geospatial dataset picker via fast http rest interface written in Nodejs GDAL and Fastify
 
 # API Rest endpoints
 
