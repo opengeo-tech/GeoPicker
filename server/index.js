@@ -31,6 +31,7 @@ fastify.register(require('@fastify/cors'), () => config.cors);
 fastify.register(require('./plugins/list-routes'));
 fastify.register(require('./plugins/datasets'));
 fastify.register(require('./plugins/valid'));
+
 /**
  * fastify Routes
  */

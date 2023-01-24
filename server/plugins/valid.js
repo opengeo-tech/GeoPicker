@@ -15,7 +15,17 @@ module.exports = fp(async fastify => {
     return ajv.compile(schema.valueOf())(locs);
   }
 
+  function lonlat(lonlat) {
+    const schema = S.array().minItems(2).maxItems(2).items([
+          S.number().minimum(-180).maximum(180), //lon
+          S.number().minimum(-90).maximum(90) //lat
+        ]);
+
+    return ajv.compile(schema.valueOf())(lonlat);
+  }
+
   fastify.decorate('valid', {
-    locations
+    locations,
+    lonlat
   });
 })
