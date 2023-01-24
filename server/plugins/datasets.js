@@ -31,7 +31,7 @@ module.exports = fp(async fastify => {
             , {size} = fs.statSync(file)
 
         listDatasets[ key ] = {
-          path: val.path,
+          //path: val.path,
           size,
           epsg: val.epsg,
           band: val.band || 1,
