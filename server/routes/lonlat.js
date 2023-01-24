@@ -9,11 +9,11 @@ module.exports = async fastify => {
 
   fastify.get('/:dataset/:lon/:lat', {
     schema: {
-      description: 'Get single location value by coordinates of dataset',
+      description: 'Get single value by longitude and latitude',
       params: S.object()
         .prop('dataset', S.string().enum(datasetNames)).required()
-        .prop('lon', S.number()).required()
-        .prop('lat', S.number()).required()
+        .prop('lon', S.number().minimum(-180).maximum(180)).required()
+        .prop('lat', S.number().minimum(-90).maximum(90)).required()
     }
   }, async req => {
 
@@ -26,9 +26,10 @@ module.exports = async fastify => {
     return [val];
   });
 
+
   fastify.post('/:dataset/lonlat', {
     schema: {
-      description: 'Get array locations in body',
+      description: 'Get single array location in body',
       params: S.object()
         .prop('dataset', S.string().enum(datasetNames)).required()
       // TODO body
