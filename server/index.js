@@ -36,6 +36,7 @@ fastify.register(require('./plugins/valid'));
  * fastify Routes
  */
 fastify.register(require('./routes/root'));
+fastify.register(require('./routes/datasets'));
 fastify.register(require('./routes/lonlat'));
 fastify.register(require('./routes/geometry'));
 fastify.register(require('./routes/locations'));

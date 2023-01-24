@@ -30,6 +30,8 @@ fastifyConf:
     transport:
       target: 'pino-pretty'
 
+attribution: "Demo instance of Geopicker Server - Copyright Stefano Cudini https://opengeo.tech"
+
 demopage: ${DEMO_PAGE}
 demopath: '/map'
 
