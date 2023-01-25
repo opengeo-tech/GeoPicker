@@ -36,13 +36,13 @@ Params:
 
 # Usage
 
-running the official docker image:
+Running by official Docker image:
 
 ```bash
 docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 8080:8080 stefcud/geopicker
 ```
 
-Run from source code in development mode, requirements: nodejs 16.x > and glibc 2.28 (Ubuntu 20.x > ):
+Running from source code in development mode, requirements: nodejs 16.x > and glibc 2.28 (Ubuntu 20.x > ):
 
 ```bash
 npm install
