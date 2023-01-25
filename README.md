@@ -92,6 +92,33 @@ $ curl -X POST -H 'Content-Type: application/json' \
 
 {"type":"LineString","coordinates":[[11,46,930],[11.1,46.1,195],[11.2,46.2,1149]]}
 ```
+## Benchmarks
+
+benchmarks scripts: `tests/benchmarks.js` using [AutoCannon](https://github.com/mcollina/autocannon)
+
+```bash
+npm run bench
+```
+
+The results by testing dataset a 10KB [geotiff](https://github.com/opengeo-tech/geopicker/blob/master/tests/data/test_4611_dem.tif)
+```
+┌─────────┬──────┬──────┬───────┬──────┬────────┬─────────┬───────┐
+│ Stat    │ 2.5% │ 50%  │ 97.5% │ 99%  │ Avg    │ Stdev   │ Max   │
+├─────────┼──────┼──────┼───────┼──────┼────────┼─────────┼───────┤
+│ Latency │ 0 ms │ 0 ms │ 2 ms  │ 3 ms │ 0.3 ms │ 0.67 ms │ 15 ms │
+└─────────┴──────┴──────┴───────┴──────┴────────┴─────────┴───────┘
+┌───────────┬─────────┬─────────┬─────────┬────────┬─────────┬─────────┬─────────┐
+│ Stat      │ 1%      │ 2.5%    │ 50%     │ 97.5%  │ Avg     │ Stdev   │ Min     │
+├───────────┼─────────┼─────────┼─────────┼────────┼─────────┼─────────┼─────────┤
+│ Req/Sec   │ 7307    │ 7307    │ 12007   │ 13095  │ 11307.6 │ 2075.54 │ 7305    │
+├───────────┼─────────┼─────────┼─────────┼────────┼─────────┼─────────┼─────────┤
+│ Bytes/Sec │ 1.62 MB │ 1.62 MB │ 2.66 MB │ 2.9 MB │ 2.51 MB │ 460 kB  │ 1.62 MB │
+└───────────┴─────────┴─────────┴─────────┴────────┴─────────┴─────────┴─────────┘
+
+Req/Bytes counts sampled once per second.
+# of samples: 5
+57k requests in 5.01s, 12.5 MB read
+```
 
 # Roadmap
 
