@@ -147,3 +147,4 @@ for details see the descriptions in the [issues](https://github.com/opengeo-tech
 |  ❌  | limit access by api key |
 |  ❌  | caching responses |
 |  ❌  | websocket interface |
+|  ❌  | Command line interface |
