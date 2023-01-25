@@ -16,29 +16,32 @@ At present the index.html page contains a large implementation of browser side r
 it's work in progress...
 https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73
 
-|Status|Method| Path                 |Params | Return | Description |
-|------|------|----------------------|-------|--------|-------------|
-|  ✔️  | GET  | /                    |       | object | service status, versions, datasets |
-|  ✔️  | GET  | /datasets            |       | object | list available datasets and their attributes |
-|  ✔️  | GET  | /:dataset            |       | object | show attributes of a certain dataset |
-|      |      |                      |       |        |             |
-|  ✔️  | GET  | /:dataset/:lon/:lat  |       | array  | get single location value of dataset, densify not supported|
-|  ✔️  | GET  | /:dataset/:locations |       | array  | locations is a string (format is `lon,lat|lon,lat|lon,lat`), densify not supported |
-|      |      |                      |       |        |             |
-|  ✔️  | POST | /:dataset/lonlat     |       | arrays | accept array or object in body |
-|  ✔️  | POST | /:dataset/geometry   | f,d,p | object | geojson geometry Point or LineString in body
-|  ✔️  | POST | /:dataset/locations  | f,d,p | arrays | accept array or object of locations in body (format is `[[lon,lat],[lon,lat],[lon,lat]]`) |
-|      |      |                      |       |        |             |
-|  ❌  | GET  | /densify/:locations  |       | arrays | add more points in list of locations |
-|  ❌  | POST | /densify/geometry    |       | object | add more points in linestring |
-|  ❌  | GET  | /within/:lon/:lat    |       | object | check what dataset contains lon,lat |
-|  ❌  | POST | /within/geometry     |       | object | check what dataset contains geometry in body |
-|  ❌  | POST | /meta/geometry       |       | object | return direction and length of geometry |
+|Status|Method| Path                 | Return | Description |
+|------|------|----------------------|--------|-------------|
+|  ✔️  | GET  | /                    | object | service status, versions, datasets |
+|  ✔️  | GET  | /datasets            | object | list available datasets and their attributes |
+|  ✔️  | GET  | /:dataset            | object | show attributes of a certain dataset |
+|      |      |                      |        |             |
+|  ✔️  | GET  | /:dataset/:lon/:lat  | array  | get single location value of dataset, densify not supported|
+|  ✔️  | GET  | /:dataset/:locations | array  | locations is a string (format: `lon,lat|lon,lat|lon,lat`), densify not supported |
+|      |      |                      |        |             |
+|  ✔️  | POST | /:dataset/lonlat     | arrays | accept array or object in body |
+|  ✔️  | POST | /:dataset/geometry   | object | geojson geometry Point or LineString in body
+|  ✔️  | POST | /:dataset/locations  | arrays | accept array or object of locations in body (format is `[[lon,lat],[lon,lat],[lon,lat]]`) |
+|      |      |                      |        |             |
+|  ❌  | GET  | /densify/:locations  | arrays | add more points in list of locations |
+|  ❌  | POST | /densify/geometry    | object | add more points in linestring |
+|  ❌  | GET  | /within/:lon/:lat    | object | check what dataset contains lon,lat |
+|  ❌  | POST | /within/geometry     | object | check what dataset contains geometry in body |
+|  ❌  | POST | /meta/geometry       | object | return direction and length of geometry |
 
-Params:
-- f format(json,polyline,geojson)
-- d densify
-- p band/property of dataset
+**Additional global Parameters:**
+
+|Status|Parameter| Default  | Description |
+|------|---------|----------|-------------|
+|  ❌  | format  | by input | output type(json,polyline,geojson) |
+|  ❌  | densify | false    | enable densification of points in the result |
+|  ❌  | meta    | false    | additional metadata in output |
 
 # Usage
 
@@ -103,6 +106,8 @@ $ curl -X POST -H 'Content-Type: application/json' \
 benchmarks scripts: `tests/benchmarks.js` using [AutoCannon](https://github.com/mcollina/autocannon)
 
 ```bash
+cd tests && npm install
+cd -
 npm run bench
 ```
 
@@ -131,8 +136,10 @@ Req/Bytes counts sampled once per second.
 
 for details see the descriptions in the [issues](https://github.com/opengeo-tech/geopicker/labels/Roadmap)
 
-|Status| Goal |
+|Status| Goal        |
 |------|-------------|
+|  🚧  | manage multiple datasets |
+|  🚧  | ES6 modules |
 |  🚧  | extend benchmarks for any endpoints |
 |  ❌  | unit testing |
 |  ❌  | support vector format in datasets, such as shapefile  |
