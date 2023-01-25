@@ -93,10 +93,10 @@ curl "http://localhost:9090/elevation/11.1,46.1|11.2,46.2|11.3,46.3"
 
 ```bash
 $ curl -X POST -H 'Content-Type: application/json' \
-  -d '{"type":"LineString","coordinates":[[11,46],[11.1,46.1],[11.2,46.2]]}' \
+  -d '{"type":"LineString","coordinates":[[11.1,46.1],[11.2,46.2],[11.3,46.3]]}' \
   "http://localhost:9090/elevation/geometry"
 
-{"type":"LineString","coordinates":[[11,46,930],[11.1,46.1,195],[11.2,46.2,1149]]}
+{"type":"LineString","coordinates":[[11.1,46.1,195],[11.2,46.2,1149],[11.3,46.3,1051]]}
 ```
 ## Benchmarks
 
