@@ -13,10 +13,10 @@ dev:
   datapath: ./tests/data
   input_validation: false
   fastifyConf:
-    logger: false
-      # level: 'debug'
-      # transport:
-      #   target: 'pino-pretty'
+    logger:
+      level: 'debug'
+      transport:
+        target: 'pino-pretty'
 
 cors:
   origin: '*'
