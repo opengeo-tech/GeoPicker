@@ -133,8 +133,10 @@ for details see the descriptions in the [issues](https://github.com/opengeo-tech
 
 |Status| Goal |
 |------|-------------|
+|  ❌  | unit testing |
+|  ❌  | extend benchmarks for any endpoints |
 |  ❌  | support vector format in datasets, such as shapefile  |
 |  ❌  | supports complex geometries in input 
 |  ❌  | limit access by api key |
-|  ❌  | caching responses ||
+|  ❌  | caching responses |
 |  ❌  | websocket interface |
