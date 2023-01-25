@@ -55,8 +55,7 @@ Running from source code in development mode, requirements: _nodejs 16.x_ > and 
 
 ```bash
 npm install
-cd server && npm install
-cd -
+cd server && npm install && cd -
 npm run dev
 ```
 
@@ -106,8 +105,7 @@ $ curl -X POST -H 'Content-Type: application/json' \
 benchmarks scripts: `tests/benchmarks.js` using [AutoCannon](https://github.com/mcollina/autocannon)
 
 ```bash
-cd tests && npm install
-cd -
+cd tests && npm install && cd -
 npm run bench
 ```
 
@@ -134,7 +132,7 @@ Req/Bytes counts sampled once per second.
 
 # Roadmap
 
-for details see the descriptions in the [issues](https://github.com/opengeo-tech/geopicker/labels/Roadmap)
+for details see the descriptions in the [Roadmap issues](https://github.com/opengeo-tech/geopicker/labels/Roadmap)
 
 |Status| Goal        |
 |------|-------------|
