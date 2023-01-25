@@ -48,7 +48,7 @@ Running by official [Docker image](https://hub.docker.com/repository/docker/stef
 docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 8080:8080 stefcud/geopicker
 ```
 
-Running from source code in development mode, requirements: nodejs 16.x > and glibc 2.28 (Ubuntu 20.x > ):
+Running from source code in development mode, requirements: _nodejs 16.x_ > and _glibc 2.28_ (_Ubuntu 20.x_ > ):
 
 ```bash
 npm install
