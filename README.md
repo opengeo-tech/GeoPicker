@@ -42,7 +42,7 @@ Params:
 
 # Usage
 
-Running by official Docker image:
+Running by official [Docker image](https://hub.docker.com/repository/docker/stefcud/geopicker/general):
 
 ```bash
 docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 8080:8080 stefcud/geopicker
