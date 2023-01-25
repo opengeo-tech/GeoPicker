@@ -39,8 +39,8 @@ https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73
 
 |Status|Parameter| Default  | Description |
 |------|---------|----------|-------------|
+|  🚧  | densify | false    | enable densification of points in the result |
 |  ❌  | format  | by input | output type(json,polyline,geojson) |
-|  ❌  | densify | false    | enable densification of points in the result |
 |  ❌  | meta    | false    | additional metadata in output |
 
 # Usage
