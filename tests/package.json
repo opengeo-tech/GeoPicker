@@ -2,8 +2,10 @@
   "name": "geopicker-tests",
   "version": "1.0.0",
   "dependencies": {
+    "autocannon": "^7.10.0",
     "gdal": "^0.11.1",
     "gdal-next": "^2.8.0",
-    "geoblaze": "^1.1.0"
+    "geoblaze": "^1.1.0",
+    "lodash": "^4.17.21"
   }
 }

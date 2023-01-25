@@ -23,6 +23,8 @@ module.exports = async fastify => {
 
     // TODO return multiple val for multiple datasets
 
+    //fastify.log.debug(`response ${val.toString()}`)
+
     return [val];
   });
 
