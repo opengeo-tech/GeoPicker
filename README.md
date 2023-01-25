@@ -11,6 +11,8 @@ Geopicker has been specially designed to offer the widest range of formats and m
 Each endpoint and the parameters it accepts have been designed on the basis of the functioning of already existing services, gathering a complete and coherent collection of APIs.
 At present the index.html page contains a large implementation of browser side requests using LeafletJs as basemap and jQuery.
 
+[Article about this project](https://stefcud.medium.com/geopicker-bf4c4321c9ec)
+
 # API Rest endpoints
 
 it's work in progress...
