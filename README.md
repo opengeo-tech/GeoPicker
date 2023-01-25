@@ -67,7 +67,7 @@ some useful tools for contributors `npm run <scriptname>`
 
 ## Examples requests
 
-### Pick single location data via Get
+**Pick single location data via Get**
 
 ```bash
 $ curl "http://localhost:9090/elevation/11.123/46.123"
@@ -75,7 +75,7 @@ $ curl "http://localhost:9090/elevation/11.123/46.123"
 [195]
 ```
 
-### Stringified locations
+**Stringified locations**
 
 ```bash
 curl "http://localhost:9090/elevation/11.1,46.1|11.2,46.2|11.3,46.3"
@@ -83,7 +83,7 @@ curl "http://localhost:9090/elevation/11.1,46.1|11.2,46.2|11.3,46.3"
 [195,1149,1051]
 ```
 
-### Geojson geometry
+**Geojson geometry**
 
 ```bash
 $ curl -X POST -H 'Content-Type: application/json' \
