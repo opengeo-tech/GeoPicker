@@ -41,9 +41,9 @@ http.request({
       let r = 0;
       autocannon({
         url,
-        connections: 10,
+        duration: 3,
         pipelining: 1,
-        duration: 5,
+        connections: 10,
         requests: [{
           setupRequest: function(request) {
 
@@ -54,7 +54,14 @@ http.request({
             return request
           }
         }]
-      }, console.log)
+      }, (err,ress) => {
+
+        const out = autocannon.printResult(ress, {})
+
+        console.log(out)
+      })
+
+
 
     });
 })
