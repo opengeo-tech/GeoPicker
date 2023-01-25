@@ -41,9 +41,9 @@ http.request({
       let r = 0;
       autocannon({
         url,
-        duration: 3,
-        pipelining: 1,
-        connections: 10,
+        duration: 5,  //The number of seconds to run the autocannon. default: 10.
+        pipelining: 1,  //The number of pipelined requests to use. default: 1.
+        connections: 10,  //The number of concurrent connections to use. default: 10.
         requests: [{
           setupRequest: function(request) {
 
