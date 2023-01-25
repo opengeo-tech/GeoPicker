@@ -3,7 +3,13 @@ GeoPicker
 
 ![geopicker](docs/logo.png)
 
-Geospatial dataset picker via fast http rest interface written in NodeJs bindings for GDAL and [Fastify](https://www.fastify.io/)
+Geospatial dataset picker via fast http rest interface written in [NodeJs for GDAL](https://github.com/mmomtchev/node-gdal-async) bindings and [Fastify](https://www.fastify.io/)
+
+## Scope
+
+Geopicker has been specially designed to offer the widest range of formats and methods of data requests that is possible, to adapt to any context of use by the client.
+Each endpoint and the parameters it accepts have been designed on the basis of the functioning of already existing services, gathering a complete and coherent collection of APIs.
+At present the index.html page contains a large implementation of browser side requests using LeafletJs as basemap and jQuery.
 
 # API Rest endpoints
 
@@ -87,10 +93,10 @@ curl "http://localhost:9090/elevation/11.1,46.1|11.2,46.2|11.3,46.3"
 
 ```bash
 $ curl -X POST -H 'Content-Type: application/json' \
-  -d '{"type":"LineString","coordinates":[[11,46],[11.1,46.1],[11.2,46.2]]}' \
+  -d '{"type":"LineString","coordinates":[[11.1,46.1],[11.2,46.2],[11.3,46.3]]}' \
   "http://localhost:9090/elevation/geometry"
 
-{"type":"LineString","coordinates":[[11,46,930],[11.1,46.1,195],[11.2,46.2,1149]]}
+{"type":"LineString","coordinates":[[11.1,46.1,195],[11.2,46.2,1149],[11.3,46.3,1051]]}
 ```
 ## Benchmarks
 
@@ -127,8 +133,10 @@ for details see the descriptions in the [issues](https://github.com/opengeo-tech
 
 |Status| Goal |
 |------|-------------|
+|  🚧  | extend benchmarks for any endpoints |
+|  ❌  | unit testing |
 |  ❌  | support vector format in datasets, such as shapefile  |
-|  ❌  | supports complex geometries in input 
+|  ❌  | supports complex geometries in input |
 |  ❌  | limit access by api key |
-|  ❌  | caching responses ||
+|  ❌  | caching responses |
 |  ❌  | websocket interface |
