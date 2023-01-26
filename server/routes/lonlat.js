@@ -10,12 +10,9 @@ module.exports = async fastify => {
   fastify.get('/:dataset/:lon/:lat', {schema: schemas.lonlat}, async req => {
 
     const {/*dataset,*/ lon, lat} = req.params
-        // TODO use dataset
         , val = getValue([lon, lat], defaultDataset);
 
-    // TODO return multiple val for multiple datasets
-
-    //fastify.log.debug(`response ${val.toString()}`)
+    // TODO use dataset
 
     return [val];
   });

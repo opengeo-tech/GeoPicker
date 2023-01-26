@@ -14,11 +14,11 @@ module.exports = async fastify => {
         'Surrogate-Control': 'no-store'
       };
 
-  fastify.get(config.demopath, async (req, res) => {
-    await res.headers(noCache).type('text/html').send(html)
-  });
-
   fastify.addHook('onReady', async () => {
     fastify.log.info(`Demo page available at path: ${config.demopath}`);
+  });
+
+  fastify.get(config.demopath, async (req, res) => {
+    await res.headers(noCache).type('text/html').send(html)
   });
 }
