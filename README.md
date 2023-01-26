@@ -1,9 +1,9 @@
 GeoPicker
 ==========
 
-![geopicker](docs/logo.png)
+![geopicker](docs/cover_600.png)
 
-Geospatial dataset picker via fast http rest interface written in [NodeJs for GDAL](https://github.com/mmomtchev/node-gdal-async) bindings and [Fastify](https://www.fastify.io/)
+Geospatial dataset picker via fast Api Rest interface written in [NodeJs for GDAL](https://github.com/mmomtchev/node-gdal-async) bindings and [Fastify](https://www.fastify.io/)
 
 ## Scope
 
