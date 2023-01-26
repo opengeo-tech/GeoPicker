@@ -3,20 +3,22 @@ const S = require('fluent-json-schema');
 
 module.exports = async fastify => {
 
-  const {config, defaultDataset, gpicker} = fastify
-      , {getValue, setValue} = gpicker
-      , datasetNames = Object.keys(config.datasets);
+  const {config, schemas, defaultDataset, gpicker} = fastify
+      , {getValue, setValue} = gpicker;
 
+  /**
+   * GET
+   */
   fastify.get('/:dataset/:lon/:lat', {
-    schema: {
+    /*schema: {
       description: 'Get single value by longitude and latitude',
       params: S.object()
-        .prop('dataset', S.string().enum(datasetNames)).required()
+        .prop('dataset', S.string().enum(Object.keys(config.datasets))).required()
         .prop('lon', S.number().minimum(-180).maximum(180)).required()
         .prop('lat', S.number().minimum(-90).maximum(90)).required()
-    }
+    }*/
   }, async req => {
-
+console.log('ROUTE LONLAT')
     const {/*dataset,*/ lon, lat} = req.params
         // TODO use dataset
         , val = getValue([lon, lat], defaultDataset);
@@ -28,12 +30,14 @@ module.exports = async fastify => {
     return [val];
   });
 
-
+  /**
+   * POST
+   */
   fastify.post('/:dataset/lonlat', {
     schema: {
       description: 'Get single array location in body',
       params: S.object()
-        .prop('dataset', S.string().enum(datasetNames)).required()
+        .prop('dataset', S.string().enum(Object.keys(config.datasets))).required()
       // TODO body
     }
   }, async req => {

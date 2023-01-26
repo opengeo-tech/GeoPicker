@@ -8,7 +8,7 @@ const config = require('@stefcud/configyml')({basepath: __dirname})
     , fastify = require('fastify')(fastifyConf)
     , gpicker = require('../lib');
 
-fastify.log.debug(config);
+//fastify.log.debug(config);
 
 /**
  * fastify decorators

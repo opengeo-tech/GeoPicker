@@ -57,6 +57,7 @@ errors:
   nolocations: "Require array of locations"
   outofbounds: "Location is out of dataset bounds"
 
+datapath: '/data'
 datasets:
   default: elevation
   test:

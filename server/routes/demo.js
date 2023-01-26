@@ -1,6 +1,6 @@
 
-const fs = require('fs')
-  , path = require('path');
+const path = require('path')
+    , fs = require('fs');
 
 module.exports = async fastify => {
 

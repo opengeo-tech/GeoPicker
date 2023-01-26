@@ -7,6 +7,7 @@ module.exports = async fastify => {
       , {getValue, setValue} = gpicker
       , datasetNames = Object.keys(config.datasets);
 
+  // TODO move in module utils
   function parseLocations(textlocs) {
     return textlocs
       .split('|')
