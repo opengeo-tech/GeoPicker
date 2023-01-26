@@ -42,6 +42,7 @@ https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73
 |Status|Parameter| Default  | Description |
 |------|---------|----------|-------------|
 |  🚧  | densify | false    | enable densification of points in the result |
+|  🚧  | simplify| false    | enable simplication geometry of the result |
 |  ❌  | format  | by input | output type(json,polyline,geojson) |
 |  ❌  | meta    | false    | additional metadata in output |
 
@@ -141,6 +142,8 @@ for details see the descriptions in the [Roadmap issues](https://github.com/open
 |  🚧  | manage multiple datasets |
 |  🚧  | ES6 modules |
 |  🚧  | extend benchmarks for any endpoints |
+|  ❌  | enable densify function |
+|  ❌  | enable simply function |
 |  ❌  | unit testing |
 |  ❌  | swagger |
 |  ❌  | support vector format in datasets, such as shapefile  |
