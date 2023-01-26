@@ -1,8 +1,6 @@
 
 module.exports = (S, config) => {
 
-  const datasetNames = Object.keys(config.datasets);
-
   const geojson = S.object()
     .oneOf([
         S.object()
@@ -19,7 +17,7 @@ module.exports = (S, config) => {
   return {
     geometry: {
       description: 'Post a geojson geometry',
-      params: S.object().prop('dataset', S.string().enum(datasetNames)).required(),
+      params: S.object().prop('dataset', S.string().enum(Object.keys(config.datasets))).required(),
       body: geojson
       /* TODO response: {
         200: S.object().prop('created', S.boolean())

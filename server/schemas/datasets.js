@@ -1,8 +1,7 @@
 
 module.exports = (S, config) => {
 
-  const datasetNames = Object.keys(config.datasets)
-      , dataset = S.object()
+  const dataset = S.object()
         .prop('type', S.string().enum(['raster','vector']))
         .prop('band', S.integer())
         .prop('size', S.integer())
@@ -19,7 +18,7 @@ module.exports = (S, config) => {
   return {
     dataset: {
       description: 'Describe single dataset',
-      params: S.object().prop('dataset', S.string().enum(datasetNames)).required(),
+      params: S.object().prop('dataset', S.string().enum(Object.keys(config.datasets))).required(),
       response: {
         200: dataset
       }
