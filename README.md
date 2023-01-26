@@ -142,6 +142,7 @@ for details see the descriptions in the [Roadmap issues](https://github.com/open
 |  🚧  | ES6 modules |
 |  🚧  | extend benchmarks for any endpoints |
 |  ❌  | unit testing |
+|  ❌  | swagger |
 |  ❌  | support vector format in datasets, such as shapefile  |
 |  ❌  | supports complex geometries in input |
 |  ❌  | limit access by api key |
