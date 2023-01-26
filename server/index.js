@@ -40,6 +40,9 @@ fastify.register(require('./routes/datasets'));
 fastify.register(require('./routes/lonlat'));
 fastify.register(require('./routes/geometry'));
 fastify.register(require('./routes/locations'));
+/**
+ * demo page map
+ */
 if (config.demopage) {
     fastify.register(require('./routes/demo'));
 }

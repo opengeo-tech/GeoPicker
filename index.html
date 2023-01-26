@@ -1,550 +1,557 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title>GeoPicker Demo Map</title>
-<meta name="description" content="Geospatial data picker via fast http rest interface">
-<meta charset="utf-8">
-<meta name="format-detection" content="telephone=no">
-<meta name="msapplication-tap-highlight" content="no">
-<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
-<link href="//unpkg.com/leaflet@1.4.0/dist/leaflet.css" rel="stylesheet" type="text/css" />
-<link href="//unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" rel="stylesheet" type="text/css" />
-<link href="//unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.css" rel="stylesheet" type="text/css" />
-<style>
-body {
-    margin:0;
-    padding: 0;
-}
-#map {
-	position: absolute;
-	width: 100%;
-	top:0;
-	bottom:80px;
-  user-select: none;
-}
-.btn-share {
-    font-size:16px;
-    text-decoration:none;
-    display:block;
-    text-align:right;
-}
-.leaflet-popup.loading .leaflet-popup-content {
-    background: no-repeat center center url('data:image/gif;base64,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');
-    color:rgba(0,0,0,0.2)
-}
-#ribbon {
-	position: absolute;
-	top: 0;
-	right: 0;
-	height: 120px;
-	width: auto;
-	border: 0;
-	filter: alpha(opacity=80);
-	-khtml-opacity: .8;
-	-moz-opacity: .8;
-	opacity: .8;
-  z-index:20000
-}
 
-/*L.pather*/
-#map div.elbow {
-    transition: background-color .25s;
-    border: 2px solid red;
-    outline: none;
-    border-radius: 50%;
-    pointer-events: none;
-    background-color: #555;
-}
-#map div.elbow:hover {
-    border: 2px solid white;
-}
-#map.mode-edit div.elbow {
-    cursor: move;
-    pointer-events: all;
-    background-color: orangered;
-}
-#map svg.pather {
-    position: absolute;
-    z-index: 1001;
-}
-.leaflet-left.leaflet-top .leaflet-control-btn {
-  float: left;
-  height: 24px;
-  width: 130px;
-  white-space: nowrap;
-  line-height: 28px;
-  vertical-align: middle;
-  cursor: pointer;
-  border-radius: 4px;
-  background: #fff;
-  padding: 2px 4px 2px 2px;
-  border: 2px solid rgba(0,0,0,0.2);
-  background-clip: padding-box;
-  color: black;
-}
-.clear-all {
-    display: inline-block;
-    vertical-align: middle;
-    height: 22px;
-    width: 22px;
-    background-image: url(https://unpkg.com/leaflet-draw@1.0.4/dist/images/spritesheet.svg);
-    background-image: linear-gradient(transparent,transparent),url(https://unpkg.com/leaflet-draw@1.0.4/dist/images/spritesheet.svg);
-    background-repeat: no-repeat;
-    background-size: 300px 30px;
-    background-clip: padding-box;
-    background-position: -245px -4px;
-}
-.leaflet-editing-icon {
-  border-radius: 50%;
-  background: blue;
-  outline: none;
-}
-.lime-theme .leaflet-control.elevation .background {
-    background-color: rgba(156,194,34,.65);
-    margin: 0 0 -5px 0;
-}
-.lime-theme .leaflet-control.elevation .area {
-    fill: #ff8800;
-    opacity: .65;
-}
-big {
-  font-size: 20px;
-  font-weight: bold;
-}
-.elevation.leaflet-control {
-  border-radius: 4px;
-  border: 2px solid rgba(0,0,0,0.2);
-}
-#log {
-  margin: 0;
-  position: fixed;
-  z-index: 5000;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  font-family: monospace;
-  font-size: 14px;
-  background: #ddd;
-  height: 80px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-  padding: 4px;
-}
-</style>
+<head>
+    <title>GeoPicker Demo Map</title>
+    <meta name="description" content="Geospatial data picker via fast http rest interface">
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <link href="//unpkg.com/leaflet@1.4.0/dist/leaflet.css" rel="stylesheet" type="text/css" />
+    <link href="//unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" rel="stylesheet" type="text/css" />
+    <link href="//unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.css" rel="stylesheet" type="text/css" />
+    <style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    #map {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        bottom: 80px;
+        user-select: none;
+    }
+
+    .btn-share {
+        font-size: 16px;
+        text-decoration: none;
+        display: block;
+        text-align: right;
+    }
+
+    .leaflet-popup.loading .leaflet-popup-content {
+        background: no-repeat center center url('data:image/gif;base64,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');
+        color: rgba(0, 0, 0, 0.2)
+    }
+
+    #ribbon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 120px;
+        width: auto;
+        border: 0;
+        filter: alpha(opacity=80);
+        -khtml-opacity: .8;
+        -moz-opacity: .8;
+        opacity: .8;
+        z-index: 20000
+    }
+
+    /*L.pather*/
+    #map div.elbow {
+        transition: background-color .25s;
+        border: 2px solid red;
+        outline: none;
+        border-radius: 50%;
+        pointer-events: none;
+        background-color: #555;
+    }
+
+    #map div.elbow:hover {
+        border: 2px solid white;
+    }
+
+    #map.mode-edit div.elbow {
+        cursor: move;
+        pointer-events: all;
+        background-color: orangered;
+    }
+
+    #map svg.pather {
+        position: absolute;
+        z-index: 1001;
+    }
+
+    .leaflet-left.leaflet-top .leaflet-control-btn {
+        float: left;
+        height: 24px;
+        width: 130px;
+        white-space: nowrap;
+        line-height: 28px;
+        vertical-align: middle;
+        cursor: pointer;
+        border-radius: 4px;
+        background: #fff;
+        padding: 2px 4px 2px 2px;
+        border: 2px solid rgba(0, 0, 0, 0.2);
+        background-clip: padding-box;
+        color: black;
+    }
+
+    .clear-all {
+        display: inline-block;
+        vertical-align: middle;
+        height: 22px;
+        width: 22px;
+        background-image: url(https://unpkg.com/leaflet-draw@1.0.4/dist/images/spritesheet.svg);
+        background-image: linear-gradient(transparent, transparent), url(https://unpkg.com/leaflet-draw@1.0.4/dist/images/spritesheet.svg);
+        background-repeat: no-repeat;
+        background-size: 300px 30px;
+        background-clip: padding-box;
+        background-position: -245px -4px;
+    }
+
+    .leaflet-editing-icon {
+        border-radius: 50%;
+        background: blue;
+        outline: none;
+    }
+
+    .lime-theme .leaflet-control.elevation .background {
+        background-color: rgba(156, 194, 34, .65);
+        margin: 0 0 -5px 0;
+    }
+
+    .lime-theme .leaflet-control.elevation .area {
+        fill: #ff8800;
+        opacity: .65;
+    }
+
+    big {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .elevation.leaflet-control {
+        border-radius: 4px;
+        border: 2px solid rgba(0, 0, 0, 0.2);
+    }
+
+    #log {
+        margin: 0;
+        position: fixed;
+        z-index: 5000;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        font-family: monospace;
+        font-size: 14px;
+        background: #ddd;
+        height: 80px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        padding: 4px;
+    }
+
+    </style>
 </head>
 
 <body>
+    <div id="map">
+    </div>
+    <pre id="log"></pre>
+    <a href="https://github.com/opengeo-tech/geopicker">
+        <img id="ribbon" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
+    </a>
+    <script src="//unpkg.com/underscore@1.9.1/underscore.js"></script>
+    <script src="//unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+    <script src="//unpkg.com/leaflet@1.4.0/dist/leaflet-src.js"></script>
+    <script src="//unpkg.com/clipboard@2.0.4/dist/clipboard.js"></script>
+    <script src="//unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+    <script src="//unpkg.com/d3@3.5.17/d3.min.js"></script>
+    <script src="//unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.src.js"></script>
+    <script src="//unpkg.com/leaflet-pather@0.1.17/dist/pather.js"></script>
+    <script>
+    const baseUrl = location.origin;
 
-<div id="map">
-</div>
-<pre id="log"></pre>
+    const dataset = 'default';
 
-<a href="https://github.com/opengeo-tech/geopicker">
-  <img id="ribbon" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
-</a>
+    const center = [46.0651, 11.1528],
+        bbox = [4.493408203125001, 43.092960677116295, 16.896972656250004, 48.94415123418794],
+        zoom = 13;
 
-<script src="//unpkg.com/underscore@1.9.1/underscore.js"></script>
-<script src="//unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
-<script src="//unpkg.com/leaflet@1.4.0/dist/leaflet-src.js"></script>
-<script src="//unpkg.com/clipboard@2.0.4/dist/clipboard.js"></script>
-<script src="//unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
-<script src="//unpkg.com/d3@3.5.17/d3.min.js"></script>
-<script src="//unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.src.js"></script>
-<script src="//unpkg.com/leaflet-pather@0.1.17/dist/pather.js"></script>
-<script>
+    const $divLog = $('#log');
 
-const baseUrl = location.origin;
-
-const dataset = 'default';
-
-const center = [46.0651,11.1528]
-  , bbox = [4.493408203125001,43.092960677116295,16.896972656250004,48.94415123418794]
-  , zoom = 13;
-
-const $divLog = $('#log');
-
-function logger() {
-  //console.log.apply(window, arguments)
-  let log = Array.prototype.join.call(arguments,' ')
-  $divLog.prepend(`${log}\n`)
-}
-
-function getLonlat(lon, lat) {
-
-  const url = `${baseUrl}/${dataset}/${lon}/${lat}`;
-
-  logger('request get lonlat', url)
-
-  return $.getJSON(url).done(res => {
-    logger('response get lonlat', res)
-  });
-}
-
-function postLonlat(lon, lat) {
-
-  const url = `${baseUrl}/${dataset}/lonlat`;
-
-    logger('request post lonlat', url)
-
-    return $.ajax({
-      url,
-      type: 'POST',
-      dataType: 'json',
-      contentType: 'application/json; charset=utf-8',
-      data: JSON.stringify({lon, lat}),
-    }).done(res => {
-      logger('response post lonlat', res)
-    });
-}
-
-function postGeometry(geo) {
-
-  const url = `${baseUrl}/${dataset}/geometry`;
-
-  logger('request post geometry',geo)
-
-  return $.ajax({
-    url,
-    type: 'POST',
-    dataType: 'json',
-    contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify(geo),
-  })
-  .done(geometry => {
-
-    logger('response post geometry',geometry)
-
-    controlElevation.clear();
-
-    if(geometry.type==='Point') {
-      const [lon,lat,ele] = geometry.coordinates;
-      let m = L.marker([lat,lon]).bindTooltip(`Elevation: ${ele}`,{permanent:true})
-      editableLayers.addLayer(m);
-      return
+    function logger() {
+        //console.log.apply(window, arguments)
+        let log = Array.prototype.join.call(arguments, ' ')
+        $divLog.prepend(`${log}\n`)
     }
 
-    layerElevation.addData({
-      type: 'Feature',
-      geometry
-    });
+    function getLonlat(lon, lat) {
 
-    editableLayers.addLayer(layerElevation);
-  });
-}
+        const url = `${baseUrl}/${dataset}/${lon}/${lat}`;
 
-function getLocations(locs) {
+        logger('request get lonlat', url)
 
-  const locations = locs.map(a => a.join(',')).join('|');
-
-  const url = `${baseUrl}/${dataset}/${locations}`;
-
-  logger('request get locations',url)
-
-  return $.getJSON(url).done(values => {
-
-    logger('response get locations', values);
-
-    const coordinates = locs.map((loc, k) => {
-      loc.push(values[k]);
-      return loc;
-    });
-
-    controlElevation.clear();
-
-    layerElevation.clearLayers();
-    layerElevation.addData({
-      type: 'Feature',
-      geometry: {
-        type: 'LineString',
-        coordinates
-      }
-    });
-
-    editableLayers.addLayer(layerElevation);
-  });
-}
-
-
-function postLocations(locs) {
-
-  logger('request post locations',locs)
-
-  const url = `${baseUrl}/${dataset}/locations`;
-
-  return $.ajax({
-    url,
-    type: 'POST',
-    dataType: 'json',
-    contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify(locs),
-  }).done(coordinates => {
-
-    logger('response post locations',coordinates)
-
-    controlElevation.clear();
-
-    layerElevation.clearLayers();
-    layerElevation.addData({
-      type: 'Feature',
-      geometry: {
-        type: 'LineString',
-        coordinates
-      }
-    });
-
-    editableLayers.addLayer(layerElevation);
-  });
-}
-
-const baselayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.{ext}', {
-	subdomains: 'abcd',
-	minZoom: 8,
-	maxZoom: 16,
-	ext: 'png'
-});
-
-const map = L.map('map', {
-  attributionControl: false,
-  doubleClickZoom: false,
-  layers: [baselayer],
-	center,
-	zoom
-});
-
-// https://github.com/MrMufflon/Leaflet.Elevation
-const controlElevation = new L.Control.Elevation({
-  width: 600,
-  height: 300,
-  position: 'bottomright',
-  collapsed: false
-})
-.addTo(map);
-
-const layerElevation = L.geoJson([], {
-    style: () => ({
-      color: '#00f',
-      weight: 2
-    }),
-    onEachFeature: controlElevation.addData.bind(controlElevation)
-}).addTo(map);
-
-const editableLayers = L.featureGroup().addTo(map);
-
-//editLayers
-const controlDraw = new L.Control.Draw({
-  position: 'topleft',
-  draw: {
-    polyline: {
-      shapeOptions: {
-          color: '#00f',
-          weight: 3
-      }
-    },
-    marker: true,
-    circle: false,
-    circlemarker: false,
-    rectangle: false,
-    polygon: false
-  },
-  edit: {
-    featureGroup: editableLayers,
-    edit: false,
-    remove: false
-  }
-}).addTo(map);
-
-map
-.on('draw:toolbaropened', e => {
-  $('input[name="drawtype"]').prop('checked', false).triggerHandler('change');
-})
-.on('draw:created draw:drawvertex', e => {
-
-  if(e.layers) {  //drawvertex
-    const {features} = e.layers.toGeoJSON();
-    var geometry = {
-      type: 'LineString',
-      coordinates: features.map(f => {
-        return f.geometry.coordinates
-      })
+        return $.getJSON(url).done(res => {
+            logger('response get lonlat', res)
+        });
     }
-    //feature collection to single feature
-  }
-  else if(e.layer) {  //created
-    var {geometry} = e.layer.toGeoJSON();
-  }
 
-  postGeometry(geometry);
-});
+    function postLonlat(lon, lat) {
 
-// L.Pather freehand draw
-const controlDrawFree = L.pather({
-    strokeWidth: 1,
-    smoothFactor: 0,
-    mode: L.Pather.MODE.ALL, // ALL,APPEND,CREATE,DELETE,EDIT,EDIT_APPEND,VIEW
-    pathColour: '#00f'
-})
-.on('created edited', e => {
-  const {polyline} = e.polyline
-      , {geometry} = polyline.toGeoJSON();
+        const url = `${baseUrl}/${dataset}/lonlat`;
 
-  postLocations(geometry.coordinates).done(() => {
-    controlDrawFree.addTo(editableLayers);
-    controlDrawFree.setMode(L.Pather.MODE.ALL)
-  });
-});
+        logger('request post lonlat', url)
 
-/**
- * Draw line freehand
- */
-var controlFreehand = new L.Control({position:'topleft'});
-controlFreehand.onAdd = map =>  {
-  var div = $('<label class="leaflet-control-btn">Draw Line Freehand</label>');
-  var check = $('<input type="radio" name="drawtype" />').prependTo(div)
-  check.on('change', e => {
-
-    const checked = check.is(':checked');
-
-    if (checked) {
-      controlDrawFree.addTo(editableLayers);
-      controlDrawFree.setMode(L.Pather.MODE.ALL);
-      controlDraw._toolbars.draw.disable();
-      map.off('mousemove', controlMouse._pickValue, this);
+        return $.ajax({
+            url,
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({ lon, lat }),
+        }).done(res => {
+            logger('response post lonlat', res)
+        });
     }
-    else {
-      controlDrawFree.removeFrom(editableLayers);
+
+    function postGeometry(geo) {
+
+        const url = `${baseUrl}/${dataset}/geometry`;
+
+        logger('request post geometry', geo)
+
+        return $.ajax({
+                url,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(geo),
+            })
+            .done(geometry => {
+
+                logger('response post geometry', geometry)
+
+                controlElevation.clear();
+
+                if (geometry.type === 'Point') {
+                    const [lon, lat, ele] = geometry.coordinates;
+                    let m = L.marker([lat, lon]).bindTooltip(`Elevation: ${ele}`, { permanent: true })
+                    editableLayers.addLayer(m);
+                    return
+                }
+
+                layerElevation.addData({
+                    type: 'Feature',
+                    geometry
+                });
+
+                editableLayers.addLayer(layerElevation);
+            });
     }
-  })
-  return div[0];
-};
-map.addControl(controlFreehand);
 
-/**
- * mouse click picker
- */
-const tooltipClick = L.tooltip({
-  offset: L.point([0,-10]),
-  direction: 'top'
-});
+    function getLocations(locs) {
 
-map.on('dblclick', e => {
+        const locations = locs.map(a => a.join(',')).join('|');
 
-  tooltipClick.setLatLng(e.latlng).addTo(map);
+        const url = `${baseUrl}/${dataset}/${locations}`;
 
-  const {lng, lat} = e.latlng;
+        logger('request get locations', url)
 
-  postLonlat(lng, lat).done(res => {
-      const {lon, lat, val} = res;
-      tooltipClick.setContent(`<big>${val}m</big><br>${lon}<br>${lat}`)
-  });
-})
+        return $.getJSON(url).done(values => {
 
-/**
- * mouse move picker
- */
-var controlMouse = new L.Control({position:'topleft'});
-controlMouse._pickValue = function(e) {
+            logger('response get locations', values);
 
-  controlMouse._tooltip.setLatLng(e.latlng);
+            const coordinates = locs.map((loc, k) => {
+                loc.push(values[k]);
+                return loc;
+            });
 
-  const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
+            controlElevation.clear();
 
-  getLonlat(lon,lat).done(res => {
-    const [val] = res;
-    controlMouse._tooltip.setContent(`<big>${val}m</big><br>${lon}, ${lat}`)
-  });
-};
-controlMouse.onAdd = map =>  {
-  controlMouse._tooltip = L.tooltip({
-      offset: L.point([0,-10]),
-      direction: 'top'
+            layerElevation.clearLayers();
+            layerElevation.addData({
+                type: 'Feature',
+                geometry: {
+                    type: 'LineString',
+                    coordinates
+                }
+            });
+
+            editableLayers.addLayer(layerElevation);
+        });
+    }
+
+
+    function postLocations(locs) {
+
+        logger('request post locations', locs)
+
+        const url = `${baseUrl}/${dataset}/locations`;
+
+        return $.ajax({
+            url,
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(locs),
+        }).done(coordinates => {
+
+            logger('response post locations', coordinates)
+
+            controlElevation.clear();
+
+            layerElevation.clearLayers();
+            layerElevation.addData({
+                type: 'Feature',
+                geometry: {
+                    type: 'LineString',
+                    coordinates
+                }
+            });
+
+            editableLayers.addLayer(layerElevation);
+        });
+    }
+
+    const baselayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.{ext}', {
+        subdomains: 'abcd',
+        minZoom: 8,
+        maxZoom: 16,
+        ext: 'png'
+    });
+
+    const map = L.map('map', {
+        attributionControl: false,
+        doubleClickZoom: false,
+        layers: [baselayer],
+        center,
+        zoom
+    });
+
+    // https://github.com/MrMufflon/Leaflet.Elevation
+    const controlElevation = new L.Control.Elevation({
+            width: 600,
+            height: 300,
+            position: 'bottomright',
+            collapsed: false
+        })
+        .addTo(map);
+
+    const layerElevation = L.geoJson([], {
+        style: () => ({
+            color: '#00f',
+            weight: 2
+        }),
+        onEachFeature: controlElevation.addData.bind(controlElevation)
+    }).addTo(map);
+
+    const editableLayers = L.featureGroup().addTo(map);
+
+    //editLayers
+    const controlDraw = new L.Control.Draw({
+        position: 'topleft',
+        draw: {
+            polyline: {
+                shapeOptions: {
+                    color: '#00f',
+                    weight: 3
+                }
+            },
+            marker: true,
+            circle: false,
+            circlemarker: false,
+            rectangle: false,
+            polygon: false
+        },
+        edit: {
+            featureGroup: editableLayers,
+            edit: false,
+            remove: false
+        }
+    }).addTo(map);
+
+    map.on('draw:toolbaropened', e => {
+            $('input[name="drawtype"]').prop('checked', false).triggerHandler('change');
+        })
+        .on('draw:created draw:drawvertex', e => {
+
+            if (e.layers) { //drawvertex
+                const { features } = e.layers.toGeoJSON();
+                var geometry = {
+                    type: 'LineString',
+                    coordinates: features.map(f => {
+                        return f.geometry.coordinates
+                    })
+                }
+                //feature collection to single feature
+            } else if (e.layer) { //created
+                var { geometry } = e.layer.toGeoJSON();
+            }
+
+            postGeometry(geometry);
+        });
+
+    // L.Pather freehand draw
+    const controlDrawFree = L.pather({
+            strokeWidth: 1,
+            smoothFactor: 0,
+            mode: L.Pather.MODE.ALL, // ALL,APPEND,CREATE,DELETE,EDIT,EDIT_APPEND,VIEW
+            pathColour: '#00f'
+        })
+        .on('created edited', e => {
+            const { polyline } = e.polyline, { geometry } = polyline.toGeoJSON();
+
+            postLocations(geometry.coordinates).done(() => {
+                controlDrawFree.addTo(editableLayers);
+                controlDrawFree.setMode(L.Pather.MODE.ALL)
+            });
+        });
+
+    /**
+     * Draw line freehand
+     */
+    var controlFreehand = new L.Control({ position: 'topleft' });
+    controlFreehand.onAdd = map => {
+        var div = $('<label class="leaflet-control-btn">Draw Line Freehand</label>');
+        var check = $('<input type="radio" name="drawtype" />').prependTo(div)
+        check.on('change', e => {
+
+            const checked = check.is(':checked');
+
+            if (checked) {
+                controlDrawFree.addTo(editableLayers);
+                controlDrawFree.setMode(L.Pather.MODE.ALL);
+                controlDraw._toolbars.draw.disable();
+                map.off('mousemove', controlMouse._pickValue, this);
+            } else {
+                controlDrawFree.removeFrom(editableLayers);
+            }
+        })
+        return div[0];
+    };
+    map.addControl(controlFreehand);
+
+    /**
+     * mouse click picker
+     */
+    const tooltipClick = L.tooltip({
+        offset: L.point([0, -10]),
+        direction: 'top'
+    });
+
+    map.on('dblclick', e => {
+
+        tooltipClick.setLatLng(e.latlng).addTo(map);
+
+        const { lng, lat } = e.latlng;
+
+        postLonlat(lng, lat).done(res => {
+            const { lon, lat, val } = res;
+            tooltipClick.setContent(`<big>${val}m</big><br>${lon}<br>${lat}`)
+        });
     })
-    .setLatLng([0,0]).addTo(map);
-  var div = $('<label class="leaflet-control-btn">Mouse Point Picker</label>');
-  var check = $('<input type="radio" name="drawtype" />').prependTo(div)
-  check.on('change', e => {
 
-    const checked = check.is(':checked');
+    /**
+     * mouse move picker
+     */
+    var controlMouse = new L.Control({ position: 'topleft' });
+    controlMouse._pickValue = function(e) {
 
-    if (checked) {
-      controlMouse._tooltip.setLatLng([0,0]).addTo(map);
-      map.on('mousemove', controlMouse._pickValue, this);
-      controlDraw._toolbars.draw.disable()
-    }
-    else {
-      map.off('mousemove', controlMouse._pickValue, this);
-      controlMouse._tooltip.removeFrom(map)
-    }
-  })
-  return div[0];
-};
-map.addControl(controlMouse);
+        controlMouse._tooltip.setLatLng(e.latlng);
 
-const polylocs = L.polyline([],{color:'red'}).addTo(map)
+        const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
 
-/**
- * mouse track picker
- */
-var controlMouseTrack = new L.Control({position:'topleft'});
-controlMouseTrack.locs = [];//buffer of last coordinates
-controlMouseTrack.pickTrack = function(e) {
+        getLonlat(lon, lat).done(res => {
+            const [val] = res;
+            controlMouse._tooltip.setContent(`<big>${val}m</big><br>${lon}, ${lat}`)
+        });
+    };
+    controlMouse.onAdd = map => {
+        controlMouse._tooltip = L.tooltip({
+                offset: L.point([0, -10]),
+                direction: 'top'
+            })
+            .setLatLng([0, 0]).addTo(map);
+        var div = $('<label class="leaflet-control-btn">Mouse Point Picker</label>');
+        var check = $('<input type="radio" name="drawtype" />').prependTo(div)
+        check.on('change', e => {
 
-  let {locs} = controlMouseTrack;
-  if(locs.length > 20) {
-    locs.shift();
-  }
+            const checked = check.is(':checked');
 
-  const lastLoc = locs.at(-1)
-      , {lat, lng} = e.latlng;
+            if (checked) {
+                controlMouse._tooltip.setLatLng([0, 0]).addTo(map);
+                map.on('mousemove', controlMouse._pickValue, this);
+                controlDraw._toolbars.draw.disable()
+            } else {
+                map.off('mousemove', controlMouse._pickValue, this);
+                controlMouse._tooltip.removeFrom(map)
+            }
+        })
+        return div[0];
+    };
+    map.addControl(controlMouse);
 
-  if (locs.length===0 || e.latlng.distanceTo(lastLoc) > 80) {
-    locs.push([lat,lng]);
-  }
-  polylocs.setLatLngs(locs);
+    const polylocs = L.polyline([], { color: 'red' }).addTo(map)
 
-  const {geometry} = polylocs.toGeoJSON(4)
-    , {coordinates} = geometry;
+    /**
+     * mouse track picker
+     */
+    var controlMouseTrack = new L.Control({ position: 'topleft' });
+    controlMouseTrack.locs = []; //buffer of last coordinates
+    controlMouseTrack.pickTrack = function(e) {
 
-  getLocations(coordinates);
-};
-controlMouseTrack.onAdd = map =>  {
+        let { locs } = controlMouseTrack;
+        if (locs.length > 20) {
+            locs.shift();
+        }
 
-  const maxlocations = 10;
+        const lastLoc = locs.at(-1),
+            { lat, lng } = e.latlng;
 
-  var div = $('<label class="leaflet-control-btn">Mouse Track Picker</label>');
-  var check = $('<input type="radio" name="drawtype" />').prependTo(div)
-  check.on('change', e => {
+        if (locs.length === 0 || e.latlng.distanceTo(lastLoc) > 80) {
+            locs.push([lat, lng]);
+        }
+        polylocs.setLatLngs(locs);
 
-    const checked = check.is(':checked');
+        const { geometry } = polylocs.toGeoJSON(4), { coordinates } = geometry;
 
-    if (checked) {
-      map.on('mousemove', controlMouseTrack.pickTrack, this);
-      controlDraw._toolbars.draw.disable()
-    }
-    else {
-      map.off('mousemove', controlMouseTrack.pickTrack, this);
-    }
-  })
-  return div[0];
-};
-map.addControl(controlMouseTrack);
+        getLocations(coordinates);
+    };
+    controlMouseTrack.onAdd = map => {
 
-/**
- * button clear all layers
- */
-var controlClear = L.control({position:'topleft'});
-controlClear.onAdd = map =>  {
-  var div = $('<a class="leaflet-control-btn"><i class="clear-all"></i>Clear All</a>');
-  div.on('click', e => {
-    e.preventDefault()
-    e.stopImmediatePropagation();
-    layerElevation.clearLayers();
-    editableLayers.clearLayers();
-  });
-  return div[0];
-};
-map.addControl(controlClear);
+        const maxlocations = 10;
 
-</script>
+        var div = $('<label class="leaflet-control-btn">Mouse Track Picker</label>');
+        var check = $('<input type="radio" name="drawtype" />').prependTo(div)
+        check.on('change', e => {
+
+            const checked = check.is(':checked');
+
+            if (checked) {
+                map.on('mousemove', controlMouseTrack.pickTrack, this);
+                controlDraw._toolbars.draw.disable()
+            } else {
+                map.off('mousemove', controlMouseTrack.pickTrack, this);
+            }
+        })
+        return div[0];
+    };
+    map.addControl(controlMouseTrack);
+
+    /**
+     * button clear all layers
+     */
+    var controlClear = L.control({ position: 'topleft' });
+    controlClear.onAdd = map => {
+        var div = $('<a class="leaflet-control-btn"><i class="clear-all"></i>Clear All</a>');
+        div.on('click', e => {
+            e.preventDefault()
+            e.stopImmediatePropagation();
+            layerElevation.clearLayers();
+            editableLayers.clearLayers();
+        });
+        return div[0];
+    };
+    map.addControl(controlClear);
+
+    </script>
 </body>
+
 </html>
