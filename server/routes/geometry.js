@@ -4,12 +4,18 @@ module.exports = async fastify => {
   const {config, schemas, defaultDataset, gpicker} = fastify
       , {setValue} = gpicker;
 
+  /**
+   * POST
+   */
   fastify.post('/:dataset/geometry', {
     schema: schemas.geometry
   }, async req => {
     return setValue(req.body, defaultDataset);
   });
 
+  /**
+   * POST densify
+   */
   fastify.post('/densify/geometry', async req => {
     const densify = !!req.query.densify || config.densify;
     return densify(req.body, densify);

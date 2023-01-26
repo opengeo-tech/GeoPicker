@@ -1,9 +1,7 @@
 
-const S = require('fluent-json-schema');
-
 module.exports = async fastify => {
 
-  const {config, schemas, defaultDataset, gpicker} = fastify
+  const {/*config,*/ schemas, defaultDataset, gpicker} = fastify
       , {getValue, setValue} = gpicker;
 
   /**
