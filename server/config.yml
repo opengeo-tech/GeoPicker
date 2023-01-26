@@ -41,7 +41,7 @@ input_validation: true
 input_max_locations: 10000
 # maximum number of locations picked in a single request
 
-output_precision_digits: 5
+output_precision_digits: 4
 # number of digits precision returned in geojson coordinates
 
 # default densify options
@@ -57,6 +57,7 @@ errors:
   nolocations: "Require array of locations"
   outofbounds: "Location is out of dataset bounds"
 
+datapath: '/data'
 datasets:
   default: elevation
   test:

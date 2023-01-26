@@ -5,12 +5,10 @@
  */
 const config = require('@stefcud/configyml')({basepath: __dirname})
     , {port, host, fastifyConf} = config
-    , gpicker = require('../lib')
     , fastify = require('fastify')(fastifyConf)
-    // , S = require('fluent-json-schema')
-    // , polyline = require('@mapbox/polyline')
+    , gpicker = require('../lib');
 
-fastify.log.debug(config);
+//fastify.log.debug(config);
 
 /**
  * fastify decorators
@@ -30,6 +28,7 @@ fastify.register(require('@fastify/cors'), () => config.cors);
  */
 fastify.register(require('./plugins/list-routes'));
 fastify.register(require('./plugins/datasets'));
+fastify.register(require('./plugins/schemas'));
 fastify.register(require('./plugins/valid'));
 
 /**
@@ -40,6 +39,7 @@ fastify.register(require('./routes/datasets'));
 fastify.register(require('./routes/lonlat'));
 fastify.register(require('./routes/geometry'));
 fastify.register(require('./routes/locations'));
+
 /**
  * demo page map
  */

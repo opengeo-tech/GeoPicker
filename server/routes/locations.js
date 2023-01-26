@@ -1,12 +1,10 @@
 
-const S = require('fluent-json-schema');
-
 module.exports = async fastify => {
 
-  const {config, defaultDataset, gpicker, valid} = fastify
-      , {getValue, setValue} = gpicker
-      , datasetNames = Object.keys(config.datasets);
+  const {config, schemas, defaultDataset, gpicker, valid} = fastify
+      , {getValue, setValue} = gpicker;
 
+  // TODO move in module utils
   function parseLocations(textlocs) {
     return textlocs
       .split('|')
@@ -16,21 +14,10 @@ module.exports = async fastify => {
       });
   }
 
-  fastify.get('/:dataset/:locations', {
-    schema: {
-      description: 'Get locations stringified',
-      params: S.object()
-        .prop('dataset', S.string().enum(datasetNames)).required()
-        .prop('locations',
-            S.string()
-            // eslint-disable-next-line
-            .pattern(/(?=^([^\|]*\|){1,}[^\|]*$)(?=^([^,]*,){2,}[^,]*$)/)
-            // contains min 1 pipe and 2 commas
-            /*.pattern(/^([^,]*,){2,}[^,]*$/)  // contains min 2 commas
-            .pattern(/^([^\|]*\|){1,}[^\|]*$/) // contains min 1 pipe*/
-          ).required()
-    }
-  }, async (req, res) => {
+  /**
+   * GET
+   */
+  fastify.get('/:dataset/:locations', {schema: schemas.locationsString}, async (req, res) => {
 
     const locations = parseLocations(req.params.locations);
 
@@ -46,16 +33,12 @@ module.exports = async fastify => {
     }
   });
 
-  fastify.post('/:dataset/locations', {
-    schema: {
-      description: 'Get array locations in body',
-      params: S.object()
-        .prop('dataset', S.string().enum(datasetNames)).required()
-      //  .prop('locations', S.string()).required()
-    }
-  }, async req => {
+  /**
+   * POST
+   */
+  fastify.post('/:dataset/locations', {schema: schemas.locationsPost}, async req => {
 
-    return setValue(req.body, defaultDataset)
+    return setValue(req.body, defaultDataset, {precision: config.output_precision_digits})
   });
 
   /* fastify.get('/densify/:locations', (req,res) => {

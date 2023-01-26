@@ -1,38 +1,21 @@
 
-const S = require('fluent-json-schema');
-
 module.exports = async fastify => {
 
-  const {config, defaultDataset, gpicker} = fastify
-      , {setValue} = gpicker
-      , datasetNames = Object.keys(config.datasets);
+  const {config, schemas, defaultDataset, gpicker} = fastify
+      , {setValue} = gpicker;
 
+  /**
+   * POST
+   */
   fastify.post('/:dataset/geometry', {
-    schema: {
-      description: 'Post a geojson geometry',
-      params: S.object()
-        .prop('dataset', S.string().enum(datasetNames)).required(),
-      // TODO query: S.object().prop('band', S.integer().default(1)),
-      body: S.object()
-        .oneOf([
-            S.object()
-            .prop('type', S.string().const('Point')).required()
-            .prop('coordinates', S.array().maxItems(2).items(S.number())).required()
-          ,
-            S.object()
-            .prop('type', S.string().const('LineString')).required()
-            .prop('coordinates', S.array().minItems(2).maxItems(config.input_max_locations).items(
-              S.array().maxItems(2).items(S.number())
-            )).required()
-        ])
-      /* response: {
-        200: S.object().prop('created', S.boolean())
-      } */
-    }
+    schema: schemas.geometry
   }, async req => {
     return setValue(req.body, defaultDataset);
   });
 
+  /**
+   * POST densify
+   */
   fastify.post('/densify/geometry', async req => {
     const densify = !!req.query.densify || config.densify;
     return densify(req.body, densify);
