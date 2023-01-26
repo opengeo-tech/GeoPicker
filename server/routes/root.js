@@ -1,7 +1,6 @@
 
-// const S = require('fluent-json-schema')
-
-const fs = require('fs');
+const fs = require('fs')
+    , favicon = fs.readFileSync(`${__dirname}/../favicon.png`);
 
 module.exports = async fastify => {
 
@@ -9,12 +8,10 @@ module.exports = async fastify => {
       , {name, version} = package
       , {attribution} = config
 
-  const icon = fs.readFileSync(`${__dirname}/../favicon.png`)
-
   fastify.get('/favicon.ico', async (req,res) => {
     //res.code(404).send(`It's an API Rest!`)
-    res.type('image/png').send(icon);
-  })
+    res.type('image/png').send(favicon);
+  });
 
   fastify.get('/', async () => ({
     name,
