@@ -11,6 +11,8 @@ Geopicker has been specially designed to offer the widest range of formats and m
 Each endpoint and the parameters it accepts have been designed on the basis of the functioning of already existing services, gathering a complete and coherent collection of APIs.
 At present the index.html page contains a large implementation of browser side requests using LeafletJs as basemap and jQuery.
 
+[Article about this project](https://stefcud.medium.com/geopicker-bf4c4321c9ec)
+
 # API Rest endpoints
 
 it's work in progress...
@@ -39,13 +41,13 @@ https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73
 
 |Status|Parameter| Default  | Description |
 |------|---------|----------|-------------|
+|  🚧  | densify | false    | enable densification of points in the result |
 |  ❌  | format  | by input | output type(json,polyline,geojson) |
-|  ❌  | densify | false    | enable densification of points in the result |
 |  ❌  | meta    | false    | additional metadata in output |
 
 # Usage
 
-Running by official [Docker image](https://hub.docker.com/repository/docker/stefcud/geopicker/general):
+Running by official [Docker image](https://hub.docker.com/r/stefcud/geopicker):
 
 ```bash
 docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 8080:8080 stefcud/geopicker
@@ -55,8 +57,7 @@ Running from source code in development mode, requirements: _nodejs 16.x_ > and 
 
 ```bash
 npm install
-cd server && npm install
-cd -
+cd server && npm install && cd -
 npm run dev
 ```
 
@@ -106,8 +107,7 @@ $ curl -X POST -H 'Content-Type: application/json' \
 benchmarks scripts: `tests/benchmarks.js` using [AutoCannon](https://github.com/mcollina/autocannon)
 
 ```bash
-cd tests && npm install
-cd -
+cd tests && npm install && cd -
 npm run bench
 ```
 
@@ -134,7 +134,7 @@ Req/Bytes counts sampled once per second.
 
 # Roadmap
 
-for details see the descriptions in the [issues](https://github.com/opengeo-tech/geopicker/labels/Roadmap)
+for details see the descriptions in the [Roadmap issues](https://github.com/opengeo-tech/geopicker/labels/Roadmap)
 
 |Status| Goal        |
 |------|-------------|
@@ -147,3 +147,4 @@ for details see the descriptions in the [issues](https://github.com/opengeo-tech
 |  ❌  | limit access by api key |
 |  ❌  | caching responses |
 |  ❌  | websocket interface |
+|  ❌  | command line interface |
