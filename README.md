@@ -42,6 +42,7 @@ https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73
 |Status|Parameter| Default  | Description |
 |------|---------|----------|-------------|
 |  🚧  | densify | false    | enable densification of points in the result |
+|  🚧  | simplify| false    | enable simplication geometry of the result |
 |  ❌  | format  | by input | output type(json,polyline,geojson) |
 |  ❌  | meta    | false    | additional metadata in output |
 
