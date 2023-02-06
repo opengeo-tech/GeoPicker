@@ -19,6 +19,7 @@ services:
     environment:
       - DEMO_PAGE=true
       #TODO- SWAGGER_PAGE=true
+    restart: always
 
   # test:
   #   container_name: geopicker-test
