@@ -154,7 +154,8 @@
 </head>
 
 <body>
-    <h3>GeoPicker Demo map</h3>
+    <h3>GeoPicker Demo</h3>
+    <p>Interactive demo map with the features that can be implemented using all <strong>GeoPicker endpoints</strong>, for details consult the source code of the page.</p>
     <div id="map">
     </div>
     <pre id="log"></pre>
@@ -174,7 +175,7 @@
 
     const dataset = 'default';
 
-    const zoom = 13
+    const zoom = 9
         , center = [46, 11];
 
     const $divLog = $('#log');
@@ -401,6 +402,30 @@
             postGeometry(geometry);
         });
 
+    var controlBounds = L.control({ position: 'topleft' });
+    controlBounds.onAdd = map => {
+        var div = $('<a class="leaflet-control-btn">▣ Dataset Bounds</a>');
+        div.on('click', e => {
+            e.preventDefault()
+            e.stopImmediatePropagation();
+
+            getDataset(dataset).done(res => {
+
+                const {minLon,minLat,maxLon,maxLat} = res.bbox;
+
+                var bb = L.latLngBounds([minLat,minLon],[maxLat,maxLon])
+                  , cen = bb.getCenter()
+
+                L.rectangle(bb, {fill:false}).addTo(layerElevation);
+
+                map.flyToBounds(bb)
+            })
+
+        });
+        return div[0];
+    };
+    map.addControl(controlBounds);
+
     // L.Pather freehand draw
     const controlDrawFree = L.pather({
             strokeWidth: 1,
@@ -563,33 +588,6 @@
         return div[0];
     };
     map.addControl(controlClear);
-
-
-
-    var controlBounds = L.control({ position: 'topleft' });
-    controlBounds.onAdd = map => {
-        var div = $('<a class="leaflet-control-btn">▣ Dataset Bounds</a>');
-        div.on('click', e => {
-            e.preventDefault()
-            e.stopImmediatePropagation();
-
-            getDataset(dataset).done(res => {
-
-                const {minLon,minLat,maxLon,maxLat} = res.bbox;
-
-                var bb = L.latLngBounds([minLat,minLon],[maxLat,maxLon])
-                  , cen = bb.getCenter()
-
-                L.rectangle(bb, {fill:false}).addTo(layerElevation);
-
-                map.fitBounds(bb)
-            })
-
-        });
-        return div[0];
-    };
-    map.addControl(controlBounds);
-
 
     </script>
 </body>
