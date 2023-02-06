@@ -70,6 +70,10 @@ datasets:
     path: trentino-altoadige_dem_90m.tif
     band: 1
     epsg: 4326
+  alps:
+    path: alps_10m.tif
+    band: 1
+    epsg: 4326
   aspect:
     path: italia_aspect_30m.tif
     band: 2
