@@ -17,6 +17,7 @@ services:
     volumes:
       - "../tests/data:/data"
     environment:
+      - PREFIX=/geopicker
       - DEMO_PAGE=true
       #TODO- SWAGGER_PAGE=true
     restart: always

@@ -15,7 +15,7 @@
   "dependencies": {
     "@fastify/cors": "^8.1.1",
     "@mapbox/polyline": "^1.1.1",
-    "@stefcud/configyml": "^1.0.1",
+    "@stefcud/configyml": "^1.2.0",
     "fastify": "^4.10.2",
     "fastify-plugin": "^4.4.0",
     "fluent-json-schema": "^4.0.0",

@@ -2,6 +2,8 @@ environments:
   default: prod
   # default environment if NODE_ENV is not defined
 
+defaultsEnv:
+
 prod:
   port: 8080
   host: 0.0.0.0
@@ -18,10 +20,12 @@ dev:
       transport:
         target: 'pino-pretty'
 
-cors:
-  origin: '*'
-  optionsSuccessStatus: 200
-  # some legacy browsers (IE11, various SmartTVs) choke on 2
+prefix: ${PREFIX}
+
+demopage: ${DEMO_PAGE}
+demopath: '/map'
+
+attribution: "Demo instance of Geopicker Server - Copyright Stefano Cudini https://opengeo.tech"
 
 fastifyConf:
   maxParamLength: 1024
@@ -30,10 +34,10 @@ fastifyConf:
     transport:
       target: 'pino-pretty'
 
-attribution: "Demo instance of Geopicker Server - Copyright Stefano Cudini https://opengeo.tech"
-
-demopage: ${DEMO_PAGE}
-demopath: '/map'
+cors:
+  origin: '*'
+  optionsSuccessStatus: 200
+  # some legacy browsers (IE11, various SmartTVs) choke on 2
 
 input_validation: true
 # if false speedup the responses but not valid input locations

@@ -3,12 +3,20 @@
  * Copyright Stefano Cudini stefano.cudini@gmail.com
  * https://opengeo.tech
  */
-const config = require('@stefcud/configyml')({basepath: __dirname})
-    , {port, host, fastifyConf} = config
-    , fastify = require('fastify')(fastifyConf)
-    , gpicker = require('../lib');
+const configYml = require('@stefcud/configyml')
+    , Fastify = require('fastify')
+    , gpicker = require('../lib')
+    , config = configYml({
+        basepath: __dirname,
+        defaultsEnv: {
+          DEMO_PAGE: false,
+          PREFIX: '/'
+        }
+      })
+    , {fastifyConf, port, host, prefix} = config
+    , fastify = Fastify(fastifyConf);
 
-//fastify.log.debug(config);
+fastify.log.debug(config);
 
 /**
  * fastify decorators
@@ -34,17 +42,17 @@ fastify.register(require('./plugins/valid'));
 /**
  * fastify Routes
  */
-fastify.register(require('./routes/root'));
-fastify.register(require('./routes/datasets'));
-fastify.register(require('./routes/lonlat'));
-fastify.register(require('./routes/geometry'));
-fastify.register(require('./routes/locations'));
+fastify.register(require('./routes/root'), {prefix});
+fastify.register(require('./routes/lonlat'), {prefix});
+fastify.register(require('./routes/datasets'), {prefix});
+fastify.register(require('./routes/geometry'), {prefix});
+fastify.register(require('./routes/locations'), {prefix});
 
 /**
  * demo page map
  */
-if (config.demopage) {
-    fastify.register(require('./routes/demo'));
+if (config.demopage===true) {
+    fastify.register(require('./routes/demo'), {prefix});
 }
 
 fastify.listen({port, host}, err => {
