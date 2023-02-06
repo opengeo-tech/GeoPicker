@@ -179,8 +179,19 @@
 
     function logger() {
         //console.log.apply(window, arguments)
-        let log = Array.prototype.join.call(arguments, ' ')
+        const args = Array.prototype.map.call(arguments, a => {return typeof a ==='object'?JSON.stringify(a) : a})
+        let log = Array.prototype.join.call(args, ' ')
         $divLog.prepend(`${log}\n`)
+    }
+
+    function getDataset(name) {
+        const url = `${baseUrl}/${dataset}`;
+
+        logger('request get dataset info', url)
+
+        return $.getJSON(url).done(res => {
+            logger('response get dataset info', res)
+        });
     }
 
     function getLonlat(lon, lat) {
