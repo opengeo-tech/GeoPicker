@@ -5,15 +5,15 @@ GeoPicker
 
 Geospatial dataset picker via fast Api Rest interface written in [NodeJs for GDAL](https://github.com/mmomtchev/node-gdal-async) bindings and [Fastify](https://www.fastify.io/)
 
-[Online Demo](https://opengeo.tech/geopicker)
+- [Online Demo Map](https://opengeo.tech/geopicker)
+
+- [Article about this project](https://stefcud.medium.com/geopicker-bf4c4321c9ec)
 
 ## Scope
 
 Geopicker has been specially designed to offer the widest range of formats and methods of data requests that is possible, to adapt to any context of use by the client.
 Each endpoint and the parameters it accepts have been designed on the basis of the functioning of already existing services, gathering a complete and coherent collection of APIs.
 At present the index.html page contains a large implementation of browser side requests using LeafletJs as basemap and jQuery.
-
-[Article about this project](https://stefcud.medium.com/geopicker-bf4c4321c9ec)
 
 # API Rest endpoints
 
