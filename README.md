@@ -11,7 +11,7 @@ Geospatial dataset picker via fast Api Rest interface written in [NodeJs for GDA
 
 ## Scope
 
-Geopicker has been specially designed to offer the widest range of formats and methods of data requests that is possible, to adapt to any context of use by the client.
+It is basically an advanced **elevation service** and Geopicker has been specially designed to offer the widest range of formats and methods of data requests that is possible, to adapt to any context of use by the client.
 Each endpoint and the parameters it accepts have been designed on the basis of the functioning of already existing services, gathering a complete and coherent collection of APIs.
 At present the index.html page contains a large implementation of browser side requests using LeafletJs as basemap and jQuery.
 
