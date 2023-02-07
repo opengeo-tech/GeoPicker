@@ -1,6 +1,7 @@
 
 const path = require('path')
-    , fs = require('fs');
+    , fs = require('fs')
+    , favicon = fs.readFileSync(`${__dirname}/../favicon.png`);
 
 module.exports = async fastify => {
 
@@ -18,7 +19,11 @@ module.exports = async fastify => {
     fastify.log.info(`Demo page available at path: ${config.demopath}`);
   });
 
-  fastify.get(config.demopath, async (req, res) => {
+  fastify.get(`${config.demopath}/favicon.ico`, async (req, res) => {
+    res.type('image/png').send(favicon);
+  });
+
+  fastify.get('/', async (req, res) => {
     await res.headers(noCache).type('text/html').send(html)
   });
 }

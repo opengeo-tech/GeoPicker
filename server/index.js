@@ -37,7 +37,7 @@ fastify.register(require('./plugins/valid'));
 /**
  * fastify Routes
  */
-fastify.register(require('./routes/root'), {prefix});
+fastify.register(require('./routes/status'), {prefix});
 fastify.register(require('./routes/lonlat'), {prefix});
 fastify.register(require('./routes/datasets'), {prefix});
 fastify.register(require('./routes/geometry'), {prefix});
@@ -46,7 +46,7 @@ fastify.register(require('./routes/locations'), {prefix});
 /**
  * demo page map
  */
-if (config.demopage===true) {
+if (config.demo_page===true) {
     fastify.register(require('./routes/demo'), {prefix});
 }
 

@@ -174,7 +174,7 @@
 
     const {origin, pathname} = location
         , path = pathname.substring(0, pathname.lastIndexOf('/'))
-        , api = `${origin}${path}`;
+        , api = `${origin}${pathname}`;
 
     const dataset = 'default';
 
@@ -515,7 +515,7 @@
     controlMouseTrack.pickTrack = function(e) {
 
         let { locs } = controlMouseTrack;
-        if (locs.length > 20) {
+        if (locs.length > 30) {
             locs.shift();
         }
 

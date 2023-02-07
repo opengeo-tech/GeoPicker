@@ -3,7 +3,6 @@
 # learn more about syntax: https://github.com/stefanocudini/configYml
 #
 
-
 # default environment if NODE_ENV is not defined
 # environments:
 #   default: prod
@@ -16,7 +15,7 @@ prod:
 dev:
   port: 9090
   host: 127.0.0.1
-  datapath: ./tests/data
+  datapath: './tests/data'
   input_validation: false
   fastifyConf:
     logger:
@@ -25,11 +24,11 @@ dev:
         target: 'pino-pretty'
 
 defaultsEnvVars:
-  #PREFIX: '/daconfig'
+  PREFIX: '/'
   DEMO_PAGE: false
 
-demopage: ${DEMO_PAGE}
-demopath: '/map'
+prefix: ${PREFIX}
+demo_page: ${DEMO_PAGE}
 
 attribution: "Demo instance of Geopicker Server - Copyright Stefano Cudini https://opengeo.tech"
 
@@ -94,5 +93,3 @@ datasets:
   # TODO manage shape
   #  admins:
   #   path: a-shape-file.shp
-
-prefix: ${PREFIX}

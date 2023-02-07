@@ -47,6 +47,5 @@ In development mode is enabled to allow the user tests.
 
 
 ```yaml
-demopage: true
-demopath: '/map'
+demo_page: true
 ```

@@ -20,7 +20,8 @@ https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73
 
 |Status|Method| Path                 | Return | Description |
 |------|------|----------------------|--------|-------------|
-|  ✔️  | GET  | /                    | object | service status, versions, datasets |
+|  ✔️  | GET  | /                    | html   | demo map page if enabled by env var `DEMO_PAGE=true` |
+|  ✔️  | GET  | /status              | object | service status, versions, datasets |
 |  ✔️  | GET  | /datasets            | object | list available datasets and their attributes |
 |  ✔️  | GET  | /:dataset            | object | show attributes of a certain dataset |
 |      |      |                      |        |             |
