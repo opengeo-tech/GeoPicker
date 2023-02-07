@@ -17,8 +17,8 @@ At present the index.html page contains a large implementation of browser side r
 
 # API Rest endpoints
 
-it's work in progress...
-https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73
+The [API](https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73) is work in progress.
+This basic structure can be extended starting from the environment variable `PREFIX` which by default `/`
 
 |Status|Method| Path                 | Return | Description |
 |------|------|----------------------|--------|-------------|
