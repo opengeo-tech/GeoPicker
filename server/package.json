@@ -1,6 +1,6 @@
 {
   "name": "geopicker-server",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "homepage": "https://opengeo.tech/geopicker/",
   "author": {
     "name": "Stefano Cudini",
@@ -15,7 +15,7 @@
   "dependencies": {
     "@fastify/cors": "^8.1.1",
     "@mapbox/polyline": "^1.1.1",
-    "@stefcud/configyml": "^1.2.2",
+    "@stefcud/configyml": "^1.2.3",
     "fastify": "^4.10.2",
     "fastify-plugin": "^4.4.0",
     "fluent-json-schema": "^4.0.0",
