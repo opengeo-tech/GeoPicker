@@ -156,3 +156,8 @@ for details see the descriptions in the [Roadmap issues](https://github.com/open
 |  ❌  | caching responses |
 |  ❌  | websocket interface |
 |  ❌  | command line interface |
+
+## Copyright
+
+Created by [Stefano Cudini](https://github.com/stefanocudini) [@zakis](https://twitter.com/zakis)
+Distributed under the [BSD 2-Clause](https://opensource.org/licenses/BSD-2-Clause) license.

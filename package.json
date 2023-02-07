@@ -12,7 +12,7 @@
     "email": "stefano.cudini@gmail.com",
     "url": "https://opengeo.tech/"
   },
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "main": "./lib/index.js",
   "publishConfig": {
     "access": "public"

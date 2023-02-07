@@ -7,7 +7,7 @@
     "email": "stefano.cudini@gmail.com",
     "url": "https://opengeo.tech/"
   },
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "main": "./index.js",
   "engines": {
     "node": ">= 16"
