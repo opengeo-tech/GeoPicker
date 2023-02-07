@@ -1,8 +1,12 @@
-environments:
-  default: prod
-  # default environment if NODE_ENV is not defined
+#
+# Config file parsed by configYml lib.
+# learn more about syntax: https://github.com/stefanocudini/configYml
+#
 
-defaultsEnv:
+
+# default environment if NODE_ENV is not defined
+# environments:
+#   default: prod
 
 prod:
   port: 8080
@@ -20,7 +24,9 @@ dev:
       transport:
         target: 'pino-pretty'
 
-prefix: ${PREFIX}
+defaultsEnvVars:
+  #PREFIX: '/daconfig'
+  DEMO_PAGE: false
 
 demopage: ${DEMO_PAGE}
 demopath: '/map'
@@ -88,3 +94,5 @@ datasets:
   # TODO manage shape
   #  admins:
   #   path: a-shape-file.shp
+
+prefix: ${PREFIX}

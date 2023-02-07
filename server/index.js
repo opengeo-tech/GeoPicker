@@ -3,25 +3,20 @@
  * Copyright Stefano Cudini stefano.cudini@gmail.com
  * https://opengeo.tech
  */
-const configYml = require('@stefcud/configyml')
+const basepath = __dirname
+    , configYml = require('@stefcud/configyml')
     , Fastify = require('fastify')
     , gpicker = require('../lib')
-    , config = configYml({
-        basepath: __dirname,
-        defaultsEnv: {
-          DEMO_PAGE: false,
-          PREFIX: '/'
-        }
-      })
+    , config = configYml({basepath})
     , {fastifyConf, port, host, prefix} = config
     , fastify = Fastify(fastifyConf);
 
-fastify.log.debug(config);
+console.log(config);
 
 /**
  * fastify decorators
  */
-fastify.decorate('package', require(`${__dirname}/package.json`));
+fastify.decorate('package', require(`${basepath}/package.json`));
 fastify.decorate('gpicker', gpicker);
 fastify.decorate('config', config);
 fastify.decorate('status', 'OK');
