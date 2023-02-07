@@ -39,6 +39,14 @@ fastifyConf:
       target: 'pino-pretty
 ```
 
+## Defaults values for environments variables
+
+```yaml
+defaultsEnvVars:
+  PREFIX: '/'
+  DEMO_PAGE: false
+```
+
 ## Demo page
 
 Allows you to enable a simple user interface to interact with GeoPicker API implementing all its features.
