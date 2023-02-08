@@ -16,10 +16,11 @@ module.exports = async fastify => {
       };
 
   fastify.addHook('onReady', async () => {
-    fastify.log.info(`Demo page available at path: ${config.demo_path}`);
+    const demopath = path.join(config.prefix,config.demo_path)
+    fastify.log.info(`Demo page available at path: ${demopath}`);
   });
 
-  fastify.get(path.join(config.demo_path,'favicon.png'), async (req, res) => {
+  fastify.get(path.join(config.prefix,config.demo_path,'favicon.png'), async (req, res) => {
     res.type('image/png').send(favicon);
   });
 

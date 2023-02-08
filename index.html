@@ -187,7 +187,7 @@
     }
 
     function j() {
-      const args = Array.prototype.map.call(arguments, a => { return a.replace(/\/$/, '') })
+      const args = Array.prototype.map.call(arguments, a => { return `${a}`.replace(/\/$/, '') })
       return Array.prototype.join.call(args, '/')
     }
 
