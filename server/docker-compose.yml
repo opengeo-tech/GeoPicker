@@ -9,6 +9,7 @@ services:
   geopicker:
     container_name: geopicker
     image: geopicker:latest
+    #image: stefcud/geopicker:1.2.4
     build:
       context: ../
       dockerfile: ./server/Dockerfile
@@ -16,6 +17,7 @@ services:
       - "127.0.0.1:8080:8080"
     volumes:
       - "../tests/data:/data"
+      #- "../mycustom.config.yml:/home/server/config.yml"
     environment:
       #- PREFIX=/geopicker
       - DEMO_PAGE=true
