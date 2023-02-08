@@ -116,7 +116,7 @@ cd tests && npm install && cd -
 npm run bench
 ```
 
-The results testing a dataset of 10KB [geotiff](https://github.com/opengeo-tech/geopicker/blob/master/tests/data/test_4611_dem.tif)
+The results testing a dataset of 2x2km [geotiff](https://github.com/opengeo-tech/geopicker/blob/master/tests/data/test_4611_dem.tif)
 ```
 ┌─────────┬──────┬──────┬───────┬──────┬─────────┬─────────┬──────┐
 │ Stat    │ 2.5% │ 50%  │ 97.5% │ 99%  │ Avg     │ Stdev   │ Max  │
