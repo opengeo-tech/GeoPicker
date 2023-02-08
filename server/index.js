@@ -11,7 +11,7 @@ const basepath = __dirname
     , {fastifyConf, port, host, prefix} = config
     , fastify = Fastify(fastifyConf);
 
-console.log(config);
+fastify.log.debug(config);
 
 /**
  * fastify decorators
