@@ -51,7 +51,8 @@
     "maps",
     "gdal",
     "ogr",
-    "gis"
+    "gis",
+    "api"
   ],
   "dependencies": {
     "@turf/turf": "^6.5.0",
