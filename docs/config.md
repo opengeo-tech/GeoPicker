@@ -4,6 +4,7 @@
 The main configuration file is `/server/config.yml`
 this file is compiled with a special library [configyml](https://github.com/stefanocudini/configyml) that take some options values from environment variables that can be set via docker-compose.yml
 
+
 ## Datasets
 
 It is the configuration section that defines the `default dataset` and all other datasets available in the api.
@@ -45,6 +46,7 @@ fastifyConf:
 defaultsEnvVars:
   PREFIX: '/'
   DEMO_PAGE: false
+  DATASET_DEFAULT: 'test'
 ```
 
 ## Demo page
@@ -56,4 +58,16 @@ In development mode is enabled to allow the user tests.
 
 ```yaml
 demo_page: true
+```
+
+## More customization
+
+The Default config file includes some variables read from the execution environment(PREFIX,DATASET_DEFAULT...), but to have a greater
+customization it is advisable to build the config.yml file one of your own suitable for the context, this in the Docker execution environment can be done easily
+by mounting a volume in the same path which goes to replace the original config:
+
+```yaml
+volumes:
+  - "../mypath/for/data:/data"
+  - "../mycustom.config.yml:/home/server/config.yml"
 ```
