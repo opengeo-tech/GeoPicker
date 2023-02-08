@@ -79,7 +79,7 @@ datasets:
     band: 1
     epsg: 4326
   alps:
-    path: alps_10m.tif
+    path: alps_dem_10m.tif
     band: 1
     epsg: 4326
   aspect:

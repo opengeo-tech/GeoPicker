@@ -173,26 +173,26 @@
     <script src="//unpkg.com/leaflet-pather@0.1.17/dist/pather.js"></script>
     <script>
 
-    const {origin, pathname} = location
-        , path = pathname.substring(0, pathname.lastIndexOf('/'))
-        , api = `${origin}${pathname}`;
-
-    const dataset = 'default';
-
-    const zoom = 9
-        , center = [46, 11];
+    const api = location.href
+        , dataset = 'default'
+        , center = [46, 11]
+        , zoom = 9;
 
     const $divLog = $('#log');
 
     function logger() {
-
         const args = Array.prototype.map.call(arguments, a => {return typeof a ==='object'?JSON.stringify(a) : a})
         let log = Array.prototype.join.call(args, ' ')
         $divLog.prepend(`${log}\n`)
     }
 
+    function j() {
+      const args = Array.prototype.map.call(arguments, a => { return a.replace(/\/$/, '') })
+      return Array.prototype.join.call(args, '/')
+    }
+
     function getDataset(name) {
-        const url = `${api}/${dataset}`;
+        const url = j(api, dataset);
 
         logger('request get dataset info', url)
 
@@ -203,7 +203,7 @@
 
     function getLonlat(lon, lat) {
 
-        const url = `${api}/${dataset}/${lon}/${lat}`;
+        const url = j(api, dataset, lon, lat);
 
         logger('request get lonlat', url)
 
@@ -214,7 +214,7 @@
 
     function postLonlat(lon, lat) {
 
-        const url = `${api}/${dataset}/lonlat`;
+        const url = j(api, dataset, 'lonlat');
 
         logger('request post lonlat', url)
 
@@ -231,7 +231,7 @@
 
     function postGeometry(geo) {
 
-        const url = `${api}/${dataset}/geometry`;
+        const url = j(api, dataset, 'geometry');
 
         logger('request post geometry', geo)
 
@@ -268,7 +268,7 @@
 
         const locations = locs.map(a => a.join(',')).join('|');
 
-        const url = `${api}/${dataset}/${locations}`;
+       const url = j(api, dataset, locations);
 
         logger('request get locations', url)
 
@@ -301,7 +301,7 @@
 
         logger('request post locations', locs)
 
-        const url = `${api}/${dataset}/locations`;
+        const url = j(api, dataset, 'locations');
 
         return $.ajax({
             url,
@@ -479,7 +479,7 @@
         getLonlat(lon, lat).done(res => {
             const [val] = res;
             controlMouse._tooltip.setContent(`<big>${val}m</big><br>${lon}, ${lat}`)
-        });
+        }).fail(controlMouse._tooltip.setContent('null'))
     };
     controlMouse.onAdd = map => {
         controlMouse._tooltip = L.tooltip({
