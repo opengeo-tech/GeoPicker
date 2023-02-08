@@ -3,15 +3,11 @@
 # learn more about syntax: https://github.com/stefanocudini/configYml
 #
 
-# default environment if NODE_ENV is not defined
-# environments:
-#   default: prod
-
 prod:
   port: 8080
   host: 0.0.0.0
   datapath: '/data'
-  # to test prod end utside docker datapath: ./tests/data
+
 dev:
   port: 9090
   host: 127.0.0.1
@@ -26,9 +22,12 @@ dev:
 defaultsEnvVars:
   PREFIX: '/'
   DEMO_PAGE: false
+  DATASET_DEFAULT: 'test'
 
 prefix: ${PREFIX}
+
 demo_page: ${DEMO_PAGE}
+demo_path: '/'
 
 attribution: "Demo instance of Geopicker Server - Copyright Stefano Cudini https://opengeo.tech"
 
@@ -68,7 +67,7 @@ errors:
 
 datapath: '/data'
 datasets:
-  default: elevation
+  default: ${DATASET_DEFAULT}
   test:
     path: test_4611_dem.tif
     band: 1

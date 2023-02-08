@@ -16,14 +16,14 @@ module.exports = async fastify => {
       };
 
   fastify.addHook('onReady', async () => {
-    fastify.log.info(`Demo page available at path: ${config.demopath}`);
+    fastify.log.info(`Demo page available at path: ${config.demo_path}`);
   });
 
-  fastify.get(`${config.demopath}/favicon.ico`, async (req, res) => {
+  fastify.get(path.join(config.demo_path,'favicon.png'), async (req, res) => {
     res.type('image/png').send(favicon);
   });
 
-  fastify.get('/', async (req, res) => {
+  fastify.get(config.demo_path, async (req, res) => {
     await res.headers(noCache).type('text/html').send(html)
   });
 }
