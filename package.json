@@ -23,7 +23,7 @@
     "docker-tag": "docker tag stefcud/geopicker:latest stefcud/geopicker:${npm_package_version}",
     "docker-push": "npm run docker-tag && docker push stefcud/geopicker:${npm_package_version} && docker push stefcud/geopicker:latest",
     "docker-up": "cd server && docker-compose up",
-    "postversion": "git push && git push --tags",
+    "postversion": "cd server && npm version ${npm_package_version} && git push && git push --tags",
     "postpublish": "npm run docker-build && npm run docker-push",
     "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -w lib -w server -w index.html server/index.js",
     "start": "node server/index.js",
