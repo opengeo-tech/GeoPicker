@@ -41,7 +41,7 @@ fastifyConf:
 # serving Swagger (OpenAPI v2) or OpenAPI v3 schemas
 # https://github.com/fastify/fastify-swagger
 swagger:
-  enabled: true
+  enabled: false
   # prefix append to root `prefix`
   routePrefix: '${prefix}/docs'
   # docExpansion
