@@ -185,9 +185,16 @@
 
     const $divLog = $('#log');
 
-    const strings = {
-
-    };
+/*    const strings = {
+get_status              | service status, versions, datasets
+get_datasets            | list available datasets and their attributes
+ GET  | /:dataset            | show attributes of a certain dataset
+ GET  | /:dataset/:lon/:lat  | get single location value of dataset, densify not supported
+ GET  | /:dataset/:locations | locations is a string (format: `lon,lat|lon,lat|lon,lat`), densify not supported
+ POST | /:dataset/lonlat     | accept array or object in body
+ POST | /:dataset/geometry   | geojson geometry Point or LineString in body
+ POST | /:dataset/locations  | accept array or object of locations in body (format is `[[lon,lat],[lon,lat],[lon,lat]]`)
+    };*/
 
     function logger() {
         const args = Array.prototype.map.call(arguments, a => {return typeof a ==='object'?JSON.stringify(a) : a})
@@ -207,6 +214,15 @@
 
     function getDataset(name) {
         const url = j(api, dataset);
+
+        logger('-> GET', url)
+        return $.getJSON(url).done(res => {
+            logger('<-', res)
+        });
+    }
+
+    function getDatasets() {
+        const url = j(api, 'datasets');
 
         logger('-> GET', url)
         return $.getJSON(url).done(res => {
@@ -385,11 +401,9 @@
     })
 
     map.on('draw:toolbaropened', e => {
-            //reset();
-            //controlDraw._toolbars.draw.enable();
             $(':radio').each(function() {
               $(this).prop('checked', false).triggerHandler('change');
-            })
+            });
         })
         .on('draw:created draw:drawvertex', e => {
 
@@ -428,6 +442,7 @@
         });
 
     var controlDrawFreeBtn = new L.Control({ position: 'topleft' });
+
     controlDrawFreeBtn.onAdd = map => {
         var div = $('<label class="leaflet-control-btn"><i class="fa fa-pencil"></i> Draw Line Freehand</label>');
         var check = $('<input id="" type="radio" name="drawtype" />').prependTo(div)
@@ -508,6 +523,7 @@
      * mouse track picker
      */
     var controlMouseLine = new L.Control({ position: 'topleft' });
+
     controlMouseLine.locs = []; //buffer of last coordinates
     controlMouseLine._pickTrack = function(e) {
 
@@ -551,7 +567,8 @@
     /**
      * button show Dataset Bounding box
      */
-    var controlBounds = L.control({ position: 'topleft' });
+    var controlBounds = new L.Control({ position: 'topleft' });
+
     controlBounds.onAdd = map => {
         var div = $('<a class="leaflet-control-btn"><i class="fa fa-expand"></i> Show dataset Bounds</a>');
         div.on('click', e => {
@@ -574,11 +591,29 @@
         return div[0];
     };
 
+    /**
+     * button show Datasets
+     */
+    var controlDatasets = new L.Control({ position: 'topleft' });
+
+    controlDatasets.onAdd = map => {
+        var div = $('<a class="leaflet-control-btn"><i class="fa fa-expand"></i> Show Datasets info</a>');
+        div.on('click', e => {
+            e.preventDefault()
+            e.stopImmediatePropagation();
+
+            getDatasets().done(res => {
+                logger(JSON.stringify(res,null,4))
+            });
+        });
+        return div[0];
+    };
 
     /**
      * Reset button clear all layers
      */
-    var controlClear = L.control({ position: 'topleft' });
+    var controlClear = new L.Control({ position: 'topleft' });
+
     controlClear.onAdd = map => {
         var div = $('<a class="leaflet-control-btn"><i class="fa fa-trash"></i> Clear All</a>');
         div.on('click', e => {
@@ -609,6 +644,7 @@
     map.addControl(controlDrawFreeBtn);
 
     map.addControl(controlBounds);
+    map.addControl(controlDatasets);
     map.addControl(controlClear);
 
     </script>
