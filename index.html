@@ -81,20 +81,29 @@
         z-index: 1001;
     }
 
-    .leaflet-left.leaflet-top .leaflet-control-btn {
+    .leaflet-control-btn {
         float: left;
-        height: 24px;
-        width: 130px;
+        height: 26px;
+        min-width: 160px;
         white-space: nowrap;
-        line-height: 28px;
+        line-height: 34px;
         vertical-align: middle;
         cursor: pointer;
         border-radius: 4px;
         background: #fff;
-        padding: 0 6px;
+        padding: 0 4px;
         border: 2px solid rgba(0, 0, 0, 0.2);
         background-clip: padding-box;
         color: black;
+    }
+    .leaflet-control-btn input {
+      margin-right: 4px;
+      display: inline-block;
+    }
+
+    .leaflet-control-btn .fa {
+      margin-left: 4px;
+      width: 16px;
     }
 
 /*    .leaflet-control-btn input {
@@ -421,7 +430,7 @@
     var controlFreehand = new L.Control({ position: 'topleft' });
     controlFreehand.onAdd = map => {
         var div = $('<label class="leaflet-control-btn"><i class="fa fa-pencil"></i> Draw Line Freehand</label>');
-        var check = $('<input type="radio" name="drawtype" />').appendTo(div)
+        var check = $('<input type="radio" name="drawtype" />').prependTo(div)
         check.on('change', e => {
 
             const checked = check.is(':checked');
@@ -480,13 +489,11 @@
                 direction: 'top'
             })
             .setLatLng([0, 0]).addTo(map);
-        var div = $('<label class="leaflet-control-btn"><i class="fa fa-mouse-pointer"></i> Mouse move Get Point</label>');
-        var check = $('<input type="radio" name="drawtype" />').appendTo(div)
+        var div = $('<label class="leaflet-control-btn"><i class="fa fa-mouse-pointer"></i> Mouse Move Point</label>');
+        var check = $('<input type="radio" name="drawtype" />').prependTo(div)
         check.on('change', e => {
 
             const checked = $(e.target).is(':checked');
-
-console.log('event change controlMousePoint',checked)
 
             if (checked) {
                 controlMousePoint._tooltip.setLatLng([0, 0]).addTo(map);
@@ -508,8 +515,6 @@ console.log('event change controlMousePoint',checked)
     var controlMouseLine = new L.Control({ position: 'topleft' });
     controlMouseLine.locs = []; //buffer of last coordinates
     controlMouseLine._pickTrack = function(e) {
-
-console.log('_pickTrack',e)
 
         let { locs } = controlMouseLine;
         if (locs.length > 30) {
@@ -534,30 +539,27 @@ console.log('_pickTrack',e)
         const maxlocations = 10;
 
         var div = $('<label class="leaflet-control-btn"><i class="fa fa-line-chart"></i> Mouse Track Picker</label>');
-        var check = $('<input type="radio" name="drawtype" />').appendTo(div)
+        var check = $('<input type="radio" name="drawtype" />').prependTo(div)
         check.on('change', e => {
 
             const checked = $(e.target).is(':checked');
 
-console.log('event change controlMouseLine',checked)
-
             if (checked) {
                 map.on('mousemove', controlMouseLine._pickTrack);
-                //controlDraw._toolbars.draw.disable()
             } else {
                 map.off('mousemove', controlMouseLine._pickTrack);
             }
-        })
+        });
         return div[0];
     };
 
 
     /**
-     * button show Dataset Boduns
+     * button show Dataset Bounding box
      */
     var controlBounds = L.control({ position: 'topleft' });
     controlBounds.onAdd = map => {
-        var div = $('<a class="leaflet-control-btn"><i class="fa fa-expand"></i> Dataset Bounds</a>');
+        var div = $('<a class="leaflet-control-btn"><i class="fa fa-expand"></i> Show dataset Bounds</a>');
         div.on('click', e => {
             e.preventDefault()
             e.stopImmediatePropagation();
@@ -571,7 +573,7 @@ console.log('event change controlMouseLine',checked)
 
                 L.rectangle(bb, {fill:false}).addTo(layerElevation);
 
-                map.flyToBounds(bb)
+                map.flyToBounds(bb);
             })
 
         });
@@ -590,17 +592,22 @@ console.log('event change controlMouseLine',checked)
             e.stopImmediatePropagation();
             layerElevation.clearLayers();
             editableLayers.clearLayers();
-            $(':radio').prop('checked', false).triggerHandler('change');
+            controlDraw._toolbars.draw.disable();
+            $(':radio').each(function() {
+              $(this).prop('checked', false).triggerHandler('change');
+            })
         });
         return div[0];
     };
 
-    map.addControl(controlBounds);
     map.addControl(controlDraw);
     map.addControl(controlMousePoint);
     map.addControl(controlMouseLine);
     map.addControl(controlFreehand);
+
+    map.addControl(controlBounds);
     map.addControl(controlClear);
+
     </script>
     <script src="/labs-common.js"></script>
 </body>
