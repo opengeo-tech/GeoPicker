@@ -430,7 +430,6 @@
                 controlDrawFree.addTo(editableLayers);
                 controlDrawFree.setMode(L.Pather.MODE.ALL);
                 controlDraw._toolbars.draw.disable();
-                map.off('mousemove', controlMousePoint._pickValue, this);
             } else {
                 controlDrawFree.removeFrom(editableLayers);
             }
@@ -462,7 +461,8 @@
      * mouse move picker
      */
     var controlMousePoint = new L.Control({ position: 'topleft' });
-    controlMousePoint._pickValue = function(e) {
+
+    controlMousePoint._pickPoint = function(e) {
 
         controlMousePoint._tooltip.setLatLng(e.latlng);
 
@@ -473,6 +473,7 @@
             controlMousePoint._tooltip.setContent(`<big>${val}m</big><br>${lon}, ${lat}`)
         }).fail(controlMousePoint._tooltip.setContent('null'))
     };
+
     controlMousePoint.onAdd = map => {
         controlMousePoint._tooltip = L.tooltip({
                 offset: L.point([0, -10]),
@@ -483,14 +484,16 @@
         var check = $('<input type="radio" name="drawtype" />').appendTo(div)
         check.on('change', e => {
 
-            const checked = check.is(':checked');
+            const checked = $(e.target).is(':checked');
+
+console.log('event change controlMousePoint',checked)
 
             if (checked) {
                 controlMousePoint._tooltip.setLatLng([0, 0]).addTo(map);
-                map.on('mousemove', controlMousePoint._pickValue, this);
+                map.on('mousemove', controlMousePoint._pickPoint);
                 controlDraw._toolbars.draw.disable()
             } else {
-                map.off('mousemove', controlMousePoint._pickValue, this);
+                map.off('mousemove', controlMousePoint._pickPoint);
                 controlMousePoint._tooltip.removeFrom(map)
             }
         })
@@ -504,7 +507,9 @@
      */
     var controlMouseLine = new L.Control({ position: 'topleft' });
     controlMouseLine.locs = []; //buffer of last coordinates
-    controlMouseLine.pickTrack = function(e) {
+    controlMouseLine._pickTrack = function(e) {
+
+console.log('_pickTrack',e)
 
         let { locs } = controlMouseLine;
         if (locs.length > 30) {
@@ -523,6 +528,7 @@
 
         getLocations(coordinates);
     };
+
     controlMouseLine.onAdd = map => {
 
         const maxlocations = 10;
@@ -531,13 +537,15 @@
         var check = $('<input type="radio" name="drawtype" />').appendTo(div)
         check.on('change', e => {
 
-            const checked = check.is(':checked');
+            const checked = $(e.target).is(':checked');
+
+console.log('event change controlMouseLine',checked)
 
             if (checked) {
-                map.on('mousemove', controlMouseLine.pickTrack, this);
-                controlDraw._toolbars.draw.disable()
+                map.on('mousemove', controlMouseLine._pickTrack);
+                //controlDraw._toolbars.draw.disable()
             } else {
-                map.off('mousemove', controlMouseLine.pickTrack, this);
+                map.off('mousemove', controlMouseLine._pickTrack);
             }
         })
         return div[0];
@@ -582,7 +590,7 @@
             e.stopImmediatePropagation();
             layerElevation.clearLayers();
             editableLayers.clearLayers();
-            $(':radio').prop('checked',false).triggerHandler('change');
+            $(':radio').prop('checked', false).triggerHandler('change');
         });
         return div[0];
     };
