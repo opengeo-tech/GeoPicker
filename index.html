@@ -97,9 +97,9 @@
         color: black;
     }
 
-    .leaflet-control-btn input {
+/*    .leaflet-control-btn input {
       display: none;
-    }
+    }*/
 
     .leaflet-editing-icon {
         border-radius: 50%;
@@ -430,7 +430,7 @@
                 controlDrawFree.addTo(editableLayers);
                 controlDrawFree.setMode(L.Pather.MODE.ALL);
                 controlDraw._toolbars.draw.disable();
-                map.off('mousemove', controlMouse._pickValue, this);
+                map.off('mousemove', controlMousePoint._pickValue, this);
             } else {
                 controlDrawFree.removeFrom(editableLayers);
             }
@@ -461,20 +461,20 @@
     /**
      * mouse move picker
      */
-    var controlMouse = new L.Control({ position: 'topleft' });
-    controlMouse._pickValue = function(e) {
+    var controlMousePoint = new L.Control({ position: 'topleft' });
+    controlMousePoint._pickValue = function(e) {
 
-        controlMouse._tooltip.setLatLng(e.latlng);
+        controlMousePoint._tooltip.setLatLng(e.latlng);
 
         const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
 
         getLonlat(lon, lat).done(res => {
             const [val] = res;
-            controlMouse._tooltip.setContent(`<big>${val}m</big><br>${lon}, ${lat}`)
-        }).fail(controlMouse._tooltip.setContent('null'))
+            controlMousePoint._tooltip.setContent(`<big>${val}m</big><br>${lon}, ${lat}`)
+        }).fail(controlMousePoint._tooltip.setContent('null'))
     };
-    controlMouse.onAdd = map => {
-        controlMouse._tooltip = L.tooltip({
+    controlMousePoint.onAdd = map => {
+        controlMousePoint._tooltip = L.tooltip({
                 offset: L.point([0, -10]),
                 direction: 'top'
             })
@@ -486,12 +486,12 @@
             const checked = check.is(':checked');
 
             if (checked) {
-                controlMouse._tooltip.setLatLng([0, 0]).addTo(map);
-                map.on('mousemove', controlMouse._pickValue, this);
+                controlMousePoint._tooltip.setLatLng([0, 0]).addTo(map);
+                map.on('mousemove', controlMousePoint._pickValue, this);
                 controlDraw._toolbars.draw.disable()
             } else {
-                map.off('mousemove', controlMouse._pickValue, this);
-                controlMouse._tooltip.removeFrom(map)
+                map.off('mousemove', controlMousePoint._pickValue, this);
+                controlMousePoint._tooltip.removeFrom(map)
             }
         })
         return div[0];
@@ -502,11 +502,11 @@
     /**
      * mouse track picker
      */
-    var controlMouseTrack = new L.Control({ position: 'topleft' });
-    controlMouseTrack.locs = []; //buffer of last coordinates
-    controlMouseTrack.pickTrack = function(e) {
+    var controlMouseLine = new L.Control({ position: 'topleft' });
+    controlMouseLine.locs = []; //buffer of last coordinates
+    controlMouseLine.pickTrack = function(e) {
 
-        let { locs } = controlMouseTrack;
+        let { locs } = controlMouseLine;
         if (locs.length > 30) {
             locs.shift();
         }
@@ -523,7 +523,7 @@
 
         getLocations(coordinates);
     };
-    controlMouseTrack.onAdd = map => {
+    controlMouseLine.onAdd = map => {
 
         const maxlocations = 10;
 
@@ -534,10 +534,10 @@
             const checked = check.is(':checked');
 
             if (checked) {
-                map.on('mousemove', controlMouseTrack.pickTrack, this);
+                map.on('mousemove', controlMouseLine.pickTrack, this);
                 controlDraw._toolbars.draw.disable()
             } else {
-                map.off('mousemove', controlMouseTrack.pickTrack, this);
+                map.off('mousemove', controlMouseLine.pickTrack, this);
             }
         })
         return div[0];
@@ -582,15 +582,15 @@
             e.stopImmediatePropagation();
             layerElevation.clearLayers();
             editableLayers.clearLayers();
-            $(':radio').prop('checked',false);
+            $(':radio').prop('checked',false).triggerHandler('change');
         });
         return div[0];
     };
 
     map.addControl(controlBounds);
     map.addControl(controlDraw);
-    map.addControl(controlMouse);
-    map.addControl(controlMouseTrack);
+    map.addControl(controlMousePoint);
+    map.addControl(controlMouseLine);
     map.addControl(controlFreehand);
     map.addControl(controlClear);
     </script>
