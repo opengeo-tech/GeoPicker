@@ -12,6 +12,8 @@
     <link href="//unpkg.com/leaflet@1.4.0/dist/leaflet.css" rel="stylesheet" type="text/css" />
     <link href="//unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" rel="stylesheet" type="text/css" />
     <link href="//unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> -->
+    <link href="//unpkg.com/fontawesome-4.7@4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <style>
     body {
         margin:0;
@@ -89,33 +91,14 @@
         cursor: pointer;
         border-radius: 4px;
         background: #fff;
-        padding: 2px 4px 2px 2px;
+        padding: 0 6px;
         border: 2px solid rgba(0, 0, 0, 0.2);
         background-clip: padding-box;
         color: black;
     }
 
-    .clear-all {
-        display: inline-block;
-        vertical-align: middle;
-        height: 22px;
-        width: 22px;
-        background-image: url(https://unpkg.com/leaflet-draw@1.0.4/dist/images/spritesheet.svg);
-        background-image: linear-gradient(transparent, transparent), url(https://unpkg.com/leaflet-draw@1.0.4/dist/images/spritesheet.svg);
-        background-repeat: no-repeat;
-        background-size: 300px 30px;
-        background-clip: padding-box;
-        background-position: -245px -4px;
-    }
-
-    .icon-bounds {
-      display: inline-block;
-      vertical-align: middle;
-      height: 22px;
-      width: 22px;
-      background-image: url(https://unpkg.com/leaflet-fullscreen@1.0.2/dist/fullscreen.png);
-      background-repeat: no-repeat;
-      background-position: 0 -4px;
+    .leaflet-control-btn input {
+      display: none;
     }
 
     .leaflet-editing-icon {
@@ -437,8 +420,8 @@
      */
     var controlFreehand = new L.Control({ position: 'topleft' });
     controlFreehand.onAdd = map => {
-        var div = $('<label class="leaflet-control-btn">Draw Line Freehand</label>');
-        var check = $('<input type="radio" name="drawtype" />').prependTo(div)
+        var div = $('<label class="leaflet-control-btn"><i class="fa fa-pencil"></i> Draw Line Freehand</label>');
+        var check = $('<input type="radio" name="drawtype" />').appendTo(div)
         check.on('change', e => {
 
             const checked = check.is(':checked');
@@ -496,8 +479,8 @@
                 direction: 'top'
             })
             .setLatLng([0, 0]).addTo(map);
-        var div = $('<label class="leaflet-control-btn">Mouse Point Picker</label>');
-        var check = $('<input type="radio" name="drawtype" />').prependTo(div)
+        var div = $('<label class="leaflet-control-btn"><i class="fa fa-mouse-pointer"></i> Mouse move Get Point</label>');
+        var check = $('<input type="radio" name="drawtype" />').appendTo(div)
         check.on('change', e => {
 
             const checked = check.is(':checked');
@@ -544,8 +527,8 @@
 
         const maxlocations = 10;
 
-        var div = $('<label class="leaflet-control-btn">Mouse Track Picker</label>');
-        var check = $('<input type="radio" name="drawtype" />').prependTo(div)
+        var div = $('<label class="leaflet-control-btn"><i class="fa fa-line-chart"></i> Mouse Track Picker</label>');
+        var check = $('<input type="radio" name="drawtype" />').appendTo(div)
         check.on('change', e => {
 
             const checked = check.is(':checked');
@@ -566,7 +549,7 @@
      */
     var controlBounds = L.control({ position: 'topleft' });
     controlBounds.onAdd = map => {
-        var div = $('<a class="leaflet-control-btn"><i class="icon-bounds"></i> Dataset Bounds</a>');
+        var div = $('<a class="leaflet-control-btn"><i class="fa fa-expand"></i> Dataset Bounds</a>');
         div.on('click', e => {
             e.preventDefault()
             e.stopImmediatePropagation();
@@ -593,7 +576,7 @@
      */
     var controlClear = L.control({ position: 'topleft' });
     controlClear.onAdd = map => {
-        var div = $('<a class="leaflet-control-btn"><i class="clear-all"></i>Clear All</a>');
+        var div = $('<a class="leaflet-control-btn"><i class="fa fa-trash"></i> Clear All</a>');
         div.on('click', e => {
             e.preventDefault()
             e.stopImmediatePropagation();
@@ -607,8 +590,8 @@
     map.addControl(controlBounds);
     map.addControl(controlDraw);
     map.addControl(controlMouse);
-    map.addControl(controlFreehand);
     map.addControl(controlMouseTrack);
+    map.addControl(controlFreehand);
     map.addControl(controlClear);
     </script>
     <script src="/labs-common.js"></script>
