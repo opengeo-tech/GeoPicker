@@ -15,6 +15,12 @@ It is basically an advanced **elevation service** and Geopicker has been special
 Each endpoint and the parameters it accepts have been designed on the basis of the functioning of already existing services, gathering a complete and coherent collection of APIs.
 At present the index.html page contains a large implementation of browser side requests using LeafletJs as basemap and jQuery.
 
+## Features
+- Large Rest API: many different endpoints suitable for each data request context.
+- Full JSON Schema: validation of routes and parameters, can be deactivated.
+- Customization: friendly configurable and to help devs in many deploy contexts
+- Formats: extensive support for different geospatial input and output formats
+
 # API Rest endpoints
 
 The [API](https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73) is work in progress.
