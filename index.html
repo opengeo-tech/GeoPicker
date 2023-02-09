@@ -108,6 +108,16 @@
         background-position: -245px -4px;
     }
 
+    .icon-bounds {
+      display: inline-block;
+      vertical-align: middle;
+      height: 22px;
+      width: 22px;
+      background-image: url(https://unpkg.com/leaflet-fullscreen@1.0.2/dist/fullscreen.png);
+      background-repeat: no-repeat;
+      background-position: 0 -4px;
+    }
+
     .leaflet-editing-icon {
         border-radius: 50%;
         background: blue;
@@ -383,7 +393,7 @@
             edit: false,
             remove: false
         }
-    }).addTo(map);
+    })
 
     map.on('draw:toolbaropened', e => {
             $('input[name="drawtype"]').prop('checked', false).triggerHandler('change');
@@ -444,7 +454,6 @@
         })
         return div[0];
     };
-    map.addControl(controlFreehand);
 
     /**
      * mouse click picker
@@ -504,7 +513,6 @@
         })
         return div[0];
     };
-    map.addControl(controlMouse);
 
     const polylocs = L.polyline([], { color: 'red' }).addTo(map)
 
@@ -551,14 +559,14 @@
         })
         return div[0];
     };
-    map.addControl(controlMouseTrack);
+
 
     /**
      * button show Dataset Boduns
      */
     var controlBounds = L.control({ position: 'topleft' });
     controlBounds.onAdd = map => {
-        var div = $('<a class="leaflet-control-btn">▣ Dataset Bounds</a>');
+        var div = $('<a class="leaflet-control-btn"><i class="icon-bounds"></i> Dataset Bounds</a>');
         div.on('click', e => {
             e.preventDefault()
             e.stopImmediatePropagation();
@@ -578,7 +586,7 @@
         });
         return div[0];
     };
-    map.addControl(controlBounds);
+
 
     /**
      * Reset button clear all layers
@@ -595,8 +603,13 @@
         });
         return div[0];
     };
-    map.addControl(controlClear);
 
+    map.addControl(controlBounds);
+    map.addControl(controlDraw);
+    map.addControl(controlMouse);
+    map.addControl(controlFreehand);
+    map.addControl(controlMouseTrack);
+    map.addControl(controlClear);
     </script>
     <script src="/labs-common.js"></script>
 </body>
