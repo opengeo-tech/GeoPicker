@@ -137,12 +137,15 @@
     }
 
     #log {
+        position: absolute;
+        top: 840px;
+        bottom: 0;
+        left: 0;
+        right: 0;
         margin: 0;
-        width: 100%;
         font-family: monospace;
         font-size: 14px;
         background: #ddd;
-        height: 80px;
         overflow-y: scroll;
         overflow-x: hidden;
         text-overflow: ellipsis;
@@ -182,10 +185,19 @@
 
     const $divLog = $('#log');
 
+    const strings = {
+
+    };
+
     function logger() {
         const args = Array.prototype.map.call(arguments, a => {return typeof a ==='object'?JSON.stringify(a) : a})
         let log = Array.prototype.join.call(args, ' ')
-        $divLog.prepend(`${log}\n`)
+
+        let col = args[0]==='<-' ? 'green' : 'blue';
+
+        log = `<span style="color:${col}">${log}</span>`;
+
+        $divLog.append(`${log}\n`).scrollTop($divLog[0].scrollHeight);
     }
 
     function j() {
@@ -196,30 +208,25 @@
     function getDataset(name) {
         const url = j(api, dataset);
 
-        logger('request get dataset info', url)
-
+        logger('-> GET', url)
         return $.getJSON(url).done(res => {
-            logger('response get dataset info', res)
+            logger('<-', res)
         });
     }
 
     function getLonlat(lon, lat) {
-
         const url = j(api, dataset, lon, lat);
 
-        logger('request get lonlat', url)
-
+        logger('-> GET', url)
         return $.getJSON(url).done(res => {
-            logger('response get lonlat', res)
+            logger('<-', res)
         });
     }
 
     function postLonlat(lon, lat) {
-
         const url = j(api, dataset, 'lonlat');
 
-        logger('request post lonlat', url)
-
+        logger('-> POST', url)
         return $.ajax({
             url,
             type: 'POST',
@@ -227,16 +234,14 @@
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({ lon, lat }),
         }).done(res => {
-            logger('response post lonlat', res)
+            logger('<-', res)
         });
     }
 
     function postGeometry(geo) {
-
         const url = j(api, dataset, 'geometry');
 
-        logger('request post geometry', geo)
-
+        logger('-> POST', geo)
         return $.ajax({
                 url,
                 type: 'POST',
@@ -246,7 +251,7 @@
             })
             .done(geometry => {
 
-                logger('response post geometry', geometry)
+                logger('<-', geometry)
 
                 controlElevation.clear();
 
@@ -267,44 +272,39 @@
     }
 
     function getLocations(locs) {
-
         const locations = locs.map(a => a.join(',')).join('|');
 
-       const url = j(api, dataset, locations);
+        const url = j(api, dataset, locations);
 
-        logger('request get locations', url)
-
+        logger('-> GET', url)
         return $.getJSON(url).done(values => {
 
-            logger('response get locations', values);
+            logger('<-', values);
 
             const coordinates = locs.map((loc, k) => {
-                loc.push(values[k]);
-                return loc;
+              loc.push(values[k]);
+              return loc;
             });
 
             controlElevation.clear();
 
             layerElevation.clearLayers();
             layerElevation.addData({
-                type: 'Feature',
-                geometry: {
-                    type: 'LineString',
-                    coordinates
-                }
+              type: 'Feature',
+              geometry: {
+                type: 'LineString',
+                coordinates
+              }
             });
 
             editableLayers.addLayer(layerElevation);
         });
     }
 
-
     function postLocations(locs) {
-
-        logger('request post locations', locs)
-
         const url = j(api, dataset, 'locations');
 
+        logger('-> POST', locs);
         return $.ajax({
             url,
             type: 'POST',
@@ -313,7 +313,7 @@
             data: JSON.stringify(locs),
         }).done(coordinates => {
 
-            logger('response post locations', coordinates)
+            logger('<-', coordinates)
 
             controlElevation.clear();
 
@@ -330,19 +330,17 @@
         });
     }
 
-    const baselayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.{ext}', {
-        subdomains: 'abcd',
-        minZoom: 8,
-        maxZoom: 16,
-        ext: 'png'
-    });
 
     const map = L.map('map', {
+        zoom,
+        center,
         attributionControl: false,
         doubleClickZoom: false,
-        layers: [baselayer],
-        center,
-        zoom
+        layers: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png', {
+            subdomains: 'abcd',
+            minZoom: 8,
+            maxZoom: 16
+        })
     });
 
     // https://github.com/MrMufflon/Leaflet.Elevation
@@ -351,8 +349,7 @@
             height: 300,
             position: 'bottomright',
             collapsed: false
-        })
-        .addTo(map);
+        });
 
     const layerElevation = L.geoJson([], {
         style: () => ({
@@ -388,7 +385,11 @@
     })
 
     map.on('draw:toolbaropened', e => {
-            $('input[name="drawtype"]').prop('checked', false).triggerHandler('change');
+            //reset();
+            //controlDraw._toolbars.draw.enable();
+            $(':radio').each(function() {
+              $(this).prop('checked', false).triggerHandler('change');
+            })
         })
         .on('draw:created draw:drawvertex', e => {
 
@@ -408,7 +409,9 @@
             postGeometry(geometry);
         });
 
-    // L.Pather freehand draw
+    /**
+     * Draw line freehand
+     */
     const controlDrawFree = L.pather({
             strokeWidth: 1,
             smoothFactor: 0,
@@ -424,21 +427,15 @@
             });
         });
 
-    /**
-     * Draw line freehand
-     */
-    var controlFreehand = new L.Control({ position: 'topleft' });
-    controlFreehand.onAdd = map => {
+    var controlDrawFreeBtn = new L.Control({ position: 'topleft' });
+    controlDrawFreeBtn.onAdd = map => {
         var div = $('<label class="leaflet-control-btn"><i class="fa fa-pencil"></i> Draw Line Freehand</label>');
-        var check = $('<input type="radio" name="drawtype" />').prependTo(div)
+        var check = $('<input id="" type="radio" name="drawtype" />').prependTo(div)
         check.on('change', e => {
 
-            const checked = check.is(':checked');
-
-            if (checked) {
+            if ($(e.target).is(':checked')) {
                 controlDrawFree.addTo(editableLayers);
                 controlDrawFree.setMode(L.Pather.MODE.ALL);
-                controlDraw._toolbars.draw.disable();
             } else {
                 controlDrawFree.removeFrom(editableLayers);
             }
@@ -493,9 +490,7 @@
         var check = $('<input type="radio" name="drawtype" />').prependTo(div)
         check.on('change', e => {
 
-            const checked = $(e.target).is(':checked');
-
-            if (checked) {
+            if ($(e.target).is(':checked')) {
                 controlMousePoint._tooltip.setLatLng([0, 0]).addTo(map);
                 map.on('mousemove', controlMousePoint._pickPoint);
                 controlDraw._toolbars.draw.disable()
@@ -529,7 +524,8 @@
         }
         polylocs.setLatLngs(locs);
 
-        const { geometry } = polylocs.toGeoJSON(4), { coordinates } = geometry;
+        const { geometry } = polylocs.toGeoJSON(4),
+              { coordinates } = geometry;
 
         getLocations(coordinates);
     };
@@ -538,13 +534,11 @@
 
         const maxlocations = 10;
 
-        var div = $('<label class="leaflet-control-btn"><i class="fa fa-line-chart"></i> Mouse Track Picker</label>');
+        var div = $('<label class="leaflet-control-btn"><i class="fa fa-line-chart"></i> Mouse Move Line</label>');
         var check = $('<input type="radio" name="drawtype" />').prependTo(div)
         check.on('change', e => {
 
-            const checked = $(e.target).is(':checked');
-
-            if (checked) {
+            if ($(e.target).is(':checked')) {
                 map.on('mousemove', controlMouseLine._pickTrack);
             } else {
                 map.off('mousemove', controlMouseLine._pickTrack);
@@ -590,20 +584,29 @@
         div.on('click', e => {
             e.preventDefault()
             e.stopImmediatePropagation();
-            layerElevation.clearLayers();
-            editableLayers.clearLayers();
-            controlDraw._toolbars.draw.disable();
-            $(':radio').each(function() {
-              $(this).prop('checked', false).triggerHandler('change');
-            })
+            reset();
         });
         return div[0];
     };
 
+    function reset() {
+      layerElevation.clearLayers();
+      editableLayers.clearLayers();
+      polylocs.setLatLngs([]);
+      controlDraw._toolbars.draw.disable();
+      $(':radio').each(function() {
+        $(this).prop('checked', false).triggerHandler('change');
+      })
+      controlElevation.clear();
+      $divLog.empty();
+    }
+
+    map.addControl(controlElevation);
+
     map.addControl(controlDraw);
     map.addControl(controlMousePoint);
     map.addControl(controlMouseLine);
-    map.addControl(controlFreehand);
+    map.addControl(controlDrawFreeBtn);
 
     map.addControl(controlBounds);
     map.addControl(controlClear);
