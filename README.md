@@ -7,6 +7,8 @@ Geospatial dataset picker via fast Api Rest interface written in [NodeJs for GDA
 
 - [Online Demo Map](https://opengeo.tech/geopicker)
 
+- [Swagger API](https://opengeo.tech/geopicker/docs)
+
 - [Article about this project](https://stefcud.medium.com/geopicker-bf4c4321c9ec)
 
 ## Scope
@@ -23,7 +25,7 @@ At present the index.html page contains a large implementation of browser side r
 
 # API Rest endpoints
 
-The [API](https://gist.github.com/stefanocudini/77f36db813997e057d3fd163cbe04a73) is work in progress.
+The [API](https://opengeo.tech/geopicker/docs) is work in progress.
 This basic structure can be extended starting from the environment variable `PREFIX` which by default `/`
 
 |Status|Method| Path                 | Return | Description |
