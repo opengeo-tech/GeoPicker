@@ -152,18 +152,31 @@
         padding: 4px;
     }
 
+    #help {
+      background: #F4D03F;
+      font-size: 18px;
+      padding: 10px;
+      min-width: 10px;
+      width: auto;
+    }
+
+    h3,p {
+      padding: 0 8px;
+    }
+
     </style>
 </head>
 
 <body>
     <h3>GeoPicker Demo</h3>
     <p>
-      Interactive demo map with the features that can be implemented using all <strong>GeoPicker endpoints</strong>, for details consult the source code of the page.
+      Interactive demo map which demonstrates how it works <strong>GeoPicker endpoints</strong>, for details consult <a href="https://github.com/opengeo-tech/geopicker#api-rest-endpoints">API table</a>.
+      <br />
+      Each buttons activates a different way of requesting data to GeoPicker, in the box below the data sent and returned and green panel shown the <strong>elevation profile</strong> in real-time.
     </p>
     <div id="map">
     </div>
     <br>
-    <label>Requests/Reponses</label>
     <pre id="log"></pre>
     <a href="https://github.com/opengeo-tech/geopicker">
         <img id="ribbon" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
@@ -185,15 +198,16 @@
 
     const $divLog = $('#log');
 
-    const strings = {
-      get_status: "service status and versions",
-      get_datasets: "get list available datasets and their attributes",
+    const Texts = {
+      get_status: "get service status and versions",
       get_dataset: "get attributes of a certain dataset",
+      get_datasets: "get list available datasets and their attributes",
       get_lonlat: "get single location value of dataset, densify not supported",
       get_locations: "send via get locations as string in format: `lon,lat|lon,lat|lon,lat`), densify not supported",
-      post_lonlat: "send in POST body array or object",
+      post_lonlat: "send in POST body lon lat object",
       post_geometry: "send in POST body geojson geometry Point or LineString",
       post_locations: "send in POST body array or object of locations in format: `[[lon,lat],[lon,lat],[lon,lat]]`",
+      reset: "reset all interations and data loaded"
     };
 
     function logger() {
@@ -453,7 +467,7 @@
     var controlDrawFreeBtn = new L.Control({ position: 'topleft' });
 
     controlDrawFreeBtn.onAdd = map => {
-        var div = $('<label class="leaflet-control-btn"><i class="fa fa-pencil"></i> Draw Line Freehand</label>');
+        var div = $('<label id="post_locations" class="leaflet-control-btn"><i class="fa fa-pencil"></i> Draw Line Freehand</label>');
         var check = $('<input id="" type="radio" name="drawtype" />').prependTo(div)
         check.on('change', e => {
 
@@ -510,7 +524,7 @@
                 direction: 'top'
             })
             .setLatLng([0, 0]).addTo(map);
-        var div = $('<label class="leaflet-control-btn"><i class="fa fa-mouse-pointer"></i> Mouse Move Point</label>');
+        var div = $('<label id="get_lonlat" class="leaflet-control-btn"><i class="fa fa-mouse-pointer"></i> Mouse Move Point</label>');
         var check = $('<input type="radio" name="drawtype" />').prependTo(div)
         check.on('change', e => {
 
@@ -559,7 +573,7 @@
 
         const maxlocations = 10;
 
-        var div = $('<label class="leaflet-control-btn"><i class="fa fa-line-chart"></i> Mouse Move Line</label>');
+        var div = $('<label id="get_locations" class="leaflet-control-btn"><i class="fa fa-line-chart"></i> Mouse Move Line</label>');
         var check = $('<input type="radio" name="drawtype" />').prependTo(div)
         check.on('change', e => {
 
@@ -579,7 +593,7 @@
     var controlBounds = new L.Control({ position: 'topleft' });
 
     controlBounds.onAdd = map => {
-        var div = $('<a class="leaflet-control-btn"><i class="fa fa-expand"></i> Show Dataset Bounds</a>');
+        var div = $('<a id="get_dataset" class="leaflet-control-btn"><i class="fa fa-expand"></i> Show Dataset Bounds</a>');
         div.on('click', e => {
             e.preventDefault()
             e.stopImmediatePropagation();
@@ -608,7 +622,7 @@
     var controlDatasets = new L.Control({ position: 'topleft' });
 
     controlDatasets.onAdd = map => {
-        var div = $('<a class="leaflet-control-btn"><i class="fa fa-database"></i> Show Datasets info</a>');
+        var div = $('<a id="get_datasets" class="leaflet-control-btn"><i class="fa fa-database"></i> Show Datasets info</a>');
         div.on('click', e => {
             e.preventDefault()
             e.stopImmediatePropagation();
@@ -626,7 +640,7 @@
     var controlStatus = new L.Control({ position: 'topleft' });
 
     controlStatus.onAdd = map => {
-        var div = $('<a class="leaflet-control-btn"><i class="fa fa-info"></i> Show Service Status</a>');
+        var div = $('<a id="get_status" class="leaflet-control-btn"><i class="fa fa-info"></i> Show Service Status</a>');
         div.on('click', e => {
             e.preventDefault()
             e.stopImmediatePropagation();
@@ -644,7 +658,7 @@
     var controlClear = new L.Control({ position: 'topleft' });
 
     controlClear.onAdd = map => {
-        var div = $('<a class="leaflet-control-btn"><i class="fa fa-trash"></i> Clear All</a>');
+        var div = $('<a id="reset" class="leaflet-control-btn"><i class="fa fa-trash"></i> Clear All</a>');
         div.on('click', e => {
             e.preventDefault()
             e.stopImmediatePropagation();
@@ -652,6 +666,38 @@
         });
         return div[0];
     };
+
+    /**
+     * Reset button clear all layers
+     */
+    var controlText = new L.Control({ position: 'bottomleft' });
+    var $divText = $('<div id="help" class="leaflet-control-btn"><i class="fa fa-info"></i> <span>&nbsp;<span></div>');
+    controlText.onAdd = map => {
+        return $divText[0];
+    };
+
+    map.addControl(controlElevation);
+
+    map.addControl(controlDraw);
+    map.addControl(controlMousePoint);
+    map.addControl(controlMouseLine);
+    map.addControl(controlDrawFreeBtn);
+
+    map.addControl(controlBounds);
+    map.addControl(controlDatasets);
+    map.addControl(controlStatus);
+    map.addControl(controlClear);
+
+    map.addControl(controlText);
+
+    $('.leaflet-control-btn').on('mouseover', e => {
+      showText(e.target);
+    });
+    $('.leaflet-draw-draw-polyline, .leaflet-draw-draw-marker')
+    .on('mouseover', e => {
+      showText(Texts.post_geometry);
+    })
+    showText(`Double Click on map ${Texts.post_lonlat}`)
 
     function reset() {
       layerElevation.clearLayers();
@@ -665,17 +711,17 @@
       $divLog.empty();
     }
 
-    map.addControl(controlElevation);
-
-    map.addControl(controlDraw);
-    map.addControl(controlMousePoint);
-    map.addControl(controlMouseLine);
-    map.addControl(controlDrawFreeBtn);
-
-    map.addControl(controlBounds);
-    map.addControl(controlDatasets);
-    map.addControl(controlStatus);
-    map.addControl(controlClear);
+    function showText (obj) {
+      if (typeof obj === 'string') {
+        $divText.find('span').text(obj)
+      }
+      else {
+        let id = $(obj).attr('id');
+        if (Texts[ id ]) {
+          showText(Texts[ id ]);
+        }
+      }
+    }
 
     </script>
     <script src="/labs-common.js"></script>
