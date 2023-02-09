@@ -29,14 +29,7 @@ prefix: ${PREFIX}
 demo_page: ${DEMO_PAGE}
 demo_path: '/'
 
-attribution: "Demo instance of Geopicker Server - Copyright Stefano Cudini https://opengeo.tech"
-
-# serving Swagger (OpenAPI v2) or OpenAPI v3 schemas
-# https://github.com/fastify/fastify-swagger
-swagger:
-  enabled: true
-  # prefix append to `prefix`
-  routePrefix: '/docs'
+attribution: "Instance of GeoPicker service - Copyright Stefano Cudini"
 
 fastifyConf:
   maxParamLength: 1024
@@ -44,6 +37,18 @@ fastifyConf:
     level: 'info'
     transport:
       target: 'pino-pretty'
+
+# serving Swagger (OpenAPI v2) or OpenAPI v3 schemas
+# https://github.com/fastify/fastify-swagger
+swagger:
+  enabled: true
+  # prefix append to root `prefix`
+  routePrefix: '${prefix}/docs'
+  # docExpansion
+  # 'none' It'll Hide everything.
+  # 'list' It'll expand/List all the operations only.
+  # 'full' It'll expand everything(Full expand as the name says).
+  docExpansion: 'list'
 
 # Cross-origin resource sharing
 # https://github.com/fastify/fastify-cors

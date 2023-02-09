@@ -1,5 +1,5 @@
 
-const path = require('path')
+const {resolve} = require('path')
     , fp = require('fastify-plugin')
     , Swagger = require('@fastify/swagger')
     , SwaggerUi = require('@fastify/swagger-ui');
@@ -8,15 +8,15 @@ module.exports = fp(async fastify => {
 
   const {config, package} = fastify
       , {version, description, homepage} = package
-      , {prefix, attribution, swagger} = config
-      , {routePrefix} = swagger;
+      , {attribution, swagger} = config
+      , {routePrefix, docExpansion} = swagger;
 
   fastify.register(Swagger, {
     mode: 'dynamic',
     exposeRoute: true,
     openapi: {
       info: {
-        title: 'Geopicker',
+        title: 'GeoPicker API',
         description,
         version,
       },
@@ -34,10 +34,10 @@ module.exports = fp(async fastify => {
   });
 
   fastify.register(SwaggerUi, {
-    routePrefix: path.join(prefix, routePrefix),
+    routePrefix: resolve(routePrefix),
     //initOAuth: { },
     uiConfig: {
-      docExpansion: 'full',
+      docExpansion,
       deepLinking: false
     },
     uiHooks: {
