@@ -185,16 +185,16 @@
 
     const $divLog = $('#log');
 
-/*    const strings = {
-get_status              | service status, versions, datasets
-get_datasets            | list available datasets and their attributes
- GET  | /:dataset            | show attributes of a certain dataset
- GET  | /:dataset/:lon/:lat  | get single location value of dataset, densify not supported
- GET  | /:dataset/:locations | locations is a string (format: `lon,lat|lon,lat|lon,lat`), densify not supported
- POST | /:dataset/lonlat     | accept array or object in body
- POST | /:dataset/geometry   | geojson geometry Point or LineString in body
- POST | /:dataset/locations  | accept array or object of locations in body (format is `[[lon,lat],[lon,lat],[lon,lat]]`)
-    };*/
+    const strings = {
+      get_status: "service status and versions",
+      get_datasets: "get list available datasets and their attributes",
+      get_dataset: "get attributes of a certain dataset",
+      get_lonlat: "get single location value of dataset, densify not supported",
+      get_locations: "send via get locations as string in format: `lon,lat|lon,lat|lon,lat`), densify not supported",
+      post_lonlat: "send in POST body array or object",
+      post_geometry: "send in POST body geojson geometry Point or LineString",
+      post_locations: "send in POST body array or object of locations in format: `[[lon,lat],[lon,lat],[lon,lat]]`",
+    };
 
     function logger() {
         const args = Array.prototype.map.call(arguments, a => {return typeof a ==='object'?JSON.stringify(a) : a})
@@ -210,6 +210,15 @@ get_datasets            | list available datasets and their attributes
     function j() {
       const args = Array.prototype.map.call(arguments, a => { return `${a}`.replace(/\/$/, '') })
       return Array.prototype.join.call(args, '/')
+    }
+
+    function getStatus(name) {
+        const url = j(api, 'status');
+
+        logger('-> GET', url)
+        return $.getJSON(url).done(res => {
+            logger('<-', res)
+        });
     }
 
     function getDataset(name) {
@@ -570,12 +579,14 @@ get_datasets            | list available datasets and their attributes
     var controlBounds = new L.Control({ position: 'topleft' });
 
     controlBounds.onAdd = map => {
-        var div = $('<a class="leaflet-control-btn"><i class="fa fa-expand"></i> Show dataset Bounds</a>');
+        var div = $('<a class="leaflet-control-btn"><i class="fa fa-expand"></i> Show Dataset Bounds</a>');
         div.on('click', e => {
             e.preventDefault()
             e.stopImmediatePropagation();
 
             getDataset(dataset).done(res => {
+
+                logger(JSON.stringify(res,null,4))
 
                 const {minLon,minLat,maxLon,maxLat} = res.bbox;
 
@@ -597,12 +608,30 @@ get_datasets            | list available datasets and their attributes
     var controlDatasets = new L.Control({ position: 'topleft' });
 
     controlDatasets.onAdd = map => {
-        var div = $('<a class="leaflet-control-btn"><i class="fa fa-expand"></i> Show Datasets info</a>');
+        var div = $('<a class="leaflet-control-btn"><i class="fa fa-database"></i> Show Datasets info</a>');
         div.on('click', e => {
             e.preventDefault()
             e.stopImmediatePropagation();
 
             getDatasets().done(res => {
+                logger(JSON.stringify(res,null,4))
+            });
+        });
+        return div[0];
+    };
+
+    /**
+     * button show Status
+     */
+    var controlStatus = new L.Control({ position: 'topleft' });
+
+    controlStatus.onAdd = map => {
+        var div = $('<a class="leaflet-control-btn"><i class="fa fa-info"></i> Show Service Status</a>');
+        div.on('click', e => {
+            e.preventDefault()
+            e.stopImmediatePropagation();
+
+            getStatus().done(res => {
                 logger(JSON.stringify(res,null,4))
             });
         });
@@ -645,6 +674,7 @@ get_datasets            | list available datasets and their attributes
 
     map.addControl(controlBounds);
     map.addControl(controlDatasets);
+    map.addControl(controlStatus);
     map.addControl(controlClear);
 
     </script>
