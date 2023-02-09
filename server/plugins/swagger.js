@@ -1,5 +1,6 @@
 
-const fp = require('fastify-plugin')
+const path = require('path')
+    , fp = require('fastify-plugin')
     , Swagger = require('@fastify/swagger')
     , SwaggerUi = require('@fastify/swagger-ui');
 
@@ -7,7 +8,7 @@ module.exports = fp(async fastify => {
 
   const {config, package} = fastify
       , {version, description, homepage} = package
-      , {attribution, swagger} = config
+      , {prefix, attribution, swagger} = config
       , {routePrefix} = swagger;
 
   fastify.register(Swagger, {
@@ -33,7 +34,7 @@ module.exports = fp(async fastify => {
   });
 
   fastify.register(SwaggerUi, {
-    routePrefix,
+    routePrefix: path.join(prefix, routePrefix),
     //initOAuth: { },
     uiConfig: {
       docExpansion: 'full',

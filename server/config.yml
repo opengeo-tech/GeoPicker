@@ -31,8 +31,11 @@ demo_path: '/'
 
 attribution: "Demo instance of Geopicker Server - Copyright Stefano Cudini https://opengeo.tech"
 
+# serving Swagger (OpenAPI v2) or OpenAPI v3 schemas
+# https://github.com/fastify/fastify-swagger
 swagger:
   enabled: true
+  # prefix append to `prefix`
   routePrefix: '/docs'
 
 fastifyConf:
@@ -42,19 +45,21 @@ fastifyConf:
     transport:
       target: 'pino-pretty'
 
+# Cross-origin resource sharing
+# https://github.com/fastify/fastify-cors
 cors:
   origin: '*'
   optionsSuccessStatus: 200
-  # some legacy browsers (IE11, various SmartTVs) choke on 2
 
-input_validation: true
 # if false speedup the responses but not valid input locations
+input_validation: true
 
-input_max_locations: 10000
 # maximum number of locations picked in a single request
+input_max_locations: 10000
 
-output_precision_digits: 7
+
 # number of digits precision returned in geojson coordinates
+output_precision_digits: 7
 
 # default densify options
 densify:
@@ -92,7 +97,7 @@ datasets:
     epsg: 4326
   elevation_veneto:
     path: veneto_30m.tif
-    # band: * # TODO espose all bands if value is *
+  # TODO band: * # TODO espose all bands if value is *
   # TODO manage shape
   #  admins:
   #   path: a-shape-file.shp
