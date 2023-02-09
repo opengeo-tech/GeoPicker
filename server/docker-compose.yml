@@ -6,19 +6,19 @@ networks:
 
 services:
 
-  geopicker-official:
-    container_name: geopicker
-    image: stefcud/geopicker:1.2.5
-    ports:
-      - "127.0.0.1:8080:8080"
-    volumes:
-      - "../tests/data:/data"
-    environment:
-      - PREFIX=$PREFIX
-      - DEMO_PAGE=true
-      - DATASET_DEFAULT=$DATASET_DEFAULT
-      #TODO- SWAGGER_PAGE=true
-    restart: always
+  # geopicker-official:
+  #   container_name: geopicker
+  #   image: stefcud/geopicker:1.2.5
+  #   ports:
+  #     - "127.0.0.1:8080:8080"
+  #   volumes:
+  #     - "../tests/data:/data"
+  #   environment:
+  #     - PREFIX=$PREFIX
+  #     - DEMO_PAGE=true
+  #     - DATASET_DEFAULT=$DATASET_DEFAULT
+  #     #TODO- SWAGGER_PAGE=true
+  #   restart: always
 
   geopicker:
     container_name: geopicker
