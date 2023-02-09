@@ -4,11 +4,12 @@
  * https://opengeo.tech
  */
 const basepath = __dirname
+    //, path = require('path')
     , configYml = require('@stefcud/configyml')
     , Fastify = require('fastify')
     , gpicker = require('../lib')
     , config = configYml({basepath})
-    , {fastifyConf, port, host, prefix} = config
+    , {fastifyConf, port, host, prefix, swagger} = config
     , fastify = Fastify(fastifyConf);
 
 fastify.log.debug(config);
@@ -25,7 +26,9 @@ fastify.decorate('status', 'OK');
  * 3rd fastify plugins
  */
 fastify.register(require('@fastify/cors'), () => config.cors);
-
+if (swagger.enabled === true) {
+    fastify.register(require('./plugins/swagger'));
+}
 /**
  * fastify Plugins configs and utils
  */
@@ -46,7 +49,7 @@ fastify.register(require('./routes/locations'), {prefix});
 /**
  * demo page map
  */
-if (config.demo_page===true) {
+if (config.demo_page === true) {
     fastify.register(require('./routes/demo'), {prefix});
 }
 

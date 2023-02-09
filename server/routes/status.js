@@ -2,11 +2,11 @@
 module.exports = async fastify => {
 
   const {config, status, gpicker, package} = fastify
-      , {name, version} = package
+      , {version} = package
       , {attribution} = config
 
   fastify.get('/status', async () => ({
-    name,
+    name: 'GeoPicker',
     version,
     gdal: gpicker.gdal.version,
     attribution,

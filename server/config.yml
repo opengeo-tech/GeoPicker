@@ -31,6 +31,10 @@ demo_path: '/'
 
 attribution: "Demo instance of Geopicker Server - Copyright Stefano Cudini https://opengeo.tech"
 
+swagger:
+  enabled: true
+  routePrefix: '/docs'
+
 fastifyConf:
   maxParamLength: 1024
   logger:
