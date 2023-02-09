@@ -6,8 +6,7 @@ module.exports = async fastify => {
   const {config, status, gpicker, package} = fastify
       , {version, homepage} = package
       , {attribution, swagger} = config
-
-  const documentation = swagger.enabled ? resolve(swagger.routePrefix) : homepage;
+      , documentation = swagger.enabled ? resolve(swagger.routePrefix) : homepage;
 
   fastify.get('/status', async () => ({
     name: 'GeoPicker',
