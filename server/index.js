@@ -42,18 +42,15 @@ if (swagger.enabled === true) {
 /**
  * fastify Routes
  */
-fastify.register(require('./routes/status'), {prefix});
-fastify.register(require('./routes/lonlat'), {prefix});
-fastify.register(require('./routes/datasets'), {prefix});
-fastify.register(require('./routes/geometry'), {prefix});
-fastify.register(require('./routes/locations'), {prefix});
-
-/**
- * demo page map
- */
 if (config.demo_page === true) {
     fastify.register(require('./routes/demo'), {prefix});
 }
+fastify.register(require('./routes/status'), {prefix});
+fastify.register(require('./routes/datasets'), {prefix});
+fastify.register(require('./routes/lonlat'), {prefix});
+fastify.register(require('./routes/locations'), {prefix});
+fastify.register(require('./routes/geometry'), {prefix});
+
 
 fastify.listen({port, host}, err => {
     if (err) {

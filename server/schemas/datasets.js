@@ -18,7 +18,7 @@ module.exports = (S, config) => {
   return {
     dataset: {
       description: 'Describe single dataset',
-      params: S.object().prop('dataset', S.string().enum(Object.keys(config.datasets))).required(),
+      params: S.object().prop('dataset', S.string().enum(Object.keys(config.datasets))).default('default').required(),
       response: {
         200: dataset
       }

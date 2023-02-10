@@ -197,6 +197,7 @@
         , zoom = 9;
 
     const $divLog = $('#log');
+    const $divText = $('<div id="help" class="leaflet-control-btn"><i class="fa fa-info"></i> <span>&nbsp;<span></div>');
 
     const Texts = {
       get_status: "get service status and versions",
@@ -271,7 +272,7 @@
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify({ lon, lat }),
+            data: JSON.stringify({lon, lat}),
         }).done(res => {
             logger('<-', res)
         });
@@ -499,7 +500,8 @@
             const { lon, lat, val } = res;
             tooltipClick.setContent(`<big>${val}m</big><br>${lon}<br>${lat}`)
         });
-    })
+    });
+    showText(`Double Click on map ${Texts.post_lonlat}`)
 
     /**
      * mouse move picker
@@ -671,7 +673,6 @@
      * Reset button clear all layers
      */
     var controlText = new L.Control({ position: 'bottomleft' });
-    var $divText = $('<div id="help" class="leaflet-control-btn"><i class="fa fa-info"></i> <span>&nbsp;<span></div>');
     controlText.onAdd = map => {
         return $divText[0];
     };
@@ -696,8 +697,7 @@
     $('.leaflet-draw-draw-polyline, .leaflet-draw-draw-marker')
     .on('mouseover', e => {
       showText(Texts.post_geometry);
-    })
-    showText(`Double Click on map ${Texts.post_lonlat}`)
+    });
 
     function reset() {
       layerElevation.clearLayers();

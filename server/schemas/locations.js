@@ -3,7 +3,7 @@ module.exports = (S, config) => {
 
   return {
     locationsString: {
-      description: 'Get locations stringified',
+      description: 'Get multiple locations stringified',
       params: S.object()
         .prop('dataset', S.string().enum(Object.keys(config.datasets))).required()
         .prop('locations',
@@ -17,8 +17,15 @@ module.exports = (S, config) => {
     },
     locationsPost: {
       description: 'Post array locations in body',
-      params: S.object().prop('dataset', S.string().enum(Object.keys(config.datasets))).required()
-      // TODO body
+      params: S.object().prop('dataset', S.string().enum(Object.keys(config.datasets))).required(),
+      body: S.array().minItems(2).maxItems(config.input_max_locations).items(
+          S.array().minItems(2).maxItems(2).items(S.number())
+        ),
+      response: {
+        200: S.array().minItems(2).maxItems(config.input_max_locations).items(
+          S.array().minItems(3).maxItems(3).items(S.number())
+        )
+      }
     }
   }
 }

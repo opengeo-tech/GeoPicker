@@ -20,13 +20,18 @@ module.exports = async fastify => {
     fastify.log.info(`Demo page available at path: ${demopath}`);
   });
 
-  fastify.get(join(config.prefix,config.demo_path,'favicon.png'), async (req, res) => {
+  fastify.get(join(config.prefix,config.demo_path,'favicon.png'), {
+      schema: {
+        //hide from swagger
+        hide:true
+      }
+    }, async (req, res) => {
     res.type('image/png').send(favicon);
   });
 
   fastify.get(resolve(config.demo_path), {
       schema: {
-        description: 'Interactive demo map which demonstrates how it works GeoPicker endpoints',
+        description: 'Interactive demo page which demonstrates how it works GeoPicker endpoints',
       }
     }, async (req, res) => {
     await res.headers(noCache).type('text/html').send(html)

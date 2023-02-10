@@ -42,6 +42,8 @@ fastifyConf:
 
 ## Defaults values for environments variables
 
+these values can be set with environment variables or following their default values in the config file.
+
 ```yaml
 defaultsEnvVars:
   PREFIX: '/'

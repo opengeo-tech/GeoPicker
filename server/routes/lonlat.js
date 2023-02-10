@@ -21,7 +21,6 @@ module.exports = async fastify => {
    * POST
    */
   fastify.post('/:dataset/lonlat', {schema: schemas.lonlatPost}, async req => {
-
     return setValue(req.body, defaultDataset, {precision: config.output_precision_digits})
   });
 }
