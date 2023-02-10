@@ -1,4 +1,5 @@
 
+// TODO convert in plugin, pass fastify
 const S = require('fluent-json-schema');
 
 module.exports = config => ({

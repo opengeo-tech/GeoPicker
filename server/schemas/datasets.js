@@ -18,7 +18,11 @@ module.exports = (S, config) => {
   return {
     dataset: {
       description: 'Describe single dataset',
-      params: S.object().prop('dataset', S.string().enum(Object.keys(config.datasets))).default('default').required(),
+      params: S.object().prop('dataset',
+        S.string()
+         .enum(Object.keys(config.datasets)))
+      // TODO use fastify.datasets decorator
+         .default('default').required(),
       response: {
         200: dataset
       }

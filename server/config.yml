@@ -102,6 +102,8 @@ datasets:
     epsg: 4326
   elevation_veneto:
     path: veneto_30m.tif
+  nope:
+    path: nope.tif
   # TODO band: * # TODO espose all bands if value is *
   # TODO manage shape
   #  admins:
