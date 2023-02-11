@@ -23,6 +23,12 @@ At present the index.html page contains a large implementation of browser side r
 - **Customization**: friendly configs and to help devs in many deploy contexts
 - **Formats**: support for different geospatial input and output formatss
 
+and includes some other additional functions:
+
+- **Densify**: add more points in a sequence of coordinates, this improves the display on an elevation graph, adding intermediate positions at a minimum fixed distance.
+- **Simplify**: unlike densify it removes points that are too close together from a geometry.
+- **Meta**: additional informations calculated for a certain geometry, can be for example the direction of a path.
+
 # API Rest endpoints
 
 The [API](https://opengeo.tech/geopicker/docs) is work in progress.
