@@ -18,15 +18,31 @@
     body {
         margin:0;
         padding: 0;
-        background: #bfd3ab;
-        color: #203060;
+        color: #0079c2;
+        background: #eee;
     }
 
+    h1,p {
+      padding: 0 8px;
+    }
+
+    a {
+      text-decoration: none;
+      color: #41454d;
+    }
+    a:visited {
+      color: #41454d;
+    }
+    img {
+      height: 60px;
+      float: left;
+      vertical-align: baseline;
+    }
     #map {
       box-shadow: 0 0 8px #333;
       margin: 0 -8px -10px 0 -8px;
         width: 100%;
-        height: 700px;
+        height: 600px;
         user-select: none;
     }
 
@@ -138,7 +154,7 @@
 
     #log {
         position: absolute;
-        top: 840px;
+        top: 780px;
         bottom: 0;
         left: 0;
         right: 0;
@@ -160,17 +176,23 @@
       width: auto;
     }
 
-    h3,p {
-      padding: 0 8px;
-    }
-
     </style>
 </head>
 
 <body>
-    <h3>GeoPicker Demo</h3>
+    <img src="https://raw.githubusercontent.com/opengeo-tech/GeoPicker/master/docs/logo.png" />
+    <h1><a href="https://opengeo.tech/geopicker">GeoPicker Demo</a></h1>
+  <p>
+
+    <a href="https://opengeo.tech/geopicker/docs">
+      <i class="fa fa-question-circle"></i> <span>API Docs</span>
+    </a>
+    |
+    <a href="https://github.com/opengeo-tech/GeoPicker/">
+      <i class="fa fa-github" aria-hidden="true"></i> <span>Source Code</span>
+    </a></p>
     <p>
-      Interactive demo map which demonstrates how it works <strong>GeoPicker endpoints</strong>, for details consult <a href="https://opengeo.tech/geopicker/docs">API Documentation</a>.
+      Interactive demo map which demonstrates how it works <strong>GeoPicker API Rest</strong>.
       <br />
       Each buttons activates a different way of requesting data to GeoPicker, in the box below the data sent and returned and green panel shown the <strong>elevation profile</strong> in real-time.
     </p>
