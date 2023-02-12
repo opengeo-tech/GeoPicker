@@ -23,6 +23,12 @@ At present the index.html page contains a large implementation of browser side r
 - **Customization**: friendly configs and to help devs in many deploy contexts
 - **Formats**: support for different geospatial input and output formatss
 
+and includes some other additional functions:
+
+- **Densify**: add more points in a sequence of coordinates, this improves the display on an elevation graph, adding intermediate positions at a minimum fixed distance.
+- **Simplify**: unlike densify it removes points that are too close together from a geometry.
+- **Meta**: additional informations calculated for a certain geometry, can be for example the direction of a path.
+
 # API Rest endpoints
 
 The [API](https://opengeo.tech/geopicker/docs) is work in progress.
@@ -58,6 +64,8 @@ This basic structure can be extended starting from the environment variable `PRE
 |  ❌  | format   | by input | output type(json,polyline,geojson) |
 |  ❌  | meta     | false    | additional metadata in output |
 
+✔️ Done ❌ TODO 🚧 Work in Progress
+
 # Usage
 
 Running by official [Docker image](https://hub.docker.com/r/stefcud/geopicker):
@@ -88,26 +96,41 @@ some useful tools for contributors `npm run <scriptname>`
 - `dev` run in development mode
 
 
-## Examples requests
+# Requests
 
-**Pick single location data via Get**
-
+Get single location exchanging a few bytes:
 ```bash
 $ curl "http://localhost:9090/elevation/11.123/46.123"
 
 [195]
 ```
 
-**Stringified locations**
+Post a json object and receive the same decorated with the result(still works with `longitude`,`latitude`):
+```bash
+$ curl -X POST -H 'Content-Type: application/json' \
+  -d '{"lon": 11.123, "lat": 46.123"}' \
+  "http://localhost:9090/elevation/lonlat"
 
+{"lon": 11.123,"lat": 46.123,"val":195}
+```
+
+Get many stringified locations in one time(designed for not too long LineString):
 ```bash
 curl "http://localhost:9090/elevation/11.1,46.1|11.2,46.2|11.3,46.3"
 
 [195,1149,1051]
 ```
 
-**Geojson geometry**
+Post a very long LineString saving bytes:
+```bash
+$ curl -X POST -H 'Content-Type: application/json' \
+  -d '[[10.9998,46.0064],[10.9998,46.0065],[10.9999,46.0066],[11.0000,46.0067]]' \
+  "http://localhost:9090/elevation/locations"
 
+[[10.9998,46.0064,900],[10.9998,46.0065,898],[10.9999,46.0066,898],[11.0000,46.0067,900]]
+```
+
+Post anyone GeoJSON geometry, the same input geometry is always returned which has a third dimension:
 ```bash
 $ curl -X POST -H 'Content-Type: application/json' \
   -d '{"type":"LineString","coordinates":[[11.1,46.1],[11.2,46.2],[11.3,46.3]]}' \
@@ -115,6 +138,8 @@ $ curl -X POST -H 'Content-Type: application/json' \
 
 {"type":"LineString","coordinates":[[11.1,46.1,195],[11.2,46.2,1149],[11.3,46.3,1051]]}
 ```
+
+
 ## Benchmarks
 
 benchmarks scripts: `tests/benchmarks.js` using [AutoCannon](https://github.com/mcollina/autocannon)
@@ -151,13 +176,13 @@ for details see the descriptions in the [Roadmap issues](https://github.com/open
 
 |Status| Goal        |
 |------|-------------|
+|  ✔️   | Swagger Documentation Interface |
 |  🚧  | manage multiple datasets |
 |  🚧  | ES6 modules |
 |  🚧  | extend benchmarks for any endpoints |
 |  ❌  | enable densify function |
 |  ❌  | enable simply function |
 |  ❌  | unit testing |
-|  ❌  | swagger |
 |  ❌  | support vector format in datasets, such as shapefile  |
 |  ❌  | supports complex geometries in input |
 |  ❌  | limit access by api key |
