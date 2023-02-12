@@ -94,26 +94,41 @@ some useful tools for contributors `npm run <scriptname>`
 - `dev` run in development mode
 
 
-## Examples requests
+# Requests
 
-**Pick single location data via Get**
-
+Get single location exchanging a few bytes:
 ```bash
 $ curl "http://localhost:9090/elevation/11.123/46.123"
 
 [195]
 ```
 
-**Stringified locations**
+Post a json object and receive the same decorated with the result(still works with `longitude`,`latitude`):
+```bash
+$ curl -X POST -H 'Content-Type: application/json' \
+  -d '{"lon": 11.123, "lat": 46.123"}' \
+  "http://localhost:9090/elevation/lonlat"
 
+{"lon": 11.123,"lat": 46.123,"val":195}
+```
+
+Get many stringified locations in one time(designed for not too long LineString):
 ```bash
 curl "http://localhost:9090/elevation/11.1,46.1|11.2,46.2|11.3,46.3"
 
 [195,1149,1051]
 ```
 
-**Geojson geometry**
+Post a very long LineString saving bytes:
+```bash
+$ curl -X POST -H 'Content-Type: application/json' \
+  -d '[[10.9998,46.0064],[10.9998,46.0065],[10.9999,46.0066],[11.0000,46.0067]]' \
+  "http://localhost:9090/elevation/geometry"
 
+[[10.9998,46.0064,900],[10.9998,46.0065,898],[10.9999,46.0066,898],[11.0000,46.0067,900]]
+```
+
+Post anyone GeoJSON geometry, the same input geometry is always returned which has a third dimension:
 ```bash
 $ curl -X POST -H 'Content-Type: application/json' \
   -d '{"type":"LineString","coordinates":[[11.1,46.1],[11.2,46.2],[11.3,46.3]]}' \
@@ -121,6 +136,8 @@ $ curl -X POST -H 'Content-Type: application/json' \
 
 {"type":"LineString","coordinates":[[11.1,46.1,195],[11.2,46.2,1149],[11.3,46.3,1051]]}
 ```
+
+
 ## Benchmarks
 
 benchmarks scripts: `tests/benchmarks.js` using [AutoCannon](https://github.com/mcollina/autocannon)
