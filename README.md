@@ -64,6 +64,8 @@ This basic structure can be extended starting from the environment variable `PRE
 |  ❌  | format   | by input | output type(json,polyline,geojson) |
 |  ❌  | meta     | false    | additional metadata in output |
 
+✔️ Done ❌ TODO 🚧 Work in Progress
+
 # Usage
 
 Running by official [Docker image](https://hub.docker.com/r/stefcud/geopicker):
@@ -174,13 +176,13 @@ for details see the descriptions in the [Roadmap issues](https://github.com/open
 
 |Status| Goal        |
 |------|-------------|
+|  ✔️   | Swagger Documentation Interface |
 |  🚧  | manage multiple datasets |
 |  🚧  | ES6 modules |
 |  🚧  | extend benchmarks for any endpoints |
 |  ❌  | enable densify function |
 |  ❌  | enable simply function |
 |  ❌  | unit testing |
-|  ✔️  | swagger |
 |  ❌  | support vector format in datasets, such as shapefile  |
 |  ❌  | supports complex geometries in input |
 |  ❌  | limit access by api key |
