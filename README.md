@@ -123,7 +123,7 @@ Post a very long LineString saving bytes:
 ```bash
 $ curl -X POST -H 'Content-Type: application/json' \
   -d '[[10.9998,46.0064],[10.9998,46.0065],[10.9999,46.0066],[11.0000,46.0067]]' \
-  "http://localhost:9090/elevation/geometry"
+  "http://localhost:9090/elevation/locations"
 
 [[10.9998,46.0064,900],[10.9998,46.0065,898],[10.9999,46.0066,898],[11.0000,46.0067,900]]
 ```
