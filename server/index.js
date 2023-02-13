@@ -51,7 +51,6 @@ fastify.register(require('./routes/lonlat'), {prefix});
 fastify.register(require('./routes/locations'), {prefix});
 fastify.register(require('./routes/geometry'), {prefix});
 
-
 fastify.listen({port, host}, err => {
     if (err) {
         fastify.log.error(err);

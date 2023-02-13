@@ -46,7 +46,8 @@ module.exports = fp(async fastify => {
         }
       }
       else {
-        fastify.log.warn(`Dataset not exists! ${file} `)
+        fastify.log.warn(`Dataset not exists! ${key} ${file} `);
+        delete datasets[key];
       }
     }
   }
