@@ -74,6 +74,7 @@ densify:
 errors:
   nodatadir: "Data directory not exists"
   nodefaultdataset: "Default dataset file not exists"
+  nodatasets: "At least one default dataset is required"
   nodataset: "Dataset name not exists"
   densify_nobody: "Require a geojson in body"
   nolocations: "Require array of locations"
@@ -103,7 +104,7 @@ datasets:
   elevation_veneto:
     path: veneto_30m.tif
   nope:
-    path: nope.tif
+    path: this-file-not-exists.tif
   # TODO band: * # TODO espose all bands if value is *
   # TODO manage shape
   #  admins:
