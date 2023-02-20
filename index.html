@@ -26,12 +26,16 @@
       padding: 0 8px;
     }
 
+    h1 a{
+        color: #0079c2;
+    }
+
     a {
       text-decoration: none;
       color: #41454d;
     }
-    a:visited {
-      color: #41454d;
+    a:hover {
+      color: #0079c2;
     }
     img {
       height: 80px;
@@ -176,6 +180,12 @@
       width: auto;
     }
 
+    .fa {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+    }
+
     </style>
 </head>
 
@@ -194,6 +204,12 @@
 
       &nbsp; | &nbsp;
 
+      <a href="https://www.paypal.com/paypalme/stefanocudini" target="_blank" title="finance the project if it was useful for your work">
+        <i class="fa fa-heart"></i> <span>Donate</span>
+      </a>
+
+      &nbsp; | &nbsp;
+
       <a href="https://opengeo.tech/geopicker/docs">
         <i class="fa fa-question-circle"></i> <span>API Docs</span>
       </a>
@@ -201,7 +217,7 @@
     <p>
       Interactive map which demonstrates how it works GeoPicker <strong>elevation service API Rest</strong> .
       <br />
-      Each buttons activates a different way of requesting data, in the box below the data sent and returned and green panel shown the <strong>elevation profile</strong> in real-time.
+      Each buttons activates a different way of requesting data, in the box below the data exchanged, green panel shown the <strong>elevation profile</strong> in real-time.
     </p>
     <div id="map">
     </div>
