@@ -5,6 +5,8 @@
     "autocannon": "^7.10.0",
     "gdal": "^0.11.1",
     "gdal-next": "^2.8.0",
+    "@turf/turf": "^6.5.0",
+    "gdal-async": "^3.6.1",
     "geoblaze": "^1.1.0",
     "lodash": "^4.17.21"
   }
