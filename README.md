@@ -187,7 +187,7 @@ for details see the descriptions in the [Roadmap issues](https://github.com/open
 |  ❌  | supports complex geometries in input |
 |  ❌  | limit access by api key |
 |  ❌  | caching responses |
-|  ❌  | websocket interface |
+|  ❌  | interfaces: websocket, jsonrpc |
 |  ❌  | command line interface |
 
 ## Copyright
