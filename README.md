@@ -27,7 +27,7 @@ and includes some other additional functions:
 
 - **Densify**: add more points in a sequence of coordinates, this improves the display on an elevation graph, adding intermediate positions at a minimum fixed distance.
 - **Simplify**: unlike densify it removes points that are too close together from a geometry.
-- **Meta**: additional informations calculated for a certain geometry, can be for example the direction of a path.
+- **Metadata**: get additional informations for a certain geometry, can be for example the direction of a path.
 
 # API Rest endpoints
 
@@ -187,7 +187,7 @@ for details see the descriptions in the [Roadmap issues](https://github.com/open
 |  ❌  | supports complex geometries in input |
 |  ❌  | limit access by api key |
 |  ❌  | caching responses |
-|  ❌  | websocket interface |
+|  ❌  | interfaces: websocket, jsonrpc |
 |  ❌  | command line interface |
 
 ## Copyright
