@@ -105,11 +105,13 @@ datasets:
     path: veneto_30m.tif
   nope:
     path: this-file-not-exists.tif
-  wms:
-    path: wms.tif
-    wmspath: wms.xml
-    band: 1
-    epsg: 3857
+  #TODO wms:
+  #   path: wms.tif
+  #   download:
+  #       wmspath: wms.xml
+  #       bboxpath:
+  #   band: 1
+  #   epsg: 3857
   # TODO band: * # TODO espose all bands if value is *
   # TODO manage shape
   #  admins:
