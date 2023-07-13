@@ -1,3 +1,10 @@
+//make a map using osm tiles
+var map = L.map('map').setView([40.5, -76.5], 9);
+L.tileLayer('http://b.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 18,
+  attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributers'
+}).addTo(map);
+
 //text change callback
 var geojson = null;
 function render() {

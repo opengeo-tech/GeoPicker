@@ -12,15 +12,6 @@
   <script src="./polyline_files/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
   <script src="./polyline_files/decode.js"></script>
 
-  <script>
-    //make a map using osm tiles
-    var map = L.map('map').setView([40.5, -76.5], 9);
-    L.tileLayer('http://b.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributers'
-    }).addTo(map);
-  </script>
-
 Unescape '\': <input id="unescape" type="checkbox"><br>
 Polyline6: <input id="polyline6" type="checkbox"><br>
 Number of Points: <a id="cardinality"></a><br>
