@@ -59,7 +59,7 @@
   ],
   "dependencies": {
     "@turf/turf": "^6.5.0",
-    "gdal-async": "^3.6.1"
+    "gdal-async": "^3.7.0"
   },
   "devDependencies": {
     "autocannon": "^7.10.0",
