@@ -87,7 +87,7 @@ Browse the demo page: http://localhost:9090/
 
 Full configuration options can be found in [docs config](./docs/config.md)
 
-## Scripts
+## Development
 
 some useful tools for contributors `npm run <scriptname>`
 
