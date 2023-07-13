@@ -22,8 +22,7 @@ services:
 
   geopicker:
     container_name: geopicker
-    image: geopicker:latest
-    #image: stefcud/geopicker:1.2.4
+    image: stefcud/geopicker:latest
     build:
       context: ../
       dockerfile: ./server/Dockerfile
