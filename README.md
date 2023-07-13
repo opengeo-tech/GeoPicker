@@ -81,7 +81,7 @@ npm install
 cd server && npm install && cd -
 npm run dev
 ```
-Browse url: http://localhost:9090/
+Browse the demo page: http://localhost:9090/
 
 ## Configuration
 
