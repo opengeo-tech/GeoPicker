@@ -81,6 +81,7 @@ npm install
 cd server && npm install && cd -
 npm run dev
 ```
+Browse url: http://localhost:9090/
 
 ## Configuration
 
@@ -100,7 +101,7 @@ some useful tools for contributors `npm run <scriptname>`
 
 Get single location exchanging a few bytes:
 ```bash
-$ curl "http://localhost:9090/elevation/11.123/46.123"
+        $ curl "http://localhost:9090/elevation/11.123/46.123"
 
 [195]
 ```
