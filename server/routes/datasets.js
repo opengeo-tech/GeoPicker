@@ -13,6 +13,16 @@ module.exports = async fastify => {
   /**
    * GET
    */
+  fastify.get('/datasets/:dataset', {schema: schemas.dataset}, async req => {
+
+    const {dataset} = req.params
+
+    return fastify.datasets[ dataset ] || config.errors.nodataset;
+  });
+
+  /**
+   * GET
+   */
   fastify.get('/:dataset', {schema: schemas.dataset}, async req => {
 
     const {dataset} = req.params
