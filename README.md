@@ -61,6 +61,7 @@ This basic structure can be extended starting from the environment variable `PRE
 |  🚧  | precision| 7        | rounded to digits decimal precision |
 |  🚧  | densify  | false    | enable densification of points in the result |
 |  🚧  | simplify | false    | enable simplication geometry of the result |
+|  🚧  | height   | false    | add vertical distance from the ground(only input has elevation) |
 |  ❌  | format   | by input | output type(json,polyline,geojson) |
 |  ❌  | meta     | false    | additional metadata in output |
 
