@@ -531,8 +531,11 @@
             const { lon, lat, val } = res;
             tooltipClick.setContent(`<big>${val}m</big><br>${lon}<br>${lat}`)
         });
+    })
+    .once('dblclick', e => {
+        showText('');   //hide message below
     });
-    showText(`Double Click on map ${Texts.post_lonlat}`)
+    showText(`Double Click on map ${Texts.post_lonlat}`);
 
     /**
      * mouse move picker
@@ -742,7 +745,7 @@
       $divLog.empty();
     }
 
-    function showText (obj) {
+    function showText(obj) {
       if (typeof obj === 'string') {
         $divText.find('span').text(obj)
       }
