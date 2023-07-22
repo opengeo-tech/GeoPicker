@@ -27,6 +27,7 @@ and includes some other additional functions:
 
 - **Densify**: add more points in a sequence of coordinates, this improves the display on an elevation graph, adding intermediate positions at a minimum fixed distance.
 - **Simplify**: unlike densify it removes points that are too close together from a geometry.
+- **Height**: add the vertical distance from the ground, if input has elevation add a fourth coordinate with this value.
 - **Metadata**: get additional informations for a certain geometry, can be for example the direction of a path.
 
 # API Rest endpoints
