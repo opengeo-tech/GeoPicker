@@ -43,13 +43,25 @@
       vertical-align: baseline;
     }
     #map {
-      box-shadow: 0 0 8px #333;
-      margin: 0 -8px -10px 0 -8px;
+        box-shadow: 0 0 8px #333;
         width: 100%;
         height: 600px;
         user-select: none;
     }
 
+    #log {
+        height: auto;
+        max-height: 300px;
+        overflow-y: hidden;
+        font-family: monospace;
+        font-size: 14px;
+        background: #ddd;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        padding: 4px;
+        z-index: 10000;
+    }
     .btn-share {
         font-size: 16px;
         text-decoration: none;
@@ -142,22 +154,6 @@
         border: 2px solid rgba(0, 0, 0, 0.2);
     }
 
-    #log {
-        position: absolute;
-        top: 780px;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: 0;
-        font-family: monospace;
-        font-size: 14px;
-        background: #ddd;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        text-overflow: ellipsis;
-        padding: 4px;
-    }
-
     #help {
       background: #F4D03F;
       font-size: 18px;
@@ -207,11 +203,7 @@
     </p>
     <div id="map">
     </div>
-    <br>
     <pre id="log"></pre>
-    <a href="https://github.com/opengeo-tech/geopicker">
-        Github
-    </a>
     <script src="//unpkg.com/underscore@1.9.1/underscore.js"></script>
     <script src="//unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
     <script src="//unpkg.com/leaflet@1.4.0/dist/leaflet-src.js"></script>
@@ -407,6 +399,7 @@
         center,
         attributionControl: false,
         doubleClickZoom: false,
+        scrollWheelZoom: false,
         layers: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png', {
             subdomains: 'abcd',
             minZoom: 8,
