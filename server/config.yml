@@ -28,6 +28,9 @@ prefix: ${PREFIX}
 
 demo_page: ${DEMO_PAGE}
 demo_path: '/'
+#TODO section demo:
+#   enabled:
+#   path
 
 attribution: "GeoPicker service - Copyright Stefano Cudini - opengeo.tech"
 
@@ -53,11 +56,13 @@ swagger:
 # Cross-origin resource sharing
 # https://github.com/fastify/fastify-cors
 cors:
+  enabled: true
   origin: '*'
   optionsSuccessStatus: 200
 
 # output compression (set to false to disable)
 compress:
+  enabled: true
   global: false
   threshold: 1024
   encodings:

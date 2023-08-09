@@ -34,10 +34,10 @@ fastify.register(require('./plugins/print-routes'));
 /**
  * Plugins
  */
-if (cors) {
+if (cors.enabled) {
     fastify.register(require('@fastify/cors'), () => cors);
 }
-if (compress) {
+if (compress.enabled) {
     fastify.register(require('@fastify/compress'), compress);
 }
 if (swagger.enabled) {
