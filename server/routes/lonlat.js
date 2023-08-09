@@ -2,6 +2,7 @@
 module.exports = async fastify => {
 
   const {config, schemas, defaultDataset, gpicker} = fastify
+      , {output_precision_digits} = config
       , {getValue, setValue} = gpicker;
 
   /**
@@ -21,6 +22,6 @@ module.exports = async fastify => {
    * POST
    */
   fastify.post('/:dataset/lonlat', {schema: schemas.lonlatPost}, async req => {
-    return setValue(req.body, defaultDataset, {precision: config.output_precision_digits})
+    return setValue(req.body, defaultDataset, {precision: output_precision_digits})
   });
 }

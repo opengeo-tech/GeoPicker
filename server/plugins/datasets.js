@@ -17,6 +17,7 @@ module.exports = fp(async fastify => {
     throw errors.nodatasets;
   }
 
+  // eslint-disable-next-line
   const def = datasets[ datasets.default ] // (datasets.default && typeof datasets.default.valueOf()==='string') ?
       , defaultFile = `${datapath}/${def.path}`
       , listDatasets = {};
@@ -29,7 +30,7 @@ module.exports = fp(async fastify => {
 
     if(val.path) {
 
-      const file = `${config.datapath}/${val.path}`;
+      const file = `${datapath}/${val.path}`;
 
       if (fs.existsSync(file)) {
 

@@ -10,13 +10,13 @@ const basepath = __dirname
     , gpicker = require('../lib')
     , package = require(resolve(`${basepath}/../package.json`))
     , config = configYml({basepath})
-    , {fastifyConf, port, host, prefix, swagger} = config
+    , {fastifyConf, port, host, prefix, cors, compress, swagger, demo_page} = config
     , fastify = Fastify(fastifyConf);
 
 fastify.log.debug(config);
 
 /**
- * fastify decorators
+ * Decorators
  */
 fastify.decorate('package', package);
 fastify.decorate('gpicker', gpicker);
@@ -24,7 +24,7 @@ fastify.decorate('config',  config);
 fastify.decorate('status', 'OK');
 
 /**
- * fastify Plugins configs and utils
+ * Plugins configs and utils
  */
 fastify.register(require('./plugins/datasets'));
 fastify.register(require('./plugins/formats'));
@@ -33,23 +33,28 @@ fastify.register(require('./plugins/valid'));
 fastify.register(require('./plugins/print-routes'));
 
 /**
- * 3rd fastify plugins
+ * Plugins
  */
-fastify.register(require('@fastify/cors'), () => config.cors);
-if (swagger.enabled === true) {
+if (cors) {
+    fastify.register(require('@fastify/cors'), () => cors);
+}
+if (compress) {
+    fastify.register(require('@fastify/compress'), compress);
+}
+if (swagger.enabled) {
     fastify.register(require('./plugins/swagger'));
+}
+if (demo_page) {
+    fastify.register(require('./routes/demo'), {prefix});
 }
 
 /**
- * fastify Routes
+ * Routes
  */
-if (config.demo_page === true) {
-    fastify.register(require('./routes/demo'), {prefix});
-}
-fastify.register(require('./routes/status'), {prefix});
+fastify.register(require('./routes/status'),   {prefix});
 fastify.register(require('./routes/datasets'), {prefix});
-fastify.register(require('./routes/lonlat'), {prefix});
-fastify.register(require('./routes/locations'), {prefix});
+fastify.register(require('./routes/lonlat'),   {prefix});
+fastify.register(require('./routes/locations'),{prefix});
 fastify.register(require('./routes/geometry'), {prefix});
 
 fastify.log.info(`Geopicker v${package.version} started`);

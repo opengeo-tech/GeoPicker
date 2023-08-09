@@ -29,7 +29,7 @@ prefix: ${PREFIX}
 demo_page: ${DEMO_PAGE}
 demo_path: '/'
 
-attribution: "Instance of GeoPicker service - Copyright Stefano Cudini"
+attribution: "GeoPicker service - Copyright Stefano Cudini - opengeo.tech"
 
 fastifyConf:
   maxParamLength: 1024
@@ -56,12 +56,19 @@ cors:
   origin: '*'
   optionsSuccessStatus: 200
 
+# output compression (set to false to disable)
+compress:
+  global: false
+  threshold: 1024
+  encodings:
+    - 'deflate'
+    - 'gzip'
+
 # if false speedup the responses but not valid input locations
 input_validation: true
 
 # maximum number of locations picked in a single request
 input_max_locations: 10000
-
 
 # number of digits precision returned in geojson coordinates
 output_precision_digits: 7

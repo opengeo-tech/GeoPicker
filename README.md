@@ -22,6 +22,7 @@ At present the index.html page contains a large implementation of browser side r
 - **JSON Schema**: validation of routes and parameters, can be deactivated
 - **Customization**: friendly configs and to help devs in many deploy contexts
 - **Formats**: support for different geospatial input and output formatss
+- **Compression**: configurable output compression if client accept encoding: deflate,gzip
 
 and includes some other additional functions:
 
@@ -141,6 +142,8 @@ $ curl -X POST -H 'Content-Type: application/json' \
 
 {"type":"LineString","coordinates":[[11.1,46.1,195],[11.2,46.2,1149],[11.3,46.3,1051]]}
 ```
+
+From version v1.6.1 `/elevation/...` is the same of `/datasets/elevation/...` `datasets` can be implicit.
 
 
 ## Benchmarks

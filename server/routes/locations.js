@@ -2,6 +2,7 @@
 module.exports = async fastify => {
 
   const {config, schemas, defaultDataset, gpicker, valid} = fastify
+      , {input_validation, output_precision_digits, errors, compress} = config
       , {getValue, setValue} = gpicker;
 
   // TODO move in module utils
@@ -21,14 +22,14 @@ module.exports = async fastify => {
 
     const locations = parseLocations(req.params.locations);
 
-    if (config.input_validation===false || valid.locations(locations)) {
+    if (input_validation===false || valid.locations(locations)) {
       return getValue(locations, defaultDataset);
     }
     else {
       res.status(400).send({
         statusCode: 400,
         error: 'Bad Request',
-        message: config.errors.nolocations
+        message: errors.nolocations
       });
     }
   });
@@ -36,14 +37,14 @@ module.exports = async fastify => {
   /**
    * POST
    */
-  fastify.post('/:dataset/locations', {schema: schemas.locationsPost}, async req => {
+  fastify.post('/:dataset/locations', {schema: schemas.locationsPost, compress}, async req => {
 
-    return setValue(req.body, defaultDataset, {precision: config.output_precision_digits})
+    return setValue(req.body, defaultDataset, {precision: output_precision_digits});
   });
 
   /* fastify.get('/densify/:locations', (req,res) => {
     // TODO
-    return {densify:1}//res.code(400).send({status: config.errors.densify_nobody})
+    return {densify:1}//res.code(400).send({status: errors.densify_nobody})
   }); */
 
 }

@@ -15,6 +15,7 @@
   "rules": {
     "spaced-comment": 0,
     "n/no-path-concat": 0,
+    "camelcase": 0,
     "one-var": [
       1,
       {

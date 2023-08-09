@@ -1,7 +1,8 @@
 
 module.exports = async fastify => {
 
-  const {config, schemas} = fastify;
+  const {config, schemas} = fastify
+      , {errors} = config;
 
   /**
    * GET
@@ -17,7 +18,7 @@ module.exports = async fastify => {
 
     const {dataset} = req.params
 
-    return fastify.datasets[ dataset ] || config.errors.nodataset;
+    return fastify.datasets[ dataset ] || errors.nodataset;
   });
 
   /**
@@ -27,6 +28,6 @@ module.exports = async fastify => {
 
     const {dataset} = req.params
 
-    return fastify.datasets[ dataset ] || config.errors.nodataset;
+    return fastify.datasets[ dataset ] || errors.nodataset;
   });
 }
