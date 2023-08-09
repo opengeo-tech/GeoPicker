@@ -29,7 +29,7 @@ prefix: ${PREFIX}
 demo_page: ${DEMO_PAGE}
 demo_path: '/'
 
-attribution: "Instance of GeoPicker service - Copyright Stefano Cudini"
+attribution: "Instance of GeoPicker service - Copyright Stefano Cudini - opengeo.tech"
 
 fastifyConf:
   maxParamLength: 1024

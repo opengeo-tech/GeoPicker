@@ -30,7 +30,7 @@ services:
       - "127.0.0.1:8080:8080"
     volumes:
       - "../tests/data:/data"
-      #- "../mycustom.config.yml:/home/server/config.yml"
+      #- "./custom.config.yml:/home/server/config.yml"
     environment:
       - PREFIX=$PREFIX
       - DEMO_PAGE=true

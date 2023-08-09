@@ -2,3 +2,4 @@ node_modules
 *.pyc
 tests/data
 .env
+server/custom.config.yml
