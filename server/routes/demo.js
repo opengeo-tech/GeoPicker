@@ -16,7 +16,7 @@ module.exports = async fastify => {
       };
 
   fastify.addHook('onReady', async () => {
-    const demopath = join(config.prefix,config.demo_path)
+    const demopath = join(config.prefix, config.demo_path)
     fastify.log.info(`Demo page available at path: ${demopath}`);
   });
 

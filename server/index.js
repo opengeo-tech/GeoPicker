@@ -35,9 +35,12 @@ fastify.register(require('./plugins/print-routes'));
  * 3rd fastify plugins
  */
 fastify.register(require('@fastify/cors'), () => config.cors);
+fastify.register(require('@fastify/compress'), config.compress);
+
 if (swagger.enabled === true) {
     fastify.register(require('./plugins/swagger'));
 }
+
 
 /**
  * fastify Routes
