@@ -27,6 +27,7 @@ fastify.decorate('status', 'OK');
  * fastify Plugins configs and utils
  */
 fastify.register(require('./plugins/datasets'));
+fastify.register(require('./plugins/formats'));
 fastify.register(require('./plugins/schemas'));
 fastify.register(require('./plugins/valid'));
 fastify.register(require('./plugins/print-routes'));

@@ -63,7 +63,7 @@ This basic structure can be extended starting from the environment variable `PRE
 |  🚧  | densify  | false    | enable densification of points in the result |
 |  🚧  | simplify | false    | enable simplication geometry of the result |
 |  🚧  | height   | false    | add vertical distance from the ground(only input has elevation) |
-|  ❌  | format   | by input | output type(json,polyline,geojson) |
+|  🚧  | format   | `input`  | output format (`polyline`,`geojson`,`json`,`gpx`) |
 |  ❌  | meta     | false    | additional metadata in output |
 
 ✔️ Done ❌ TODO 🚧 Work in Progress

@@ -80,6 +80,13 @@ errors:
   nolocations: "Require array of locations"
   outofbounds: "Location is out of dataset bounds"
 
+formats:
+  - input
+  # - gpx
+  # - json
+  # - geojson
+  - polyline
+
 datapath: '/data'
 datasets:
   default: ${DATASET_DEFAULT}

@@ -1,6 +1,8 @@
 
 module.exports = (S, config) => {
 
+  const datasetNames = Object.keys(config.datasets);
+
   const dataset = S.object()
         .prop('type', S.string().enum(['raster','vector']))
         .prop('band', S.integer())
@@ -19,10 +21,9 @@ module.exports = (S, config) => {
     dataset: {
       description: 'Describe single dataset',
       params: S.object().prop('dataset',
-        S.string()
-         .enum(Object.keys(config.datasets)))
-      // TODO use fastify.datasets decorator
-         .default('default').required(),
+          S.string().enum(datasetNames)
+        )
+        .default('default').required(),
       response: {
         200: dataset
       }

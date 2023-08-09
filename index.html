@@ -45,7 +45,7 @@
     #map {
         box-shadow: 0 0 8px #333;
         width: 100%;
-        height: 600px;
+        height: 550px;
         user-select: none;
     }
 
@@ -118,7 +118,6 @@
       margin-right: 4px;
       display: inline-block;
     }
-
     .leaflet-control-btn .fa {
       margin-left: 4px;
       width: 16px;
@@ -199,7 +198,7 @@
     <p>
       Interactive map which demonstrates how it works GeoPicker <strong>elevation service API Rest</strong> .
       <br />
-      Each buttons activates a different way of requesting data, in the box below the data exchanged, green panel shown the <strong>elevation profile</strong> in real-time.
+      Each buttons activates a different <strong>endpoint</strong> to requesting data, in the box below the data exchanged, green panel shown the <strong>elevation profile</strong> in real-time.
     </p>
     <div id="map">
     </div>
@@ -234,6 +233,8 @@
       reset: "reset all interations and data loaded"
     };
 
+    const params = {};
+
     function logger() {
         const args = Array.prototype.map.call(arguments, a => {return typeof a ==='object'?JSON.stringify(a) : a})
         let log = Array.prototype.join.call(args, ' ')
@@ -247,14 +248,20 @@
 
     function j() {
       const args = Array.prototype.map.call(arguments, a => { return `${a}`.replace(/\/$/, '') })
-      return Array.prototype.join.call(args, '/')
+      let u = Array.prototype.join.call(args, '/')
+      let p = '';
+      if( Object.keys(params).length>0) {
+        p = '?'+$.param(params);
+        console.log(p)
+      }
+      return u+p;
     }
 
     function getStatus(name) {
         const url = j(api, 'status');
 
         logger('-> GET', url)
-        return $.getJSON(url).done(res => {
+        return $.getJSON(url, params).done(res => {
             logger('<-', res)
         });
     }
@@ -263,7 +270,7 @@
         const url = j(api, dataset);
 
         logger('-> GET', url)
-        return $.getJSON(url).done(res => {
+        return $.getJSON(url, params).done(res => {
             logger('<-', res)
         });
     }
@@ -272,7 +279,7 @@
         const url = j(api, 'datasets');
 
         logger('-> GET', url)
-        return $.getJSON(url).done(res => {
+        return $.getJSON(url, params).done(res => {
             logger('<-', res)
         });
     }
@@ -281,7 +288,7 @@
         const url = j(api, dataset, lon, lat);
 
         logger('-> GET', url)
-        return $.getJSON(url).done(res => {
+        return $.getJSON(url, params).done(res => {
             logger('<-', res)
         });
     }
@@ -340,7 +347,7 @@
         const url = j(api, dataset, locations);
 
         logger('-> GET', url)
-        return $.getJSON(url).done(values => {
+        return $.getJSON(url, params).done(values => {
 
             logger('<-', values);
 
@@ -397,6 +404,7 @@
     const map = L.map('map', {
         zoom,
         center,
+        zoomControl: false,
         attributionControl: false,
         doubleClickZoom: false,
         scrollWheelZoom: false,
@@ -406,6 +414,8 @@
             maxZoom: 16
         })
     });
+
+    L.control.zoom({position:'topright'}).addTo(map)
 
     // https://github.com/MrMufflon/Leaflet.Elevation
     const controlElevation = new L.Control.Elevation({
@@ -488,6 +498,36 @@
                 controlDrawFree.setMode(L.Pather.MODE.ALL)
             });
         });
+
+    const formats = [
+        //'input',
+        'polyline',
+        'geojson',
+        //'json',
+        //'gpx'
+        ]
+
+    var controlFormat = new L.Control({ position: 'topleft' });
+
+    controlFormat.onAdd = map => {
+        var div = $('<label id="post_locations" class="leaflet-control-btn"><i class="fa fa-pencil"></i> Output Format</label>');
+        var sel = $('<select id="format" />').prependTo(div)
+
+        $('<option>').val('input').text('input').prop('selected',true).appendTo(sel)
+        formats.forEach(f => {
+            $('<option>').val(f).text(f).appendTo(sel)
+        });
+        sel.on('change', e => {
+            const format = $(e.target).val()
+            if (format) {
+                params.format = format;
+            }
+            else {
+                delete params.format;
+            }
+        })
+        return div[0]
+    }
 
     var controlDrawFreeBtn = new L.Control({ position: 'topleft' });
 
@@ -705,6 +745,8 @@
     };
 
     map.addControl(controlElevation);
+
+    map.addControl(controlFormat);
 
     map.addControl(controlDraw);
     map.addControl(controlMousePoint);
