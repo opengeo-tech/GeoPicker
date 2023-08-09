@@ -545,7 +545,7 @@
         getLonlat(lon, lat).done(res => {
             const [val] = res;
             controlMousePoint._tooltip.setContent(`<big>${val}m</big><br>${lon}, ${lat}`)
-        }).fail(controlMousePoint._tooltip.setContent('null'))
+        });
     };
 
     controlMousePoint.onAdd = map => {
