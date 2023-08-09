@@ -22,6 +22,7 @@ At present the index.html page contains a large implementation of browser side r
 - **JSON Schema**: validation of routes and parameters, can be deactivated
 - **Customization**: friendly configs and to help devs in many deploy contexts
 - **Formats**: support for different geospatial input and output formatss
+- **Compression**: configurable output compression if client accept encoding: deflate,gzip
 
 and includes some other additional functions:
 
