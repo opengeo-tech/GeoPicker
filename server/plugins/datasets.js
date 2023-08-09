@@ -17,6 +17,7 @@ module.exports = fp(async fastify => {
     throw errors.nodatasets;
   }
 
+  // eslint-disable-next-line
   const def = datasets[ datasets.default ] // (datasets.default && typeof datasets.default.valueOf()==='string') ?
       , defaultFile = `${datapath}/${def.path}`
       , listDatasets = {};
