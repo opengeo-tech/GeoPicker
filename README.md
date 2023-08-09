@@ -142,6 +142,8 @@ $ curl -X POST -H 'Content-Type: application/json' \
 {"type":"LineString","coordinates":[[11.1,46.1,195],[11.2,46.2,1149],[11.3,46.3,1051]]}
 ```
 
+From version v1.6.1 `/elevation/...` is the same of `/datasets/elevation/...` `datasets` can be implicit.
+
 
 ## Benchmarks
 
