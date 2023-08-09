@@ -6,6 +6,7 @@ const {resolve, join} = require('path')
 module.exports = async fastify => {
 
   const {config} = fastify
+      , {prefix, demo_path} = config
       , htmlpath = resolve(`${__dirname}/../../index.html`)
       , html = fs.readFileSync(htmlpath).toString()
       , noCache = {
@@ -16,11 +17,11 @@ module.exports = async fastify => {
       };
 
   fastify.addHook('onReady', async () => {
-    const demopath = join(config.prefix, config.demo_path)
+    const demopath = join(prefix, demo_path)
     fastify.log.info(`Demo page available at path: ${demopath}`);
   });
 
-  fastify.get(join(config.demo_path,'favicon.png'), {
+  fastify.get(join(demo_path,'favicon.png'), {
       schema: {
         //hide from swagger
         hide:true
@@ -29,7 +30,7 @@ module.exports = async fastify => {
     res.type('image/png').send(favicon);
   });
 
-  fastify.get(resolve(config.demo_path), {
+  fastify.get(resolve(demo_path), {
       schema: {
         description: 'Interactive demo page which demonstrates how it works GeoPicker endpoints',
       }

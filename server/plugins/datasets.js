@@ -29,7 +29,7 @@ module.exports = fp(async fastify => {
 
     if(val.path) {
 
-      const file = `${config.datapath}/${val.path}`;
+      const file = `${datapath}/${val.path}`;
 
       if (fs.existsSync(file)) {
 

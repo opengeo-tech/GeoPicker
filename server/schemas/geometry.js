@@ -6,14 +6,14 @@ module.exports = (S, config) => {
         S.object()
         .prop('type', S.string().const('LineString')).required()
         .prop('coordinates', S.array().minItems(2).maxItems(config.input_max_locations).items(
-          S.array().maxItems(2).items(S.number())
+          S.array().minItems(2).items(S.number())
         )).required()
         ,
         S.object()
         .prop('type', S.string().const('Point')).required()
-        .prop('coordinates', S.array().maxItems(2).items(
-          S.number()
-        )).required()
+        .prop('coordinates',
+          S.array().minItems(2).items(S.number())
+        ).required()
     ]);
 
   return {
