@@ -47,7 +47,7 @@ This basic structure can be extended starting from the environment variable `PRE
 |  ✔️  | GET  | /:dataset/:locations | array  | locations is a string (format: `lon,lat|lon,lat|lon,lat`), densify not supported |
 |      |      |                      |        |             |
 |  ✔️  | POST | /:dataset/lonlat     | arrays | accept array or object in body |
-|  ✔️  | POST | /:dataset/geometry   | object | geojson geometry Point or LineString in body
+|  ✔️  | POST | /:dataset/geometry   | object | geojson Point or LineString in body (support feature/geometry/f.collection)|
 |  ✔️  | POST | /:dataset/locations  | arrays | accept array or object of locations in body (format is `[[lon,lat],[lon,lat],[lon,lat]]`) |
 |      |      |                      |        |             |
 |  ❌  | GET  | /densify/:locations  | arrays | add more points in list of locations |

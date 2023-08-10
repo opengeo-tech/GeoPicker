@@ -303,9 +303,10 @@
     }
 
     function postGeometry(geo) {
+
         const url = j(api, dataset, 'geometry');
 
-        logger('-> POST', geo)
+        logger('-> POST', url)
         return $.ajax({
                 url,
                 type: 'POST',
@@ -313,11 +314,23 @@
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(geo),
             })
-            .done(geometry => {
+            .done(geo => {
 
-                logger('<-', geometry)
+                logger('<-', geo)
 
                 controlElevation.clear();
+
+                let geometry
+
+                if (geo.coordinates) {   //is geometry
+                    geometry = geo
+                }
+                else if (geo.geometry) {  //is feature
+                    geometry = geo.geometry
+                }
+                else if (geo.features) { //is featureCollection
+                    geometry = geo.features[0].geometry
+                }
 
                 if (geometry.type === 'Point') {
                     const [lon, lat, ele] = geometry.coordinates;
@@ -410,8 +423,8 @@
 
     // https://github.com/MrMufflon/Leaflet.Elevation
     const controlElevation = new L.Control.Elevation({
-            width: 600,
-            height: 300,
+            width: 500,
+            height: 250,
             position: 'bottomright',
             collapsed: false
         });
@@ -456,20 +469,22 @@
         })
         .on('draw:created draw:drawvertex', e => {
 
+            let geo;
+
             if (e.layers) { //drawvertex
                 const { features } = e.layers.toGeoJSON();
-                var geometry = {
+                //feature collection to single feature
+                geo = {
                     type: 'LineString',
                     coordinates: features.map(f => {
                         return f.geometry.coordinates
                     })
                 }
-                //feature collection to single feature
-            } else if (e.layer) { //created
-                var { geometry } = e.layer.toGeoJSON();
+            } else if (e.layer) {
+                geo = e.layer.toGeoJSON();
             }
 
-            postGeometry(geometry);
+            postGeometry(geo);
         });
 
     /**
