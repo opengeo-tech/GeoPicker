@@ -19,7 +19,7 @@ At present the index.html page contains a large implementation of browser side r
 
 ## Features
 - **Large Rest API**: many endpoints suitable for each data request context
-- **JSON Schema**: validation of routes and parameters, can be deactivated
+- **JSON Schema**: validation of routes and parameters via schemas which allows output optimization
 - **Customization**: friendly configs and to help devs in many deploy contexts
 - **Formats**: support for different geospatial input and output formatss
 - **Compression**: configurable output compression if client accept encoding: deflate,gzip
