@@ -22,15 +22,12 @@
         background: #fff;
     }
     h1 {margin: 8px 0}
-
     h1, p {
       padding: 0 8px;
     }
-
     h1 a{
         color: #0079c2;
     }
-
     a {
       text-decoration: none;
       color: #41454d;
@@ -49,7 +46,6 @@
         height: 550px;
         user-select: none;
     }
-
     #log {
         height: auto;
         max-height: 300px;
@@ -69,12 +65,10 @@
         display: block;
         text-align: right;
     }
-
     .leaflet-popup.loading .leaflet-popup-content {
         background: no-repeat center center url('data:image/gif;base64,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');
         color: rgba(0, 0, 0, 0.2)
     }
-
     /*L.pather*/
     #map div.elbow {
         transition: background-color .25s;
@@ -84,22 +78,18 @@
         pointer-events: none;
         background-color: #555;
     }
-
     #map div.elbow:hover {
         border: 2px solid white;
     }
-
     #map.mode-edit div.elbow {
         cursor: move;
         pointer-events: all;
         background-color: orangered;
     }
-
     #map svg.pather {
         position: absolute;
         z-index: 1001;
     }
-
     .leaflet-control-btn {
         float: left;
         height: 26px;
@@ -123,37 +113,27 @@
       margin-left: 4px;
       width: 16px;
     }
-
-/*    .leaflet-control-btn input {
-      display: none;
-    }*/
-
     .leaflet-editing-icon {
         border-radius: 50%;
         background: blue;
         outline: none;
     }
-
     .lime-theme .leaflet-control.elevation .background {
         background-color: rgba(156, 194, 34, .65);
         margin: 0 0 -5px 0;
     }
-
     .lime-theme .leaflet-control.elevation .area {
         fill: #ff8800;
         opacity: .65;
     }
-
     big {
         font-size: 20px;
         font-weight: bold;
     }
-
     .elevation.leaflet-control {
         border-radius: 4px;
         border: 2px solid rgba(0, 0, 0, 0.2);
     }
-
     #help {
       background: #F4D03F;
       font-size: 18px;
@@ -161,13 +141,14 @@
       min-width: 10px;
       width: auto;
     }
-
+    .leaflet-control-filelayer .fa {
+        margin-left: -6px;
+    }
     .fa {
         display: inline-block;
         width: 16px;
         height: 16px;
     }
-
     </style>
 </head>
 
@@ -212,6 +193,8 @@
     <script src="//unpkg.com/d3@3.5.17/d3.min.js"></script>
     <script src="//unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.src.js"></script>
     <script src="//unpkg.com/leaflet-pather@0.1.17/dist/pather.js"></script>
+    <script src="//unpkg.com/togeojson@0.16.0"></script>
+    <script src="//unpkg.com/leaflet-filelayer@1.2.0/src/leaflet.filelayer.js"></script>
     <script>
 
     const api = location.href
@@ -246,7 +229,6 @@
 
         $divLog.append(`${log}\n`).scrollTop($divLog[0].scrollHeight);
     }
-
     function j() {
       const args = Array.prototype.map.call(arguments, a => { return `${a}`.replace(/\/$/, '') })
       let u = Array.prototype.join.call(args, '/')
@@ -257,7 +239,6 @@
       }
       return u+p;
     }
-
     function getStatus(name) {
         const url = j(api, 'status');
 
@@ -266,7 +247,6 @@
             logger('<-', res)
         });
     }
-
     function getDataset(name) {
         const url = j(api, dataset);
 
@@ -275,7 +255,6 @@
             logger('<-', res)
         });
     }
-
     function getDatasets() {
         const url = j(api, 'datasets');
 
@@ -284,7 +263,6 @@
             logger('<-', res)
         });
     }
-
     function getLonlat(lon, lat) {
         const url = j(api, dataset, lon, lat);
 
@@ -293,7 +271,6 @@
             logger('<-', res)
         });
     }
-
     function postLonlat(lon, lat) {
         const url = j(api, dataset, 'lonlat');
 
@@ -308,11 +285,11 @@
             logger('<-', res)
         });
     }
-
     function postGeometry(geo) {
+
         const url = j(api, dataset, 'geometry');
 
-        logger('-> POST', geo)
+        logger('-> POST', url)
         return $.ajax({
                 url,
                 type: 'POST',
@@ -320,19 +297,29 @@
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(geo),
             })
-            .done(geometry => {
+            .done(geo => {
 
-                logger('<-', geometry)
+                logger('<-', geo)
 
                 controlElevation.clear();
 
+                let geometry
+
+                if (geo.coordinates) {   //is geometry
+                    geometry = geo
+                }
+                else if (geo.geometry) {  //is feature
+                    geometry = geo.geometry
+                }
+                else if (geo.features) { //is featureCollection
+                    geometry = geo.features[0].geometry
+                }
                 if (geometry.type === 'Point') {
                     const [lon, lat, ele] = geometry.coordinates;
                     let m = L.marker([lat, lon]).bindTooltip(`Elevation: ${ele}`, { permanent: true })
                     editableLayers.addLayer(m);
                     return
                 }
-
                 layerElevation.addData({
                     type: 'Feature',
                     geometry
@@ -341,7 +328,6 @@
                 editableLayers.addLayer(layerElevation);
             });
     }
-
     function getLocations(locs) {
         const locations = locs.map(a => a.join(',')).join('|');
 
@@ -371,7 +357,6 @@
             editableLayers.addLayer(layerElevation);
         });
     }
-
     function postLocations(locs) {
         const url = j(api, dataset, 'locations');
 
@@ -401,7 +386,6 @@
         });
     }
 
-
     const map = L.map('map', {
         zoom,
         center,
@@ -420,8 +404,8 @@
 
     // https://github.com/MrMufflon/Leaflet.Elevation
     const controlElevation = new L.Control.Elevation({
-            width: 600,
-            height: 300,
+            width: 500,
+            height: 250,
             position: 'bottomright',
             collapsed: false
         });
@@ -466,20 +450,21 @@
         })
         .on('draw:created draw:drawvertex', e => {
 
+            let geo;
+
             if (e.layers) { //drawvertex
                 const { features } = e.layers.toGeoJSON();
-                var geometry = {
+                //feature collection to single feature
+                geo = {
                     type: 'LineString',
                     coordinates: features.map(f => {
                         return f.geometry.coordinates
                     })
                 }
-                //feature collection to single feature
-            } else if (e.layer) { //created
-                var { geometry } = e.layer.toGeoJSON();
+            } else if (e.layer) {
+                geo = e.layer.toGeoJSON();
             }
-
-            postGeometry(geometry);
+            postGeometry(geo);
         });
 
     /**
@@ -585,7 +570,7 @@
         getLonlat(lon, lat).done(res => {
             const [val] = res;
             controlMousePoint._tooltip.setContent(`<big>${val}m</big><br>${lon}, ${lat}`)
-        }).fail(controlMousePoint._tooltip.setContent('null'))
+        });
     };
 
     controlMousePoint.onAdd = map => {
@@ -624,7 +609,6 @@
         if (locs.length > 30) {
             locs.shift();
         }
-
         const lastLoc = locs.at(-1),
             { lat, lng } = e.latlng;
 
@@ -655,6 +639,41 @@
         });
         return div[0];
     };
+
+
+    /**
+     * button File upload
+     */
+    var fileLayer = L.geoJson([]).addTo(map);
+
+    L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open"></i>'
+    L.Control.FileLayerLoad.TITLE = 'File uploader';
+
+    var controlFileLoader = new L.Control.FileLayerLoad({
+        addToMap: false,
+        fitBounds: true,
+        fileSizeLimit: 2048, //TODO set by /status
+        layer: data => {
+
+            reset();
+
+            fileLayer.addData(data);
+
+            postGeometry(data)
+
+            return fileLayer;
+        },
+        formats: [
+            '.geojson'
+        ]
+    }).addTo(map);
+
+    controlFileLoader.loader.on('data:loaded', e => {
+        console.log('loaded',e)
+    })
+    .on('data:error', e => {
+        console.log('File loader error', e.error);
+    });
 
 
     /**
@@ -747,8 +766,8 @@
 
     map.addControl(controlElevation);
 
+    //map.addControl(controlFileLoader);
     map.addControl(controlFormat);
-
     map.addControl(controlDraw);
     map.addControl(controlMousePoint);
     map.addControl(controlMouseLine);
@@ -772,6 +791,7 @@
     function reset() {
       layerElevation.clearLayers();
       editableLayers.clearLayers();
+      fileLayer.clearLayers();
       polylocs.setLatLngs([]);
       controlDraw._toolbars.draw.disable();
       $(':radio').each(function() {
@@ -780,7 +800,6 @@
       controlElevation.clear();
       $divLog.empty();
     }
-
     function showText(obj) {
       if (typeof obj === 'string') {
         $divText.find('span').text(obj)
@@ -792,7 +811,6 @@
         }
       }
     }
-
     </script>
 </body>
 

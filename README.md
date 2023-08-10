@@ -19,7 +19,7 @@ At present the index.html page contains a large implementation of browser side r
 
 ## Features
 - **Large Rest API**: many endpoints suitable for each data request context
-- **JSON Schema**: validation of routes and parameters, can be deactivated
+- **JSON Schema**: validation of routes and parameters via schemas which allows output optimization
 - **Customization**: friendly configs and to help devs in many deploy contexts
 - **Formats**: support for different geospatial input and output formatss
 - **Compression**: configurable output compression if client accept encoding: deflate,gzip
@@ -38,7 +38,7 @@ This basic structure can be extended starting from the environment variable `PRE
 
 |Status|Method| Path                 | Return | Description |
 |------|------|----------------------|--------|-------------|
-|  ✔️  | GET  | /                    | html   | demo map page if enabled by env var `DEMO_PAGE=true` |
+|  ✔️  | GET  | /                    | html   | default demo map page if enabled by env var `DEMO_PAGE=true` |
 |  ✔️  | GET  | /status              | object | service status, versions, datasets |
 |  ✔️  | GET  | /datasets            | object | list available datasets and their attributes |
 |  ✔️  | GET  | /:dataset            | object | show attributes of a certain dataset |
@@ -47,7 +47,7 @@ This basic structure can be extended starting from the environment variable `PRE
 |  ✔️  | GET  | /:dataset/:locations | array  | locations is a string (format: `lon,lat|lon,lat|lon,lat`), densify not supported |
 |      |      |                      |        |             |
 |  ✔️  | POST | /:dataset/lonlat     | arrays | accept array or object in body |
-|  ✔️  | POST | /:dataset/geometry   | object | geojson geometry Point or LineString in body
+|  ✔️  | POST | /:dataset/geometry   | object | geojson Point or LineString in body (support feature/geometry/f.collection)|
 |  ✔️  | POST | /:dataset/locations  | arrays | accept array or object of locations in body (format is `[[lon,lat],[lon,lat],[lon,lat]]`) |
 |      |      |                      |        |             |
 |  ❌  | GET  | /densify/:locations  | arrays | add more points in list of locations |

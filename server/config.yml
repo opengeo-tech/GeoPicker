@@ -19,6 +19,7 @@ dev:
       transport:
         target: 'pino-pretty'
 
+#the default values if not present in process.env
 defaultsEnvVars:
   PREFIX: '/'
   DEMO_PAGE: false
@@ -26,13 +27,15 @@ defaultsEnvVars:
 
 prefix: ${PREFIX}
 
-demo_page: ${DEMO_PAGE}
-demo_path: '/'
+demopage:
+  enabled: ${DEMO_PAGE}
+  path: '/'
 
 attribution: "GeoPicker service - Copyright Stefano Cudini - opengeo.tech"
 
 fastifyConf:
   maxParamLength: 1024
+  bodyLimit: 1048576
   logger:
     level: 'info'
     transport:
@@ -53,11 +56,13 @@ swagger:
 # Cross-origin resource sharing
 # https://github.com/fastify/fastify-cors
 cors:
+  enabled: true
   origin: '*'
   optionsSuccessStatus: 200
 
 # output compression (set to false to disable)
 compress:
+  enabled: true
   global: false
   threshold: 1024
   encodings:
@@ -94,7 +99,6 @@ formats:
   # - geojson
   - polyline
 
-datapath: '/data'
 datasets:
   default: ${DATASET_DEFAULT}
   test:

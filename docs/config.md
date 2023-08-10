@@ -57,9 +57,9 @@ Allows you to enable a simple user interface to interact with GeoPicker API impl
 In the official [docker image](https://hub.docker.com/r/stefcud/geopicker) it is disabled by default you can be enable by environment variable `DEMO_PAGE=true`
 In development mode is enabled to allow the user tests.
 
-
 ```yaml
-demo_page: true
+demopage:
+  enabled: true
 ```
 
 ## More customization
@@ -71,5 +71,5 @@ by mounting a volume in the same path which goes to replace the original config:
 ```yaml
 volumes:
   - "../mypath/for/data:/data"
-  - "../mycustom.config.yml:/home/server/config.yml"
+  - "./custom.config.yml:/home/server/config.yml"
 ```
