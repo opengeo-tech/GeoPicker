@@ -7,5 +7,4 @@ module.exports = config => ({
   ...require('./locations')(S, config),
   ...require('./geometry')(S, config),
   ...require('./lonlat')(S, config),
-  ...require('./status')(S, config)
 });

@@ -10,7 +10,7 @@ const basepath = __dirname
     , gpicker = require('../lib')
     , package = require(resolve(`${basepath}/../package.json`))
     , config = configYml({basepath})
-    , {fastifyConf, port, host, prefix, cors, compress, swagger, demo_page} = config
+    , {fastifyConf, port, host, prefix, cors, compress, swagger, demopage} = config
     , fastify = Fastify(fastifyConf);
 
 fastify.log.debug(config);
@@ -43,7 +43,7 @@ if (compress.enabled) {
 if (swagger.enabled) {
     fastify.register(require('./plugins/swagger'));
 }
-if (demo_page) {
+if (demopage.enabled) {
     fastify.register(require('./routes/demo'), {prefix});
 }
 

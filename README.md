@@ -38,7 +38,7 @@ This basic structure can be extended starting from the environment variable `PRE
 
 |Status|Method| Path                 | Return | Description |
 |------|------|----------------------|--------|-------------|
-|  ✔️  | GET  | /                    | html   | demo map page if enabled by env var `DEMO_PAGE=true` |
+|  ✔️  | GET  | /                    | html   | default demo map page if enabled by env var `DEMO_PAGE=true` |
 |  ✔️  | GET  | /status              | object | service status, versions, datasets |
 |  ✔️  | GET  | /datasets            | object | list available datasets and their attributes |
 |  ✔️  | GET  | /:dataset            | object | show attributes of a certain dataset |
