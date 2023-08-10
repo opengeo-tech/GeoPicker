@@ -1,7 +1,7 @@
 
 module.exports = (S, config) => {
 
-  const GeoJSON = S.object()
+  const Geometry = S.object()
     .oneOf([
         S.object()
         .prop('type', S.string().const('LineString')).required()
@@ -20,9 +20,9 @@ module.exports = (S, config) => {
     geometry: {
       description: 'JSON as geojson geometry',
       params: S.object().prop('dataset', S.string().enum(Object.keys(config.datasets))).required(),
-      body: GeoJSON,
+      body: Geometry,
       response: {
-        200: GeoJSON
+        200: Geometry
       }
     }
   }
