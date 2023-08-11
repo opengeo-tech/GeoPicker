@@ -60,11 +60,11 @@ This basic structure can be extended starting from the environment variable `PRE
 
 |Status|Parameter | Default  | Description |
 |------|----------|----------|-------------|
+|  🚧   | format   | `input`  | output format (✔️`polyline`,✔️`geojson`,✔️`json`,❌`gpx`, ❌`kml`) |
 |  🚧  | precision| 7        | rounded to digits decimal precision |
 |  🚧  | densify  | false    | enable densification of points in the result |
 |  🚧  | simplify | false    | enable simplication geometry of the result |
 |  🚧  | height   | false    | add vertical distance from the ground(only input has elevation) |
-|  🚧  | format   | `input`  | output format (`polyline`,`geojson`,`json`,`gpx`) |
 |  ❌  | meta     | false    | additional metadata in output |
 
 ✔️ Done ❌ TODO 🚧 Work in Progress
@@ -183,7 +183,7 @@ for details see the descriptions in the [Roadmap issues](https://github.com/open
 |Status| Goal        |
 |------|-------------|
 |  ✔️   | Swagger Documentation Interface |
-|  🚧  | manage multiple datasets |
+|  ❌  | manage multiple datasets |
 |  🚧  | ES6 modules |
 |  🚧  | extend benchmarks for any endpoints |
 |  ❌  | enable densify function |
