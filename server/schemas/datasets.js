@@ -1,9 +1,8 @@
 
 module.exports = (S, config) => {
 
-  const datasetNames = Object.keys(config.datasets);
-
-  const dataset = S.object()
+  const datasetNames = Object.keys(config.datasets)
+      , dataset = S.object()
         .prop('type', S.string().enum(['raster','vector']))
         .prop('band', S.integer())
         .prop('size', S.integer())

@@ -13,8 +13,9 @@ module.exports = async fastify => {
       , crossorigin = cors.enabled ? cors.origin : false
       , compression = compress.enabled ? compress.encodings : false
       , frontend = demopage ? demopage.path : false
-      , documentation = swagger.enabled ? resolve(swagger.routePrefix) : homepage
+      , documentation = swagger.enabled ? resolve(swagger.routePrefix) : homepage;
 
+  // eslint-disable-next-line
   const out = {
     status,
     name: 'GeoPicker',
@@ -23,7 +24,7 @@ module.exports = async fastify => {
     attribution,
     documentation,
     frontend
-  }
+  };
 
   if (config.status?.config) {
     out.config = {
