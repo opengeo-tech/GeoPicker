@@ -60,7 +60,7 @@ This basic structure can be extended starting from the environment variable `PRE
 
 |Status|Parameter | Default  | Description |
 |------|----------|----------|-------------|
-|  🚧   | format   | `input`  | output format (✔️`polyline`,✔️`geojson`,✔️`json`,❌`gpx`, ❌`kml`) |
+|  🚧   | format   | `input`  | output format (✔️`polyline`,✔️`geojson`,✔️`json`,❌`gpx`, ❌`csv`, ❌`kml`) |
 |  🚧  | precision| 7        | rounded to digits decimal precision |
 |  🚧  | densify  | false    | enable densification of points in the result |
 |  🚧  | simplify | false    | enable simplication geometry of the result |
