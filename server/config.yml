@@ -13,6 +13,9 @@ dev:
   host: 127.0.0.1
   datapath: './tests/data'
   input_validation: false
+  status:
+    config: true
+    stats: true
   fastifyConf:
     logger:
       level: 'debug'
@@ -68,6 +71,12 @@ compress:
   encodings:
     - 'deflate'
     - 'gzip'
+
+status:
+  #show base configs in /status enpoint
+  config: false
+  #show usage stats in /status enpoint
+  stats: false
 
 # if false speedup the responses but not valid input locations
 input_validation: true

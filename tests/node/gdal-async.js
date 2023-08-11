@@ -1,5 +1,5 @@
 
-const { gdal, utils:{ datasetInfo } } = require('../../lib')
+const { gdal, utils:{ datasetInfo, humanSize } } = require('../../lib')
 
 const {resolve} = require('path')
 const glob = require('glob');
@@ -29,6 +29,10 @@ glob('**/*.tif', {cwd}, (err, files) => {
     const timer = setInterval(() => {
 
         const filename = files.pop()
+
+        const {rss} = process.memoryUsage()
+            , mem = humanSize(rss);
+        console.log(`${mem}\t`)
 
         if (!filename) {
             //clearInterval(timer);
