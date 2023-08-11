@@ -74,7 +74,7 @@ This basic structure can be extended starting from the environment variable `PRE
 Running by official [Docker image](https://hub.docker.com/r/stefcud/geopicker):
 
 ```bash
-docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 8080:8080 stefcud/geopicker
+docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 9090:9090 stefcud/geopicker
 ```
 
 Running from source code in development mode, requirements: _nodejs 16.x_ > and _glibc 2.28_ (_Ubuntu 20.x_ > ):
