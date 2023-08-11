@@ -27,7 +27,7 @@
     "__preversion": "cd server && npm version ${npm_package_version} && git commit -am update-server --no-verify",
     "postversion": "git push && git push --tags",
     "postpublish": "npm run docker-build && npm run docker-push",
-    "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -w lib -w server -w index.html server/index.js",
+    "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -e js,yml -w lib -w server -w index.html server/index.js",
     "start": "node server/index.js",
     "bench": "node tests/benchmarks.js"
   },

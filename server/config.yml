@@ -74,7 +74,7 @@ compress:
 
 status:
   #show base configs in /status enpoint
-  config: false
+  config: true
   #show usage stats in /status enpoint
   stats: false
 
@@ -100,13 +100,14 @@ errors:
   densify_nobody: "Require a geojson in body"
   nolocations: "Require array of locations"
   outofbounds: "Location is out of dataset bounds"
+  noformat: "Request format not supported"
 
-formats:
+formats: #allow format parameter values (`input` is same format of input)
   - input
+  - polyline
   # - gpx
   # - json
   # - geojson
-  - polyline
 
 datasets:
   default: ${DATASET_DEFAULT}
