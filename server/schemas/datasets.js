@@ -2,7 +2,9 @@
 module.exports = (S, fastify) => {
 
   const {params} = require('./params')(S, fastify)
-      , Dataset = S.object()
+
+  // eslint-disable-next-line
+  const Dataset = S.object()
         .prop('type', S.string().enum(['raster','vector']))
         .prop('band', S.integer())
         .prop('size', S.integer())
