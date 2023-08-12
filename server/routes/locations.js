@@ -2,7 +2,7 @@
 module.exports = async fastify => {
 
   const {config, schemas, defaultDataset, gpicker, valid} = fastify
-      , {input_validation, output_precision_digits, errors, compress} = config
+      , {input_validation, errors, compress} = config
       , {getValue, setValue} = gpicker;
 
   // TODO move in module utils
@@ -39,7 +39,7 @@ module.exports = async fastify => {
    */
   fastify.post('/:dataset/locations', {schema: schemas.locationsPost, compress}, async req => {
 
-    return setValue(req.body, defaultDataset, {precision: output_precision_digits});
+    return setValue(req.body, defaultDataset);
   });
 
   /* fastify.get('/densify/:locations', (req,res) => {

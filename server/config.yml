@@ -84,13 +84,22 @@ input_validation: true
 # maximum number of locations picked in a single request
 input_max_locations: 10000
 
-# number of digits precision returned in geojson coordinates
+# default number of digits precision returned in geojson coordinates
 output_precision_digits: 7
 
 # default densify options
 densify:
   length: 90
   units: 'meters'
+
+# allowed values of `format` parameter (`input` is same format of input)
+formats:
+  - input
+  - polyline
+  # - gpx
+  # - json
+  # - geojson
+  #TODO - array
 
 errors:
   nodatadir: "Data directory not exists"
@@ -101,13 +110,6 @@ errors:
   nolocations: "Require array of locations"
   outofbounds: "Location is out of dataset bounds"
   noformat: "Request format not supported"
-
-formats: #allow format parameter values (`input` is same format of input)
-  - input
-  - polyline
-  # - gpx
-  # - json
-  # - geojson
 
 datasets:
   default: ${DATASET_DEFAULT}

@@ -50,22 +50,20 @@ This basic structure can be extended starting from the environment variable `PRE
 |  ✔️  | POST | /:dataset/geometry   | object | geojson Point or LineString in body (support feature/geometry/f.collection)|
 |  ✔️  | POST | /:dataset/locations  | arrays | accept array or object of locations in body (format is `[[lon,lat],[lon,lat],[lon,lat]]`) |
 |      |      |                      |        |             |
-|  ❌  | GET  | /densify/:locations  | arrays | add more points in list of locations |
-|  ❌  | POST | /densify/geometry    | object | add more points in linestring |
-|  ❌  | GET  | /within/:lon/:lat    | object | check what dataset contains lon,lat |
-|  ❌  | POST | /within/geometry     | object | check what dataset contains geometry in body |
-|  ❌  | POST | /meta/geometry       | object | return direction and length of geometry |
+|  ❌  | GET  | /within/:lon/:lat    | object | search what dataset contains lon,lat |
+|  ❌  | POST | /within/geometry     | object | search what dataset contains geometry in body |
+|  ❌  | POST | /meta/geometry       | object | return direction, length, centroid, middlepoint of geometry |
 
 **Additional global Parameters:**
 
 |Status|Parameter | Default  | Description |
 |------|----------|----------|-------------|
 |  🚧  | format   | `input`  | output format (✔️`polyline`,✔️`geojson`,✔️`json`,❌`gpx`, ❌`csv`, ❌`kml`) |
-|  🚧  | precision| 7        | rounded to digits decimal precision |
+|  🚧  | precision| `input`  | rounded to digits decimal precision |
 |  ❌  | densify  | false    | enable densification of points in the result |
 |  ❌  | simplify | false    | enable simplication geometry of the result |
 |  ❌  | height   | false    | add vertical distance from the ground(only input has elevation) |
-|  ❌  | meta     | false    | additional metadata in output |
+|  ❌  | meta     | false    | additional metadata(direction,length) in output |
 
 ✔️ Done ❌ TODO 🚧 Work in Progress
 
