@@ -24,8 +24,14 @@ module.exports = fp(async fastify => {
     return ajv.compile(schema.valueOf())(lonlat);
   }
 
+  function numbers(nums) {
+    return (typeof nums[0] === 'number' && typeof nums[1] === 'number')
+  }
+
   fastify.decorate('valid', {
+    //TODO geometry
     locations,
+    numbers,
     lonlat
   });
 })

@@ -21,7 +21,7 @@ module.exports = async fastify => {
     fastify.log.info(`Demo page available at path: ${demopath}`);
   });
 
-  fastify.get(join(path,'favicon.png'), {
+  fastify.get(join(path,'favicon.ico'), {
       schema: {
         //hide from swagger
         hide:true

@@ -9,6 +9,7 @@ module.exports = async fastify => {
    */
   fastify.get('/:dataset/:lon/:lat', {schema: schemas.lonlat}, async req => {
 
+    //TODO if (input_validation===true valid.lonlat([lon,lat])) {
     const {/*dataset,*/ lon, lat} = req.params
         , val = getValue([lon, lat], defaultDataset);
 

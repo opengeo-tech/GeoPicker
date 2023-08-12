@@ -6,7 +6,7 @@ module.exports = async fastify => {
   const {config, status, gpicker, package} = fastify
       , {utils: {humanSize} } = gpicker
       , {version, homepage} = package
-      , {fastifyConf, attribution, swagger, compress, cors, demopage} = config
+      , {fastifyConf, attribution, swagger, compress, cors, demopage, formats} = config
       , {input_validation, input_max_locations, output_precision_digits} = config
       , {maxParamLength, bodyLimit} = fastifyConf
       , gdal = gpicker.gdal.version
@@ -35,6 +35,7 @@ module.exports = async fastify => {
       bodyLimit,
       crossorigin,
       compression,
+      formats
     }
   }
 

@@ -21,7 +21,8 @@
     "fastify": "^4.10.2",
     "fastify-plugin": "^4.4.0",
     "fluent-json-schema": "^4.0.0",
-    "pino-pretty": "^9.1.1"
+    "pino-pretty": "^9.1.1",
+    "togpx": "^0.5.4"
   },
   "scripts": {
     "start": "node index.js"

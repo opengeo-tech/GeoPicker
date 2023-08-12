@@ -31,7 +31,7 @@ and includes some other additional functions:
 - **Height**: add the vertical distance from the ground, if input has elevation add a fourth coordinate with this value.
 - **Metadata**: get additional informations for a certain geometry, can be for example the direction of a path.
 
-# API Rest endpoints
+## API Rest endpoints
 
 The [API](https://opengeo.tech/geopicker/docs) is work in progress.
 This basic structure can be extended starting from the environment variable `PREFIX` which by default `/`
@@ -54,13 +54,13 @@ This basic structure can be extended starting from the environment variable `PRE
 |  ❌  | POST | /within/geometry     | object | search what dataset contains geometry in body |
 |  ❌  | POST | /meta/geometry       | object | return direction, length, centroid, middlepoint of geometry |
 
-**Additional global Parameters:**
+### Global Parameters
 
 |Status|Parameter | Default  | Description |
 |------|----------|----------|-------------|
 |  ✔️  | precision| `input`  | rounded to digits decimal precision |
-|  🚧  | format   | `input`  | output format (✔️`polyline`,✔️`geojson`,✔️`json`,❌`gpx`, ❌`csv`, ❌`kml`) |
-|  ❌  | densify  | false    | enable densification of points in the result |
+|  ✔️  | format   | `input`  | output format (✔️`polyline`,✔️`gpx`,✔️`geojson`,✔️`json`, ❌`csv`, ❌`kml`) |
+|  🚧  | densify  | false    | enable densification of points in the result |
 |  ❌  | simplify | false    | enable simplication geometry of the result |
 |  ❌  | height   | false    | add vertical distance from the ground(only input has elevation) |
 |  ❌  | meta     | false    | additional metadata(direction,length) in output |

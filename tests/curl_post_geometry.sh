@@ -11,9 +11,8 @@ fi
 
 curl -v -s -X POST \
   -H "Content-Type: application/json; charset=UTF-8" \
-  -H "Accept: application/json, */*" \
-  -H "Accept-encoding: gzip" \
+  #-H "Accept-encoding: gzip" \
   -d @$GEOM \
-  http://localhost:9090/default/geometry
+  "http://localhost:9090/default/geometry?format=gpx"
   # | gunzip
   #1> /dev/null

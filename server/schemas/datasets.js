@@ -1,7 +1,8 @@
 
 module.exports = (S, config) => {
 
-  const datasetNames = Object.keys(config.datasets)
+  const /*{query} = require('./query')(S, config)
+      , */datasetNames = Object.keys(config.datasets)
       , dataset = S.object()
         .prop('type', S.string().enum(['raster','vector']))
         .prop('band', S.integer())

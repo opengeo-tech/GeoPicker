@@ -1,13 +1,15 @@
-#
-# Config file parsed by configYml lib.
-# learn more about syntax: https://github.com/stefanocudini/configYml
-#
+##
+## Config file parsed by ConfigYml library
+## learn more about syntax: https://github.com/stefanocudini/configYml
+##
 
+## Production/Dockerized environment config override
 prod:
   port: 8080
   host: 0.0.0.0
   datapath: '/data'
 
+## Development environment config override
 dev:
   port: 9090
   host: 127.0.0.1
@@ -22,20 +24,24 @@ dev:
       transport:
         target: 'pino-pretty'
 
-#the default values if not present in process.env
+## Default values if not present in environment
 defaultsEnvVars:
   PREFIX: '/'
   DEMO_PAGE: false
   DATASET_DEFAULT: 'test'
 
+## Prefix for any endpoints url
 prefix: ${PREFIX}
 
+## Enable Demo map front-end
 demopage:
   enabled: ${DEMO_PAGE}
   path: '/'
 
+## Attribution service show in /status endpoint
 attribution: "GeoPicker service - Copyright Stefano Cudini - opengeo.tech"
 
+## Fastify server base config
 fastifyConf:
   maxParamLength: 1024
   bodyLimit: 1048576
@@ -44,8 +50,7 @@ fastifyConf:
     transport:
       target: 'pino-pretty'
 
-# serving Swagger (OpenAPI v2) or OpenAPI v3 schemas
-# https://github.com/fastify/fastify-swagger
+## Enable Swagger front-end (options by: https://github.com/fastify/fastify-swagger)
 swagger:
   enabled: true
   # prefix append to root `prefix`
@@ -56,14 +61,13 @@ swagger:
   # 'full' It'll expand everything(Full expand as the name says).
   docExpansion: 'list'
 
-# Cross-origin resource sharing
-# https://github.com/fastify/fastify-cors
+## Cross-origin resource sharing (options by: https://github.com/fastify/fastify-cors)
 cors:
   enabled: true
   origin: '*'
   optionsSuccessStatus: 200
 
-# output compression (set to false to disable)
+## Output compression (set to false to disable)
 compress:
   enabled: true
   global: false
@@ -72,35 +76,37 @@ compress:
     - 'deflate'
     - 'gzip'
 
+## Show details in /status endpoint
 status:
   #show base configs in /status enpoint
   config: true
   #show usage stats in /status enpoint
   stats: false
 
-# if false speedup the responses but not valid input locations
+## Enable input validation by json-schemasm, if false speedup the responses but not valid input locations
 input_validation: true
 
-# maximum number of locations picked in a single request
+## Maximum number of locations picked in a single request
 input_max_locations: 10000
 
-# default number of digits precision returned in geojson coordinates(false to disable, default by input)
+## Default number of digits precision returned in geojson coordinates(false to disable, default by input)
 output_precision_digits: input
 
-# default densify options
+## Default densify options
 densify:
   length: 90
   units: 'meters'
 
-# allowed values of `format` parameter (`input` is same format of input)
+## Allowed formats in output by`format` parameter (`input` is same format of input)
 formats:
   - input
   - polyline
-  # - gpx
+  - gpx
   # - json
   # - geojson
   #TODO - array
 
+## Errors strings
 errors:
   nodatadir: "Data directory not exists"
   nodefaultdataset: "Default dataset file not exists"
@@ -111,6 +117,7 @@ errors:
   outofbounds: "Location is out of dataset bounds"
   noformat: "Request format not supported"
 
+## Datasets for `dataset` api parameter
 datasets:
   default: ${DATASET_DEFAULT}
   test:

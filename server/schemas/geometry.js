@@ -1,7 +1,9 @@
 
 module.exports = (S, config) => {
 
-  const {query} = require('./query')(S, config);
+  const {query} = require('./query')(S, config)
+      , datasetNames = Object.keys(config.datasets);
+
   // eslint-disable-next-line
   const Geometry = S.object()
     .oneOf([
@@ -21,7 +23,7 @@ module.exports = (S, config) => {
   return {
     geometry: {
       description: 'JSON as geojson geometry',
-      params: S.object().prop('dataset', S.string().enum(Object.keys(config.datasets))).required(),
+      params: S.object().prop('dataset', S.string().enum(datasetNames)).required(),
       query,
       body: Geometry,
       response: {

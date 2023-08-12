@@ -3,17 +3,7 @@ module.exports = async fastify => {
 
   const {config, schemas, defaultDataset, gpicker, valid} = fastify
       , {input_validation, errors, compress} = config
-      , {getValue, setValue} = gpicker;
-
-  // TODO move in module utils
-  function parseLocations(textlocs) {
-    return textlocs
-      .split('|')
-      .map(l => l.split(','))
-      .map(c => {
-        return c.map(parseFloat)
-      });
-  }
+      , {getValue, setValue, utils: {parseLocations}} = gpicker;
 
   /**
    * GET
@@ -21,11 +11,13 @@ module.exports = async fastify => {
   fastify.get('/:dataset/:locations', {schema: schemas.locationsString}, async (req, res) => {
 
     const locations = parseLocations(req.params.locations);
+    //TODO mode in preparsing
 
     if (input_validation===false || valid.locations(locations)) {
       return getValue(locations, defaultDataset);
     }
     else {
+      //TODO move inside valid.locations()
       res.status(400).send({
         statusCode: 400,
         error: 'Bad Request',
