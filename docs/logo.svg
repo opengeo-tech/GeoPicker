@@ -5,7 +5,7 @@
    viewBox="0 0 66.145831 66.145835"
    version="1.1"
    id="svg8"
-   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    sodipodi:docname="logo.svg"
    inkscape:export-filename="/home/z4k/geopicker/docs/logo.png"
    inkscape:export-xdpi="69.119995"
@@ -42,9 +42,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.0000001"
-     inkscape:cx="133"
-     inkscape:cy="105"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="112.42998"
+     inkscape:cy="148.84597"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -52,10 +52,10 @@
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:snap-nodes="true"
-     inkscape:window-width="2058"
-     inkscape:window-height="1350"
-     inkscape:window-x="159"
-     inkscape:window-y="344"
+     inkscape:window-width="1850"
+     inkscape:window-height="998"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      units="px"
      inkscape:snap-bbox="true"
@@ -86,9 +86,12 @@
      id="layer1">
     <path
        id="path21410"
-       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-linejoin:round"
-       d="M 33.064131,10.821384 8.5767377,27.803292 v 2.703711 l 4.1568533,2.884061 -7.3933483,5.127337 v 3.060279 l 27.7228563,19.235518 27.742492,-19.24482 -0.0103,-3.039092 -7.40161,-5.13457 4.17597,-2.896981 -0.009,-2.68459 z"
-       sodipodi:nodetypes="ccccccccccccc" />
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:2.2908;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 33.062854,7.5139676 5.0149577,26.96507 v 3.096834 l 4.7612658,3.303408 -8.4683518,5.872859 v 3.505248 L 33.061671,64.775809 64.837962,42.732765 64.826162,39.251784 56.348348,33.37064 61.13151,30.052434 61.1212,26.977501 Z"
+       sodipodi:nodetypes="ccccccccccccc"
+       inkscape:export-filename="/home/z4k/geopicker/docs/logo.png"
+       inkscape:export-xdpi="61.439995"
+       inkscape:export-ydpi="61.439995" />
     <g
        id="g998"
        transform="matrix(0.82133362,0.58477979,-0.82133362,0.58477979,132.9979,10.588768)">
@@ -762,10 +765,10 @@
        y="-149.33342" />
     <g
        id="g21887"
-       transform="translate(0,-1.0538805)"
-       inkscape:export-filename="/home/z4k/geopicker/docs/g21887.png"
-       inkscape:export-xdpi="69.119995"
-       inkscape:export-ydpi="69.119995">
+       transform="matrix(1.1454015,0,0,1.1454015,-4.8088501,-6.0879776)"
+       inkscape:export-filename="/home/z4k/geopicker/docs/logo.png"
+       inkscape:export-xdpi="61.439995"
+       inkscape:export-ydpi="61.439995">
       <path
          id="path948"
          style="fill:#0079c2;fill-opacity:1;stroke:none;stroke-width:0.220366"
