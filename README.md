@@ -60,11 +60,11 @@ This basic structure can be extended starting from the environment variable `PRE
 
 |Status|Parameter | Default  | Description |
 |------|----------|----------|-------------|
+|  🚧  | format   | `input`  | output format (✔️`polyline`,✔️`geojson`,✔️`json`,❌`gpx`, ❌`csv`, ❌`kml`) |
 |  🚧  | precision| 7        | rounded to digits decimal precision |
-|  🚧  | densify  | false    | enable densification of points in the result |
-|  🚧  | simplify | false    | enable simplication geometry of the result |
-|  🚧  | height   | false    | add vertical distance from the ground(only input has elevation) |
-|  🚧  | format   | `input`  | output format (`polyline`,`geojson`,`json`,`gpx`) |
+|  ❌  | densify  | false    | enable densification of points in the result |
+|  ❌  | simplify | false    | enable simplication geometry of the result |
+|  ❌  | height   | false    | add vertical distance from the ground(only input has elevation) |
 |  ❌  | meta     | false    | additional metadata in output |
 
 ✔️ Done ❌ TODO 🚧 Work in Progress
@@ -74,7 +74,7 @@ This basic structure can be extended starting from the environment variable `PRE
 Running by official [Docker image](https://hub.docker.com/r/stefcud/geopicker):
 
 ```bash
-docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 8080:8080 stefcud/geopicker
+docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 9090:9090 stefcud/geopicker
 ```
 
 Running from source code in development mode, requirements: _nodejs 16.x_ > and _glibc 2.28_ (_Ubuntu 20.x_ > ):
@@ -104,15 +104,15 @@ some useful tools for contributors `npm run <scriptname>`
 
 Get single location exchanging a few bytes:
 ```bash
-        $ curl "http://localhost:9090/elevation/11.123/46.123"
+ $ curl "http://localhost:9090/elevation/11.123/46.123"
 
 [195]
 ```
 
 Post a json object and receive the same decorated with the result(still works with `longitude`,`latitude`):
 ```bash
-$ curl -X POST -H 'Content-Type: application/json' \
-  -d '{"lon": 11.123, "lat": 46.123"}' \
+$ curl -X POST -d '{"lon": 11.123, "lat": 46.123"}' \
+  -H 'Content-Type: application/json' \
   "http://localhost:9090/elevation/lonlat"
 
 {"lon": 11.123,"lat": 46.123,"val":195}
@@ -127,8 +127,8 @@ curl "http://localhost:9090/elevation/11.1,46.1|11.2,46.2|11.3,46.3"
 
 Post a very long LineString saving bytes:
 ```bash
-$ curl -X POST -H 'Content-Type: application/json' \
-  -d '[[10.9998,46.0064],[10.9998,46.0065],[10.9999,46.0066],[11.0000,46.0067]]' \
+$ curl -X POST -d '[[10.9998,46.0064],[10.9998,46.0065],[10.9999,46.0066],[11.0000,46.0067]]' \
+  -H 'Content-Type: application/json' \
   "http://localhost:9090/elevation/locations"
 
 [[10.9998,46.0064,900],[10.9998,46.0065,898],[10.9999,46.0066,898],[11.0000,46.0067,900]]
@@ -136,8 +136,8 @@ $ curl -X POST -H 'Content-Type: application/json' \
 
 Post anyone GeoJSON geometry, the same input geometry is always returned which has a third dimension:
 ```bash
-$ curl -X POST -H 'Content-Type: application/json' \
-  -d '{"type":"LineString","coordinates":[[11.1,46.1],[11.2,46.2],[11.3,46.3]]}' \
+$ curl -X POST -d '{"type":"LineString","coordinates":[[11.1,46.1],[11.2,46.2],[11.3,46.3]]}' \
+  -H 'Content-Type: application/json' \
   "http://localhost:9090/elevation/geometry"
 
 {"type":"LineString","coordinates":[[11.1,46.1,195],[11.2,46.2,1149],[11.3,46.3,1051]]}
@@ -183,7 +183,7 @@ for details see the descriptions in the [Roadmap issues](https://github.com/open
 |Status| Goal        |
 |------|-------------|
 |  ✔️   | Swagger Documentation Interface |
-|  🚧  | manage multiple datasets |
+|  ❌  | manage multiple datasets |
 |  🚧  | ES6 modules |
 |  🚧  | extend benchmarks for any endpoints |
 |  ❌  | enable densify function |
