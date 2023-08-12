@@ -10,7 +10,7 @@ module.exports = async fastify => {
    * POST
    */
   fastify.post('/:dataset/geometry', {
-      //TODO not work schema: schemas.geometry,
+      //FIXME not work schema: schemas.geometry,
       compress}, async req => {
     return setValue(req.body, defaultDataset);
   });

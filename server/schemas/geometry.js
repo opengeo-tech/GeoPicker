@@ -1,6 +1,8 @@
 
 module.exports = (S, config) => {
 
+  const {query} = require('./query')(S, config);
+
   const Geometry = S.object()
     .oneOf([
         S.object()
@@ -20,6 +22,7 @@ module.exports = (S, config) => {
     geometry: {
       description: 'JSON as geojson geometry',
       params: S.object().prop('dataset', S.string().enum(Object.keys(config.datasets))).required(),
+      query,
       body: Geometry,
       response: {
         200: Geometry

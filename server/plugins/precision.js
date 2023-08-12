@@ -1,24 +1,18 @@
 
-const fp = require('fastify-plugin')
-    , polyline = require('@mapbox/polyline');
+const fp = require('fastify-plugin');
 
 module.exports = fp(async fastify => {
 
   const {config, gpicker} = fastify
       , {utils: {setPrecision}} = gpicker
-      , {output_precision_digits, errors} = config;
+      , {output_precision_digits} = config;
 
-  fastify.addHook('onSend', (req, res, payload, done) => {
-    let err = null
-    const {precision} = req.query
+  fastify.addHook('preSerialization', (req, res, payload, done) => {
+    const {precision = output_precision_digits} = req.query
 
-    //TODO filter only some request
-
-    let payloadOut = payload;
-
-    if (precision) {
+    if (typeof precision === 'number') {
       setPrecision(payload, precision);
     }
-    done(err, payloadOut)
+    done(null, payload)
   })
 });

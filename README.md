@@ -18,10 +18,10 @@ Each endpoint and the parameters it accepts have been designed on the basis of t
 At present the index.html page contains a large implementation of browser side requests using LeafletJs as basemap and jQuery.
 
 ## Features
-- **Large Rest API**: many endpoints suitable for each data request context
-- **JSON Schema**: validation of routes and parameters via schemas which allows output optimization
-- **Customization**: friendly configs and to help devs in many deploy contexts
-- **Formats**: support for different geospatial input and output formatss
+- **Large Rest API**: ergonomic endpoints suitable for any type of use context
+- **Validation**: full validation of endpoint and parameters via **JSON-Schema** which allows output optimization
+- **Configuration**: friendly configs and to help devs in many deployment contexts
+- **Formats**: support for different geospatial input and output formats
 - **Compression**: configurable output compression if client accept encoding: deflate,gzip
 
 and includes some other additional functions:
@@ -58,8 +58,8 @@ This basic structure can be extended starting from the environment variable `PRE
 
 |Status|Parameter | Default  | Description |
 |------|----------|----------|-------------|
+|  ✔️  | precision| `input`  | rounded to digits decimal precision |
 |  🚧  | format   | `input`  | output format (✔️`polyline`,✔️`geojson`,✔️`json`,❌`gpx`, ❌`csv`, ❌`kml`) |
-|  🚧  | precision| `input`  | rounded to digits decimal precision |
 |  ❌  | densify  | false    | enable densification of points in the result |
 |  ❌  | simplify | false    | enable simplication geometry of the result |
 |  ❌  | height   | false    | add vertical distance from the ground(only input has elevation) |

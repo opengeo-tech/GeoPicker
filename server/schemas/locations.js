@@ -1,6 +1,8 @@
 
 module.exports = (S, config) => {
 
+  const {query} = require('./query')(S, config);
+
   return {
     locationsString: {
       description: 'Get multiple locations stringified',
@@ -18,10 +20,7 @@ module.exports = (S, config) => {
     locationsPost: {
       description: 'Post array locations in body',
       params: S.object().prop('dataset', S.string().enum(Object.keys(config.datasets))).required(),
-      query: S.object()
-        .prop('format',
-          S.string().enum(config.formats)
-        ),
+      query,
       body: S.array().minItems(2).maxItems(config.input_max_locations).items(
           S.array().minItems(2).maxItems(2).items(S.number())
         ),

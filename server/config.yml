@@ -84,8 +84,8 @@ input_validation: true
 # maximum number of locations picked in a single request
 input_max_locations: 10000
 
-# default number of digits precision returned in geojson coordinates
-output_precision_digits: 7
+# default number of digits precision returned in geojson coordinates(false to disable, default by input)
+output_precision_digits: input
 
 # default densify options
 densify:

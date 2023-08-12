@@ -24,14 +24,12 @@ module.exports = fp(async fastify => {
             case 'polyline':
               fastify.log.debug(`onSend ${format}`);
               payloadOut = polyline.encode(payload)
-              //console.log(payloadOut, 'onSend')
             break;
          /* case 'gpx':
-              console.log(req, payload, 'onSend')
             break;*/
             case 'input':
             default:
-              console.log('onSend')
+              payloadOut = payload;
           }
         }
         else {

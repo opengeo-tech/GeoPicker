@@ -228,7 +228,10 @@
       reset: "reset all interations and data loaded"
     };
 
-    const params = {};
+    //GET parameters for each call
+    const params = {
+        //precision: 4
+    };
 
     function logger() {
         const args = Array.prototype.map.call(arguments, a => {return typeof a ==='object'?JSON.stringify(a) : a})
@@ -437,7 +440,7 @@
         draw: {
             polyline: {
                 shapeOptions: {
-                    color: '#00f',
+                    color: '#f00',
                     weight: 3
                 }
             },
@@ -485,7 +488,7 @@
             strokeWidth: 1,
             smoothFactor: 0,
             mode: L.Pather.MODE.ALL, // ALL,APPEND,CREATE,DELETE,EDIT,EDIT_APPEND,VIEW
-            pathColour: '#00f'
+            pathColour: '#f00'
         })
         .on('created edited', e => {
             const { polyline } = e.polyline, { geometry } = polyline.toGeoJSON();
