@@ -58,7 +58,7 @@ This basic structure can be extended starting from the environment variable `PRE
 
 |Status|Parameter | Default  | Description |
 |------|----------|----------|-------------|
-|  ✔️  | precision| 'input'  | rounded to digits decimal precision |
+|  ✔️  | precision| 'input'  | round the digits precision the output coordinates |
 |  🚧  | format   | 'input'  | output format (✔️`polyline`,✔️`geojson`,✔️`json`,❌`gpx`, ❌`csv`, ❌`kml`) |
 |  ❌  | densify  | false    | enable densification of points in the result |
 |  ❌  | simplify | false    | enable simplication geometry of the result |
