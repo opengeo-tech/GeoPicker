@@ -52,7 +52,7 @@ This basic structure can be extended starting from the environment variable `PRE
 |      |      |                      |        |             |
 |  ❌  | GET  | /within/:lon/:lat    | object | search what dataset contains lon,lat |
 |  ❌  | POST | /within/geometry     | object | search what dataset contains geometry in body |
-|  ❌  | POST | /meta/geometry       | object | return direction, length, centroid, middlepoint of geometry |
+|  ❌  | POST | /metadata/geometry       | object | return direction, length, centroid, middlepoint of geometry |
 
 ### Global Parameters
 
@@ -63,7 +63,7 @@ This basic structure can be extended starting from the environment variable `PRE
 |  🚧  | densify  | false    | enable densification of points in the result |
 |  ❌  | simplify | false    | enable simplication geometry of the result |
 |  ❌  | height   | false    | add vertical distance from the ground(only input has elevation) |
-|  ❌  | meta     | false    | additional metadata(direction,length) in output |
+|  ❌  | metadata | false    | additional metadata(direction,length) in output |
 
 ✔️ Done ❌ TODO 🚧 Work in Progress
 
