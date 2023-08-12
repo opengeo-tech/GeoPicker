@@ -2,7 +2,7 @@
 module.exports = (S, config) => {
 
   const {query} = require('./query')(S, config);
-
+  // eslint-disable-next-line
   const Geometry = S.object()
     .oneOf([
         S.object()
