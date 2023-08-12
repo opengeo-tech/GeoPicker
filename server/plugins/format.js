@@ -5,7 +5,7 @@ module.exports = fp(async fastify => {
 
   const {config} = fastify
       , {formats} = config
-      , {polylineWrite, gpxWrite} = require('./formats')(fastify);
+      , {polylineWrite, gpxWrite} = require('../formats')(fastify);
 
   if (formats && formats.length > 0) {
 

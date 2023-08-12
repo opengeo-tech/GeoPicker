@@ -18,7 +18,7 @@ Each endpoint and the parameters it accepts have been designed on the basis of t
 At present the index.html page contains a large implementation of browser side requests using LeafletJs as basemap and jQuery.
 
 ## Features
-- **Large Rest API**: ergonomic endpoints suitable for any type of use context
+- **Large Rest API**: ergonomic endpoints suitable for any type of use case
 - **Validation**: full validation of endpoint and parameters via **JSON-Schema** which allows output optimization
 - **Configuration**: friendly configs and to help devs in many deployment contexts
 - **Formats**: support for different geospatial input and output formats
