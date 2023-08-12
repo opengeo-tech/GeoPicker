@@ -230,7 +230,7 @@
 
     //GET parameters for each call
     const params = {
-        //precision: 4
+        precision: 4
     };
 
     function logger() {
@@ -245,13 +245,11 @@
     }
     function j() {
       const args = Array.prototype.map.call(arguments, a => { return `${a}`.replace(/\/$/, '') })
-      let u = Array.prototype.join.call(args, '/')
-      let p = '';
+      let url = Array.prototype.join.call(args, '/')
       if( Object.keys(params).length>0) {
-        p = '?'+$.param(params);
-        console.log(p)
+        url += '?'+$.param(params);
       }
-      return u+p;
+      return url;
     }
     function getStatus(name) {
         const url = j(api, 'status');
