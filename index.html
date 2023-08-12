@@ -21,9 +21,16 @@
         color: #0079c2;
         background: #fff;
     }
-    h1 {margin: 8px 0}
+    h1 {
+        margin: 8px 0;
+        float: left;
+    }
     h1, p {
       padding: 0 8px;
+    }
+    p {
+        margin: 0;
+        clear: both;
     }
     h1 a{
         color: #0079c2;
@@ -37,13 +44,21 @@
     }
     img {
       height: 80px;
-      float: left;
-      vertical-align: baseline;
+      line-height: 80px;
+      vertical-align: middle;
+    }
+    nav {
+        padding: 4px;
+        line-height: 80px;
+    }
+    nav a {
+        white-space: nowrap;
+        margin: 0 10px;
     }
     #map {
-        box-shadow: 0 0 8px #333;
+        margin: 4px 0;
         width: 100%;
-        height: 550px;
+        height: 500px;
         user-select: none;
     }
     #log {
@@ -157,29 +172,25 @@
     <h1>
       <a href="https://opengeo.tech/geopicker">
         <img src="https://raw.githubusercontent.com/opengeo-tech/GeoPicker/master/docs/logo.png" />
-        GeoPicker Demo
+        GeoPicker
       </a>
     </h1>
-    <p>
+    <nav>
       <a href="https://github.com/opengeo-tech/GeoPicker/">
         <i class="fa fa-github" aria-hidden="true"></i> <span>Source Code</span>
       </a>
-
-      &nbsp; | &nbsp;
-
-      <a href="https://www.paypal.com/paypalme/stefanocudini" target="_blank" title="finance the project if it was useful for your work">
-        <i class="fa fa-heart"></i> <span>Donate</span>
-      </a>
-
-      &nbsp; | &nbsp;
-
+      |
       <a href="https://opengeo.tech/geopicker/docs">
         <i class="fa fa-question-circle"></i> <span>API Docs</span>
       </a>
-    </p>
+      |
+      <a href="https://www.paypal.com/paypalme/stefanocudini" target="_blank" title="finance the project if it was useful for your work">
+        <i class="fa fa-heart"></i> <span>Donate</span>
+      </a>
+    </nav>
     <p>
-      Interactive map which demonstrates how it works GeoPicker <strong>elevation service API Rest</strong> .
-      <br />
+      Interactive map to play with GeoPicker <strong>elevation service API Rest</strong> .
+
       Each buttons activates a different <strong>endpoint</strong> to requesting data, in the box below the data exchanged, green panel shown the <strong>elevation profile</strong> in real-time.
     </p>
     <div id="map">
