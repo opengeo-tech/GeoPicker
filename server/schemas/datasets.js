@@ -1,9 +1,8 @@
 
-module.exports = (S, config) => {
+module.exports = (S, fastify) => {
 
-  const /*{query} = require('./query')(S, config)
-      , */datasetNames = Object.keys(config.datasets)
-      , dataset = S.object()
+  const {datasetsNames} = fastify
+      , Dataset = S.object()
         .prop('type', S.string().enum(['raster','vector']))
         .prop('band', S.integer())
         .prop('size', S.integer())
@@ -21,11 +20,11 @@ module.exports = (S, config) => {
     dataset: {
       description: 'Describe single dataset',
       params: S.object().prop('dataset',
-          S.string().enum(datasetNames)
+          S.string().enum(datasetsNames)
         )
         .default('default').required(),
       response: {
-        200: dataset
+        200: Dataset
       }
     },
     datasets: {
@@ -33,7 +32,7 @@ module.exports = (S, config) => {
       response: {
         200: S.object()
             .patternProperties({
-                '.*': dataset
+                '.*': Dataset
             })
       }
     }

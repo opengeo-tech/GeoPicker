@@ -1,10 +1,14 @@
 
 const fp = require('fastify-plugin')
-    , schemas = require('../schemas');
+    , S = require('fluent-json-schema');
 
 module.exports = fp(async fastify => {
-
-  const {config} = fastify;
-
-  fastify.decorate('schemas', schemas(config));
+  fastify.decorate('schemas', {
+    ...require('../schemas/datasets')(S, fastify),
+    ...require('../schemas/locations')(S, fastify),
+    ...require('../schemas/geometry')(S, fastify),
+    ...require('../schemas/lonlat')(S, fastify),
+    ...require('../schemas/params')(S, fastify),
+    ...require('../schemas/query')(S, fastify),
+  });
 })

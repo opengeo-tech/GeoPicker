@@ -1,9 +1,12 @@
 
-module.exports = (S, config) => {
+module.exports = (S, fastify) => {
 
-  const datasetNames = Object.keys(config.datasets);
+  const {datasetsNames} = fastify
 
   return {
-    params: S.object().prop('dataset', S.string().enum(datasetNames)).required(),
+    params: S.object()
+        .prop('dataset',
+          S.string().enum(datasetsNames)
+        ).required(),
   }
 }

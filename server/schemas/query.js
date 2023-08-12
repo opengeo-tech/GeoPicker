@@ -1,5 +1,7 @@
 
-module.exports = (S, config) => {
+module.exports = (S, fastify) => {
+
+  const {config} = fastify
 
   return {
     query: S.object()

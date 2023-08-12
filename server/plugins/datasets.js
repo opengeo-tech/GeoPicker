@@ -54,12 +54,17 @@ module.exports = fp(async fastify => {
     }
   }
 
-  if (!Object.keys(listDatasets).length) {
+  if (Object.keys(listDatasets).length===0) {
     throw errors.nodatasets;
   }
 
+  // eslint-disable-next-line
+  const datasetsNames = Object.keys(listDatasets)
+
   fastify.decorate('datasets', listDatasets);
-  fastify.log.info(`Datasets available: ${Object.keys(listDatasets)}`)
+  fastify.decorate('datasetsNames', datasetsNames);
+
+  fastify.log.info(`Datasets available: ${datasetsNames}`);
 
   if (fs.existsSync(defaultFile)) {
 

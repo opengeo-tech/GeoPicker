@@ -1,8 +1,8 @@
 
-module.exports = (S, config) => {
+module.exports = (S, fastify) => {
 
-  const {query} = require('./query')(S, config)
-      , datasetNames = Object.keys(config.datasets);
+  const {query} = require('./query')(S, fastify)
+      , {config, datasetsNames} = fastify
 
   // eslint-disable-next-line
   const Geometry = S.object()
@@ -23,7 +23,7 @@ module.exports = (S, config) => {
   return {
     geometry: {
       description: 'JSON as geojson geometry',
-      params: S.object().prop('dataset', S.string().enum(datasetNames)).required(),
+      params: S.object().prop('dataset', S.string().enum(datasetsNames)).required(),
       query,
       body: Geometry,
       response: {
