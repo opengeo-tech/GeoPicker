@@ -6,8 +6,8 @@ const fs = require('fs')
 
 module.exports = fp(async fastify => {
 
-  const {config, gpicker} = fastify
-      , {datapath, datasets, errors} = config
+  const {config, gpicker, errors} = fastify
+      , {datapath, datasets} = config
 
   if (!fs.existsSync(datapath)) {
     throw errors.nodatadir

@@ -1,8 +1,7 @@
 
 module.exports = async fastify => {
 
-  const {config, schemas} = fastify
-      , {errors} = config;
+  const {schemas, errors} = fastify
 
   /**
    * GET

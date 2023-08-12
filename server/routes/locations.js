@@ -1,8 +1,8 @@
 
 module.exports = async fastify => {
 
-  const {config, schemas, defaultDataset, gpicker, valid} = fastify
-      , {input_validation, errors, compress} = config
+  const {config, schemas, defaultDataset, gpicker, errors, valid} = fastify
+      , {input_validation, compress} = config
       , {getValue, setValue, utils: {parseLocations}} = gpicker;
 
   /**

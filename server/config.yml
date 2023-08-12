@@ -106,17 +106,6 @@ formats:
   # - geojson
   #TODO - array
 
-## Errors strings
-errors:
-  nodatadir: "Data directory not exists"
-  nodefaultdataset: "Default dataset file not exists"
-  nodatasets: "At least one default dataset is required"
-  nodataset: "Dataset name not exists"
-  densify_nobody: "Require a geojson in body"
-  nolocations: "Require array of locations"
-  outofbounds: "Location is out of dataset bounds"
-  noformat: "Request format not supported"
-
 ## Datasets for `dataset` api parameter
 datasets:
   default: ${DATASET_DEFAULT}

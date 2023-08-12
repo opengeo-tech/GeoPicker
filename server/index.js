@@ -26,6 +26,7 @@ fastify.decorate('status', 'OK');
 /**
  * Base Plugins configs and utils
  */
+fastify.register(require('./plugins/errors'));
 fastify.register(require('./plugins/datasets'));
 fastify.register(require('./plugins/format'));
 fastify.register(require('./plugins/schemas'));
