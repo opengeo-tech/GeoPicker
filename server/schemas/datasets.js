@@ -1,7 +1,7 @@
 
 module.exports = (S, fastify) => {
 
-  const {datasetsNames} = fastify
+  const {params} = require('./params')(S, fastify)
       , Dataset = S.object()
         .prop('type', S.string().enum(['raster','vector']))
         .prop('band', S.integer())
@@ -19,10 +19,7 @@ module.exports = (S, fastify) => {
   return {
     dataset: {
       description: 'Describe single dataset',
-      params: S.object().prop('dataset',
-          S.string().enum(datasetsNames)
-        )
-        .default('default').required(),
+      params,
       response: {
         200: Dataset
       }

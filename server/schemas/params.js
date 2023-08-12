@@ -7,6 +7,8 @@ module.exports = (S, fastify) => {
     params: S.object()
         .prop('dataset',
           S.string().enum(datasetsNames)
-        ).required(),
+        )
+        .default('default')
+        .required(),
   }
 }

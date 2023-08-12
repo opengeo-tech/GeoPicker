@@ -2,13 +2,12 @@
 module.exports = (S, fastify) => {
 
   const {query} = require('./query')(S, fastify)
-      , {datasetsNames} = fastify
+      , {params} = require('./params')(S, fastify);
 
   return {
     lonlat: {
       description: 'Get single value by longitude and latitude',
-      params: S.object()
-        .prop('dataset', S.string().enum(datasetsNames)).required()
+      params: params
         .prop('lon', S.number().minimum(-180).maximum(180)).required()
         .prop('lat', S.number().minimum(-90).maximum(90)).required(),
       query,
@@ -18,7 +17,7 @@ module.exports = (S, fastify) => {
     },
     lonlatPost: {
       description: 'Post single array or object location in body',
-      params: S.object().prop('dataset', S.string().enum(datasetsNames)).required(),
+      params,
       query,
       body: S.object()
         .prop('lon', S.number().minimum(-180).maximum(180)).required()
