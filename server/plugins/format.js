@@ -9,6 +9,7 @@ module.exports = fp(async fastify => {
 
   if (formats && formats.length > 0) {
 
+    //TODO optimizazion is to move in preSerialization
     fastify.addHook('onSend', (req, res, payload, done) => { //payload is object
       const {format} = req.query
       let payloadOut = payload;

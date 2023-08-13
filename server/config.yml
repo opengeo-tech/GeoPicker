@@ -19,10 +19,10 @@ dev:
     config: true
     stats: true
   fastifyConf:
-    logger:
-      level: 'debug'
-      transport:
-        target: 'pino-pretty'
+    logger: false
+      # level: 'debug'
+      # transport:
+      #   target: 'pino-pretty'
 
 ## Default values if not present in environment
 defaultsEnvVars:

@@ -9,11 +9,15 @@ module.exports = fp(async fastify => {
 
   fastify.addHook('preSerialization', (req, res, payload, done) => {
   //fastify.addHook('preHandler', (req, res, done) => {
-    //TODO change precision before to setValue()!!!
+
+    console.log('preHandler precision', req.params)
+
     const {precision = output_precision_digits} = req.query
 
     if (typeof precision === 'number') {
       setPrecision(payload, precision);
+
+      console.log('SET PRECESION', precision)
     }
     done(null, payload)
   })
