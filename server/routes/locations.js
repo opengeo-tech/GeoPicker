@@ -8,11 +8,19 @@ module.exports = async fastify => {
   /**
    * GET
    */
-  fastify.get('/:dataset/:locations', {schema: schemas.locationsString}, async (req, res) => {
+  fastify.get('/:dataset/:locations', {
+    schema: schemas.locationsString,
+/*    preHandler: (req, res, done) => {
 
-    const locations = parseLocations(req.params.locations);
-    //TODO mode in preparsing
+console.log('preHandler')
 
+      req.locations = parseLocations(req.params.locations);
+      done()
+    }*/
+  }, async (req, res) => {
+
+    const {locations} = req;
+//console.log('Handler', locations)
     if (input_validation===false || valid.locations(locations)) {
       return getValue(locations, defaultDataset);
     }

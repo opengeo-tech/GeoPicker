@@ -32,7 +32,7 @@ fastify.register(require('./plugins/format'));
 fastify.register(require('./plugins/schemas'));
 fastify.register(require('./plugins/precision'));
 fastify.register(require('./plugins/valid'));
-fastify.register(require('./plugins/print-routes'));
+//fastify.register(require('./plugins/print-routes'));
 
 /**
  * Optional Plugins

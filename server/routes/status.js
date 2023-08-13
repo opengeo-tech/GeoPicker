@@ -3,13 +3,14 @@ const {resolve} = require('path');
 
 module.exports = async fastify => {
 
-  const {config, status, gpicker, package} = fastify
+  const {config, status, gpicker, package, datasetsNames} = fastify
       , {utils: {humanSize} } = gpicker
       , {version, homepage} = package
       , {fastifyConf, attribution, swagger, compress, cors, demopage, formats} = config
       , {input_validation, input_max_locations, output_precision_digits} = config
       , {maxParamLength, bodyLimit} = fastifyConf
       , gdal = gpicker.gdal.version
+      , datasets = datasetsNames
       , crossorigin = cors.enabled ? cors.origin : false
       , compression = compress.enabled ? compress.encodings : false
       , frontend = demopage ? demopage.path : false
@@ -35,6 +36,7 @@ module.exports = async fastify => {
       bodyLimit,
       crossorigin,
       compression,
+      datasets,
       formats
     }
   }
