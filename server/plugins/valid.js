@@ -6,8 +6,16 @@ const fp = require('fastify-plugin')
 
 module.exports = fp(async fastify => {
 
-  const {config} = fastify;
+  const {config, schemas} = fastify;
+  // , {input_validation} = config
 
+// TODO disable all schemas if input_validation == false
+/*  fastify.addHook('preValidation', (req, res, done) => {
+    //fastify.addHook('preHandler', (req, res, done) => {
+    console.log('PRE VALID ALL', Object.keys(req))
+    done()
+  });
+*/
   function arrayNumbers(nums) {
     return (typeof nums[0] === 'number' && typeof nums[1] === 'number')
   }
@@ -21,10 +29,20 @@ module.exports = fp(async fastify => {
     return ajv.compile(schema.valueOf())(lonlat);
   }
 
+  /**
+   * valid serialized location "lon1,lat1|lon2,lat2|..."
+   */
+  function stringLocs(str) {
+    return ajv.compile(schemas.locationsString.valueOf())(str)
+  }
+
+  /**
+   * valid values of array of array of coordinates
+   */
   function arrayLocs(locs) {
     const schema = S.array().minItems(2).maxItems(config.input_max_locations).items(
-                  S.array().minItems(2).maxItems(2).items(S.number())
-                );
+            S.array().minItems(2).maxItems(2).items(S.number())
+          )
     return ajv.compile(schema.valueOf())(locs);
   }
 
@@ -32,6 +50,7 @@ module.exports = fp(async fastify => {
     //TODO geometry
     arrayNumbers,
     arrayLonlat,
+    stringLocs,
     arrayLocs,
   });
 })

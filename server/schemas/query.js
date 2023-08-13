@@ -1,4 +1,4 @@
-
+//TODO rename querystring
 module.exports = (S, fastify) => {
 
   const {config: {formats}} = fastify

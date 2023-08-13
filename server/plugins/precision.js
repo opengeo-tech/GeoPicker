@@ -6,7 +6,7 @@ module.exports = fp(async fastify => {
   const {config, gpicker} = fastify
       , {utils: {setPrecision}} = gpicker
       , {output_precision_digits} = config;
-
+/*
   fastify.addHook('preSerialization', (req, res, payload, done) => {
   //fastify.addHook('preHandler', (req, res, done) => {
 
@@ -20,5 +20,5 @@ module.exports = fp(async fastify => {
       console.log('SET PRECESION', precision)
     }
     done(null, payload)
-  })
+  })*/
 });
