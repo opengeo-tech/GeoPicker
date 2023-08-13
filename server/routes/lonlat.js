@@ -9,7 +9,7 @@ module.exports = async fastify => {
    */
   fastify.get('/:dataset/:lon/:lat', {schema: schemas.lonlat}, async req => {
 
-    const {/*dataset,*/ lon, lat} = req.params
+    const {lon, lat} = req.params
         , val = getValue([lon, lat], defaultDataset);
 
     // TODO use dataset

@@ -36,6 +36,8 @@ and includes some other additional functions:
 The [API](https://opengeo.tech/geopicker/docs) is work in progress.
 This basic structure can be extended starting from the environment variable `PREFIX` which by default `/`
 
+(✔️ Work ❌ TODO 🚧 Work in Progress)
+
 |Status|Method| Path                 | Return | Description |
 |------|------|----------------------|--------|-------------|
 |  ✔️  | GET  | /                    | html   | default demo map page if enabled by env var `DEMO_PAGE=true` |
@@ -52,20 +54,23 @@ This basic structure can be extended starting from the environment variable `PRE
 |      |      |                      |        |             |
 |  ❌  | GET  | /within/:lon/:lat    | object | search what dataset contains lon,lat |
 |  ❌  | POST | /within/geometry     | object | search what dataset contains geometry in body |
-|  ❌  | POST | /metadata/geometry       | object | return direction, length, centroid, middlepoint of geometry |
+|  ❌  | POST | /metadata/geometry   | object | return direction, length, centroid, middlepoint of geometry |
 
 ### Global Parameters
 
 |Status|Parameter | Default  | Description |
 |------|----------|----------|-------------|
 |  ✔️  | precision| `input`  | rounded to digits decimal precision |
-|  ✔️  | format   | `input`  | output format (✔️`polyline`,✔️`gpx`,✔️`geojson`,✔️`json`, ❌`csv`, ❌`kml`) |
+|  ✔️  | format   | `input`  | output format (✔️`json`,✔️`geojson`,✔️`polyline`,✔️`gpx`, ❌`csv`, ❌`kml`) |
 |  🚧  | densify  | false    | enable densification of points in the result |
 |  ❌  | simplify | false    | enable simplication geometry of the result |
 |  ❌  | height   | false    | add vertical distance from the ground(only input has elevation) |
 |  ❌  | metadata | false    | additional metadata(direction,length) in output |
 
-✔️ Done ❌ TODO 🚧 Work in Progress
+Some behaviors to know about parameters are that:
+
+- only `POST` endpoints and some formats return coordinates and then support `precision` and `densify` parameters.
+
 
 # Usage
 
