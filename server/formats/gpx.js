@@ -16,7 +16,9 @@ module.exports = fastify => {
             coordinates: []
           }
         };
+
       //TODO parser gpx
+
       return feature
     },
     gpxWrite: (raw, req) => {
@@ -54,10 +56,6 @@ module.exports = fastify => {
       else if (data.lon && data.lat && data.val) {
         feature.geometry.type = 'Point';
         feature.geometry.coordinates = [data.lon, data.lat, data.val];
-      }
-      else if (data.longitude && data.latitude && data.val) {
-        feature.geometry.type = 'Point';
-        feature.geometry.coordinates = [data.longitude, data.latitude, data.val];
       }
 
       return togpx(feature, {

@@ -5,7 +5,7 @@ module.exports = fp(async fastify => {
 
   const {config} = fastify
       , {formats} = config
-      , {polylineWrite, gpxWrite} = require('../formats')(fastify);
+      , {polylineWrite, gpxWrite, geojsonWrite} = require('../formats')(fastify);
 
   if (formats && formats.length > 0) {
 
@@ -16,7 +16,8 @@ module.exports = fp(async fastify => {
       done(null, newPayload)
     })*/
 
-    //TODO optimizazion is to move in preSerialization
+    //TODO optimizazion is to move in preSerialization(bypass schemas)
+    //Response set schema
     fastify.addHook('onSend', (req, res, payload, done) => { //payload is object
       const {format} = req.query
       let payloadOut = payload;
@@ -29,8 +30,11 @@ module.exports = fp(async fastify => {
           break;
           case 'gpx':
             payloadOut = gpxWrite(payload, req)
-            //res.type('application/gpx+xml');
-            res.type('text/plain');
+            res.type('application/gpx+xml');
+          break;
+          case 'geojson':
+            payloadOut = geojsonWrite(payload, req)
+            res.type('application/geo+json');
           break;
           case 'input':
           default:

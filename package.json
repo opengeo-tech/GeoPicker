@@ -48,13 +48,13 @@
     "geospatial",
     "geotiff",
     "fastify",
-    "shapefile",
     "elevation",
     "raster",
     "maps",
     "gdal",
-    "ogr",
+    "webgis",
     "gis",
+    "rest",
     "api"
   ],
   "dependencies": {

@@ -24,6 +24,13 @@ dev:
       level: 'debug'
       transport:
         target: 'pino-pretty'
+  formats:
+    - 'input'
+    - 'polyline'
+    - 'gpx'
+    - 'geojson'
+    - 'json'
+    - 'array'
 
 ## Default values if not present in environment
 defaultsEnvVars:
@@ -100,11 +107,11 @@ densify:
 
 ## Allowed formats in output by`format` parameter (`input` is same format of input)
 formats:
-  - input
-  - polyline
-  - gpx
-  # - json
-  # - geojson
+  - 'input'
+  - 'polyline'
+  - 'gpx'
+  #- 'geojson'
+  #- 'json'
   #TODO - array
 
 ## Datasets for `dataset` api parameter
