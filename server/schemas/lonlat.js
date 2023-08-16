@@ -10,7 +10,7 @@ module.exports = (S, fastify) => {
         .prop('lat', S.number().minimum(-90).maximum(90)).required()
 
   return {
-    lonlat: {
+    lonlatGet: {
       description: 'Get single value by longitude and latitude',
       params: Lonlat,
       query,

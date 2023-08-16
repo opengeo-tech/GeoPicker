@@ -21,7 +21,7 @@ module.exports = async fastify => {
   });
 
   /**
-   * GET
+   * GET short alias enpoint
    */
   fastify.get('/:dataset', {schema: schemas.dataset}, async req => {
 

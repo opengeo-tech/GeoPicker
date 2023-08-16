@@ -9,6 +9,13 @@ module.exports = fp(async fastify => {
 
   if (formats && formats.length > 0) {
 
+    /*TODO fastify.addHook('preParsing', (request, reply, payload, done) => {
+      // TODO convert input format in geojson
+      //Notice: in the preParsing hook, request.body will always be undefined,
+      //because the body parsing happens before the preValidation hook.
+      done(null, newPayload)
+    })*/
+
     //TODO optimizazion is to move in preSerialization
     fastify.addHook('onSend', (req, res, payload, done) => { //payload is object
       const {format} = req.query

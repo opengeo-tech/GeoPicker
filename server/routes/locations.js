@@ -10,7 +10,7 @@ module.exports = async fastify => {
    */
   fastify.get('/:dataset/:locations', {schema: schemas.locationsString, compress}, async req => {
 
-    return getValue(req.params.locations, defaultDataset);
+    return getValue(req.data, defaultDataset);
   });
 
   /**
@@ -18,7 +18,7 @@ module.exports = async fastify => {
    */
   fastify.post('/:dataset/locations', {schema: schemas.locationsPost, compress}, async req => {
 
-    return setValue(req.body, defaultDataset);
+    return setValue(req.data, defaultDataset);
   });
 
   /* fastify.get('/densify/:locations', (req,res) => {

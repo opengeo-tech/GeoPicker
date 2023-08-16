@@ -9,7 +9,11 @@ module.exports = (S, fastify) => {
           S.string().enum(formats)
         )
         .prop('precision',
-          S.number().minimum(1).maximum(10)
+          S.object()
+          .oneOf([
+            S.number().minimum(1).maximum(10),
+            S.string().const('input')
+          ])
         )
   }
 }

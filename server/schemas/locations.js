@@ -2,8 +2,8 @@
 module.exports = (S, fastify) => {
 
   const {config: {input_max_locations}} = fastify
-      , {query} = require('./query')(S, fastify)
-      , {params} = require('./params')(S, fastify);
+      , {params} = require('./params')(S, fastify)
+      , {query} = require('./query')(S, fastify);
 
   // eslint-disable-next-line
   const Locations = params
