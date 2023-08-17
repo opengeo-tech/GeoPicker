@@ -11,12 +11,10 @@ const basepath = __dirname
     , package = require(resolve(`${basepath}/../package.json`))
     , config = configYml({basepath})
     , {fastifyConf, port, host, prefix} = config
-    , {cors, compress, swagger, demopage} = config;
+    , {cors, compress, swagger, demopage, isDev} = config;
 
 // eslint-disable-next-line
 const fastify = Fastify(fastifyConf);
-
-fastify.log.debug(config);
 
 /**
  * Decorators
@@ -36,7 +34,6 @@ fastify.register(require('./plugins/valid'));
 fastify.register(require('./plugins/dataparser'));
 fastify.register(require('./plugins/precision'));
 fastify.register(require('./plugins/format'));
-//fastify.register(require('./plugins/print-routes'));
 
 /**
  * Optional Plugins
@@ -53,7 +50,9 @@ if (swagger.enabled) {
 if (demopage.enabled) {
     fastify.register(require('./routes/demo'), {prefix});
 }
-
+if (isDev) {
+    fastify.register(require('./plugins/debug'));
+}
 /**
  * Routes
  */
@@ -63,7 +62,7 @@ fastify.register(require('./routes/lonlat'),   {prefix});
 fastify.register(require('./routes/locations'),{prefix});
 fastify.register(require('./routes/geometry'), {prefix});
 
-fastify.log.info(`Geopicker v${package.version} started`);
+fastify.log.info(`Geopicker v${package.version} started...`);
 
 fastify.listen({port, host}, err => {
     if (err) {

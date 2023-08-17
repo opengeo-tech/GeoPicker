@@ -26,13 +26,13 @@ function listRoutes(routes) {
 }
 
 module.exports = fp(async fastify => {
-
   const routes = [];
   fastify
   .addHook('onRoute', async route => {
     routes.push(route)
   })
   .addHook('onReady', async () => {
-    fastify.log.debug(listRoutes(routes));
+    fastify.log.debug(fastify.config, 'CONFIG');
+    fastify.log.debug(listRoutes(routes), 'ENDPOINTS');
   });
 })

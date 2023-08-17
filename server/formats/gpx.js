@@ -8,7 +8,7 @@ module.exports = fastify => {
       , creator = `Geopicker ${version} - ${homepage}`;
 
   return {
-    gpxRead: (raw, req) => {
+    gpxRead: (data, req) => {
       const feature = {
           type: 'Feature',
           geometry: {

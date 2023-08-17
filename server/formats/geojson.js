@@ -2,22 +2,22 @@
 
 module.exports = fastify => {;
 
-  //const {schemas} = fastify
+  const {utils: {parseLocations}} = fastify.gpiker
   //TODO Response set schema
 
   return {
-    geojsonRead: (raw, req) => {
-      return raw
+    geojsonRead: (data, req) => {
+      return data
     },
-    geojsonWrite: data => {
-      const feature = {
+    geojsonWrite: (data, req) => {
+      let feature = {
         type: 'Feature',
         geometry: {
           type: 'LineString',
           coordinates: []
         }
       };
-console.log(data)
+
       if (Array.isArray(data)) {
         if (data.length === 1) {          //lonlat point
           const {lon, lat} = req.params;
@@ -36,7 +36,7 @@ console.log(data)
         }
       }
       else if (data.coordinates || data.geometry) {
-        feature = data
+        feature = data;
       }
       else if (data.lon && data.lat && data.val) {
         feature.geometry.type = 'Point';
