@@ -2,7 +2,7 @@
 
 module.exports = fastify => {;
 
-  const {utils: {parseLocations}} = fastify.gpiker
+  const {utils: {parseLocations}} = fastify.gpicker
   //TODO Response set schema
 
   return {
