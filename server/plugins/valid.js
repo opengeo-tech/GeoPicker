@@ -6,8 +6,7 @@ const fp = require('fastify-plugin')
 
 module.exports = fp(async fastify => {
 
-  const {config, schemas} = fastify;
-  // , {input_validation} = config
+  const {config: {maxLocations}, schemas: {locationsString}} = fastify;
 
 // TODO disable all schemas if input_validation == false
 /*  fastify.addHook('preValidation', (req, res, done) => {
@@ -33,14 +32,14 @@ module.exports = fp(async fastify => {
    * valid serialized location "lon1,lat1|lon2,lat2|..."
    */
   function stringLocs(str) {
-    return ajv.compile(schemas.locationsString.valueOf())(str)
+    return ajv.compile(locationsString.valueOf())(str)
   }
 
   /**
    * valid values of array of array of coordinates
    */
   function arrayLocs(locs) {
-    const schema = S.array().minItems(2).maxItems(config.input_max_locations).items(
+    const schema = S.array().minItems(2).maxItems(maxLocations).items(
             S.array().minItems(2).maxItems(2).items(S.number())
           )
     return ajv.compile(schema.valueOf())(locs);

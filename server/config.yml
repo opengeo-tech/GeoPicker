@@ -47,7 +47,7 @@ demopage:
   path: '/'
 
 ## Attribution service show in /status endpoint
-attribution: "GeoPicker service - Copyright Stefano Cudini - opengeo.tech"
+attribution: "GeoPicker - Copyright Stefano Cudini - opengeo.tech"
 
 ## Fastify server base config
 fastifyConf:
@@ -95,7 +95,7 @@ status:
 input_validation: true
 
 ## Maximum number of locations picked in a single request
-input_max_locations: 10000
+maxLocations: 10000
 
 ## Default number of digits precision returned in geojson coordinates(false to disable, default is by input)
 output_precision_digits: input

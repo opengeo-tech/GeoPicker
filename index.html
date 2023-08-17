@@ -618,8 +618,10 @@
     controlMouseLine.locs = []; //buffer of last coordinates
     controlMouseLine._pickTrack = function(e) {
 
+        const maxLocations = 30;
+
         let { locs } = controlMouseLine;
-        if (locs.length > 30) {
+        if (locs.length > maxLocations) {
             locs.shift();
         }
         const lastLoc = locs.at(-1),
@@ -637,8 +639,6 @@
     };
 
     controlMouseLine.onAdd = map => {
-
-        const maxlocations = 10;
 
         var div = $('<label id="get_locations" class="leaflet-control-btn"><i class="fa fa-line-chart"></i> Mouse Move Line</label>');
         var check = $('<input type="radio" name="drawtype" />').prependTo(div)

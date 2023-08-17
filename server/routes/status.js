@@ -7,7 +7,7 @@ module.exports = async fastify => {
       , {utils: {humanSize} } = gpicker
       , {version, homepage} = package
       , {fastifyConf, attribution, swagger, compress, cors, demopage, formats} = config
-      , {input_validation, input_max_locations, output_precision_digits} = config
+      , {input_validation, maxLocations, output_precision_digits} = config
       , {maxParamLength, bodyLimit} = fastifyConf
       , gdal = gpicker.gdal.version
       , datasets = datasetsNames
@@ -30,7 +30,7 @@ module.exports = async fastify => {
   if (config.status?.config) {
     out.config = {
       input_validation,
-      input_max_locations,
+      maxLocations,
       output_precision_digits,
       maxParamLength,
       bodyLimit,

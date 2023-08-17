@@ -1,7 +1,7 @@
 
 module.exports = (S, fastify) => {
 
-  const {config: {input_max_locations}} = fastify
+  const {config: {maxLocations}} = fastify
       , {query} = require('./query')(S, fastify)
       , {params} = require('./params')(S, fastify);
 
@@ -10,7 +10,7 @@ module.exports = (S, fastify) => {
     .oneOf([
         S.object()
         .prop('type', S.string().const('LineString')).required()
-        .prop('coordinates', S.array().minItems(2).maxItems(input_max_locations).items(
+        .prop('coordinates', S.array().minItems(2).maxItems(maxLocations).items(
           S.array().minItems(2).items(S.number())
         )).required()
         ,

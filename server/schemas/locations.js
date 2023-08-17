@@ -1,7 +1,7 @@
 
 module.exports = (S, fastify) => {
 
-  const {config: {input_max_locations}} = fastify
+  const {config: {maxLocations}} = fastify
       , {params} = require('./params')(S, fastify)
       , {query} = require('./query')(S, fastify);
 
@@ -26,11 +26,11 @@ module.exports = (S, fastify) => {
       description: 'Post array locations in body',
       params,
       query,
-      body: S.array().minItems(2).maxItems(input_max_locations).items(
+      body: S.array().minItems(2).maxItems(maxLocations).items(
           S.array().minItems(2).items(S.number())
         ),
       /*response: {
-        200: S.array().minItems(2).maxItems(input_max_locations).items(
+        200: S.array().minItems(2).maxItems(maxLocations).items(
           S.array().minItems(3).items(S.number())
         )
       }*/
