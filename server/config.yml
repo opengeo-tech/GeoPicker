@@ -97,6 +97,10 @@ input_validation: true
 ## Maximum number of locations picked in a single request
 maxLocations: 10000
 
+## Locations separators (default: /locations/lon1,lat1|lon2,lat2|lon3,lat3...)
+sepLocations: '|'
+sepCoords: ','
+
 ## Default number of digits precision returned in geojson coordinates(false to disable, default is by input)
 output_precision_digits: input
 

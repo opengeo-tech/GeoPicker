@@ -1,19 +1,21 @@
 
 module.exports = (S, fastify) => {
 
-  const {config: {maxLocations}} = fastify
+  const {config: {maxLocations, sepLocations: sepL, sepCoords: sepC}} = fastify
       , {params} = require('./params')(S, fastify)
       , {query} = require('./query')(S, fastify);
 
-  // eslint-disable-next-line
+  //TODO manage other chars (only pipe require \|)
+  const regText = `(?=^([^\${sepL}]*${sepL}){1,}[^\${sepL}]*$)(?=^([^${sepC}]*${sepC}){2,}[^${sepC}]*$)`
+      , regLocs = new RegExp(regText);
+  //const regLocs =/(?=^([^\|]*\|){1,}[^\|]*$)(?=^([^,]*,){2,}[^,]*$)/
+  // contains min 1 pipe and 2 commas
+  //min 1 pipe: /^([^,]*,){2,}[^,]*$/
+  //min 1 pipe: /^([^\|]*\|){1,}[^\|]*$/
+
   const Locations = params
         .prop('locations',
-            S.string()
-            // eslint-disable-next-line
-            .pattern(/(?=^([^\|]*\|){1,}[^\|]*$)(?=^([^,]*,){2,}[^,]*$)/)
-            // contains min 1 pipe and 2 commas
-            //.pattern(/^([^,]*,){2,}[^,]*$/)  // contains min 2 commas
-            //.pattern(/^([^\|]*\|){1,}[^\|]*$/) // contains min 1 pipe
+            S.string().pattern(regLocs)
           ).required()
 
   return {
