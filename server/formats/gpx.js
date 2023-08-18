@@ -2,7 +2,8 @@
 const togpx = require('togpx');
 
 module.exports = fastify => {
-  const {package, gpicker} = fastify
+  const {config, gpicker, package} = fastify
+      , {sepLocs, sepCoords} = config
       , {utils: {parseLocations}} = gpicker
       , {version, homepage} = package
       , creator = `Geopicker ${version} - ${homepage}`;
@@ -40,7 +41,7 @@ module.exports = fastify => {
           feature.geometry.coordinates = [lon, lat, data[0]];
         }
         else if (req.params.locations) { //locations via stringified GET
-          const locations = parseLocations(req.params.locations);
+          const locations = parseLocations(req.params.locations, sepLocs, sepCoords);
           locations.forEach((loc, k) => {
             loc.push(data[k])
           });

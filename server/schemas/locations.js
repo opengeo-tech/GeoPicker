@@ -1,12 +1,12 @@
 
 module.exports = (S, fastify) => {
 
-  const {config: {maxLocations, sepLocations: sepL, sepCoords: sepC}} = fastify
+  const {config: {maxLocations, sepLocs, sepCoords}} = fastify
       , {params} = require('./params')(S, fastify)
       , {query} = require('./query')(S, fastify);
 
-  //TODO manage other chars (only pipe require \|)
-  const regText = `(?=^([^\${sepL}]*${sepL}){1,}[^\${sepL}]*$)(?=^([^${sepC}]*${sepC}){2,}[^${sepC}]*$)`
+  //TODO manage other chars for sepLocs (only pipe require \|)
+  const regText = `(?=^([^\${sepLocs}]*${sepLocs}){1,}[^\${sepLocs}]*$)(?=^([^${sepCoords}]*${sepCoords}){2,}[^${sepCoords}]*$)`
       , regLocs = new RegExp(regText);
   //const regLocs =/(?=^([^\|]*\|){1,}[^\|]*$)(?=^([^,]*,){2,}[^,]*$)/
   // contains min 1 pipe and 2 commas

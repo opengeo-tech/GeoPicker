@@ -2,7 +2,7 @@
 module.exports = async fastify => {
 
   const {config, schemas, defaultDataset, gpicker/*, errors*/} = fastify
-      , {compress} = config
+      , {compress, sepLocs, sepCoords} = config
       , {getValue, setValue} = gpicker;
 
   /**
@@ -10,7 +10,7 @@ module.exports = async fastify => {
    */
   fastify.get('/:dataset/:locations', {schema: schemas.locationsString, compress}, async req => {
 
-    return getValue(req.data, defaultDataset);
+    return getValue(req.data, defaultDataset, {sepLocs, sepCoords});
   });
 
   /**

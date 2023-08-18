@@ -7,7 +7,7 @@ const fp = require('fastify-plugin');
 module.exports = fp(async fastify => {
 
   const {config, gpicker} = fastify
-      , {sepLocations, sepCoords} = config
+      , {sepLocs, sepCoords} = config
       , {utils: {parseLocations}} = gpicker;
 
   fastify.addHook('preHandler', (req, res, done) => {
@@ -19,7 +19,7 @@ module.exports = fp(async fastify => {
       req.data = {lon, lat};
     }
     else if (typeof locations === 'string') {
-      req.data = parseLocations(locations, sepLocations, sepCoords);
+      req.data = parseLocations(locations, sepLocs, sepCoords);
     }
     else if (body) {
       req.data = body;

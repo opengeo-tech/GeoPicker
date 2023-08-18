@@ -98,7 +98,7 @@ input_validation: true
 maxLocations: 10000
 
 ## Locations separators (default: /locations/lon1,lat1|lon2,lat2|lon3,lat3...)
-sepLocations: '|'
+sepLocs: '|'
 sepCoords: ','
 
 ## Default number of digits precision returned in geojson coordinates(false to disable, default is by input)
