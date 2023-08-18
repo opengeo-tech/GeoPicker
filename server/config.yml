@@ -14,7 +14,7 @@ dev:
   port: 9090
   host: 127.0.0.1
   datapath: './tests/data'
-  input_validation: false
+  validation: false
   status:
     config: true
     stats: true
@@ -91,8 +91,8 @@ status:
   #show usage stats in /status enpoint
   stats: false
 
-## Enable input validation by json-schemasm, if false speedup the responses but not valid input locations
-input_validation: true
+## Enable input validation by json-schemas, if false speedup the responses but not valid input locations
+validation: true
 
 ## Maximum number of locations picked in a single request
 maxLocations: 10000

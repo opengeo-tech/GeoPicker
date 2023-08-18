@@ -5,7 +5,7 @@ module.exports = (S, fastify) => {
       , {params} = require('./params')(S, fastify)
       , {query} = require('./query')(S, fastify);
 
-  //TODO manage other chars for sepLocs (only pipe require \|)
+  //FIXME manage other chars for sepLocs (only pipe require a slash before `\|`)
   const regText = `(?=^([^\${sepLocs}]*${sepLocs}){1,}[^\${sepLocs}]*$)(?=^([^${sepCoords}]*${sepCoords}){2,}[^${sepCoords}]*$)`
       , regLocs = new RegExp(regText);
   //const regLocs =/(?=^([^\|]*\|){1,}[^\|]*$)(?=^([^,]*,){2,}[^,]*$)/
