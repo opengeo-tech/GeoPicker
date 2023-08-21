@@ -6,7 +6,7 @@ const fp = require('fastify-plugin')
 
 module.exports = fp(async fastify => {
 
-  const {config: {maxLocations}, schemas: {locationsString}} = fastify;
+  const {config: {validation, maxLocations}, schemas: {locationsString}} = fastify;
 
 // TODO disable all schemas if input_validation == false
 /*  fastify.addHook('preValidation', (req, res, done) => {
@@ -45,11 +45,20 @@ module.exports = fp(async fastify => {
     return ajv.compile(schema.valueOf())(locs);
   }
 
-  fastify.decorate('valid', {
+  fastify.decorate('validate', {
     //TODO geometry
     arrayNumbers,
     arrayLonlat,
     stringLocs,
     arrayLocs,
   });
+
+  if (!validation) {
+    fastify.setValidatorCompiler(schema => {
+      return data => {
+        //always valid
+        return true
+      }
+    })
+  }
 })

@@ -19,4 +19,5 @@ module.exports = fp(async fastify => {
     }
     done()
   })
+
 });

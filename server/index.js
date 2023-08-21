@@ -30,7 +30,7 @@ fastify.decorate('status', 'OK');
 fastify.register(require('./plugins/errors'));
 fastify.register(require('./plugins/datasets'));
 fastify.register(require('./plugins/schema'));
-fastify.register(require('./plugins/valid'));
+fastify.register(require('./plugins/validation'));
 fastify.register(require('./plugins/dataparser'));
 fastify.register(require('./plugins/precision'));
 fastify.register(require('./plugins/format'));
@@ -51,7 +51,7 @@ if (demopage.enabled) {
     fastify.register(require('./routes/demo'), {prefix});
 }
 if (isDev) {
-    fastify.register(require('./plugins/debug'));
+//    fastify.register(require('./plugins/debug'));
 }
 /**
  * Routes

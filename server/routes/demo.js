@@ -32,7 +32,7 @@ module.exports = async fastify => {
 
   fastify.get(resolve(path), {
       schema: {
-        description: 'Interactive demo page which demonstrates how it works GeoPicker endpoints',
+        description: 'Interactive demo page which demostrates how it works GeoPicker endpoints',
       }
     }, async (req, res) => {
     await res.headers(noCache).type('text/html').send(html)

@@ -3,11 +3,11 @@ const {resolve} = require('path');
 
 module.exports = async fastify => {
 
-  const {config, status, gpicker, package, datasetsNames} = fastify
+  const {config, status, gpicker, package, schemas, datasetsNames} = fastify
       , {utils: {humanSize} } = gpicker
       , {version, homepage} = package
       , {fastifyConf, attribution, swagger, compress, cors, demopage, formats} = config
-      , {input_validation, maxLocations, output_precision_digits} = config
+      , {validation, maxLocations, output_precision_digits} = config
       , {maxParamLength, bodyLimit} = fastifyConf
       , gdal = gpicker.gdal.version
       , datasets = datasetsNames
@@ -29,7 +29,7 @@ module.exports = async fastify => {
 
   if (config.status?.config) {
     out.config = {
-      input_validation,
+      validation,
       maxLocations,
       output_precision_digits,
       maxParamLength,
@@ -49,5 +49,5 @@ module.exports = async fastify => {
     }
   }
 
-  fastify.get('/status', async () => out);
+  fastify.get('/status', {schema: schemas.status}, async () => out);
 }

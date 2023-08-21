@@ -19,8 +19,11 @@ module.exports = fp(async fastify => {
     //TODO optimizazion is to move in preSerialization(bypass schemas)
     //Response set schema
     fastify.addHook('onSend', (req, res, payload, done) => { //payload is object
+
       const {format} = req.query
+
       let payloadOut = payload;
+
       if (format) {
         fastify.log.debug(`Format conversion in ${format}...`);
         switch(format) {
