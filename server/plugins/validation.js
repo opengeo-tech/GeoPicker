@@ -8,13 +8,15 @@ module.exports = fp(async fastify => {
 
   const {config: {validation, maxLocations}, schemas: {locationsString}} = fastify;
 
-// TODO disable all schemas if input_validation == false
-/*  fastify.addHook('preValidation', (req, res, done) => {
-    //fastify.addHook('preHandler', (req, res, done) => {
-    console.log('PRE VALID ALL', Object.keys(req))
-    done()
-  });
-*/
+  if (!validation) {
+    fastify.setValidatorCompiler(schema => {
+      return data => {
+        //always valid
+        return true
+      }
+    })
+  }
+
   function arrayNumbers(nums) {
     return (typeof nums[0] === 'number' && typeof nums[1] === 'number')
   }
@@ -52,13 +54,4 @@ module.exports = fp(async fastify => {
     stringLocs,
     arrayLocs,
   });
-
-  if (!validation) {
-    fastify.setValidatorCompiler(schema => {
-      return data => {
-        //always valid
-        return true
-      }
-    })
-  }
 })
