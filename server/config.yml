@@ -14,7 +14,7 @@ dev:
   port: 9090
   host: 127.0.0.1
   datapath: './tests/data'
-  #validation: false
+  validation: false
   status:
     config: true
     stats: true
@@ -102,7 +102,7 @@ sepLocs: '|'
 sepCoords: ','
 
 ## Default number of digits precision returned in geojson coordinates(false to disable, default is by input)
-output_precision_digits: input
+precision: input
 
 ## Default densify options
 densify:

@@ -33,7 +33,8 @@ module.exports = fp(async fastify => {
           break;
           case 'gpx':
             payloadOut = gpxWrite(payload, req)
-            res.type('application/gpx+xml');
+            //res.type('application/gpx+xml');
+            res.type('application/xml');
           break;
           case 'geojson':
             payloadOut = geojsonWrite(payload, req)

@@ -9,7 +9,8 @@ module.exports = fp(async fastify => {
   const {config: {validation, maxLocations}, schemas: {locationsString}} = fastify;
 
   if (!validation) {
-    fastify.setValidatorCompiler(schema => {
+    fastify.setValidatorCompiler(() => {
+      //return () => ({ value: true });
       return data => {
         //always valid
         return true

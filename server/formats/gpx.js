@@ -2,9 +2,7 @@
 const togpx = require('togpx');
 
 module.exports = fastify => {
-  const {config, gpicker, package} = fastify
-      , {sepLocs, sepCoords} = config
-      , {utils: {parseLocations}} = gpicker
+  const {package} = fastify
       , {version, homepage} = package
       , creator = `Geopicker ${version} - ${homepage}`;
 
@@ -22,9 +20,9 @@ module.exports = fastify => {
 
       return feature
     },
-    gpxWrite: (raw, req) => {
+    gpxWrite: (payload, req) => {
 
-      const data = JSON.parse(raw)
+      const data = JSON.parse(payload)
 
       let feature = {
           type: 'Feature',
@@ -35,19 +33,20 @@ module.exports = fastify => {
         };
 
       if (Array.isArray(data)) {
-        if (data.length === 1) {          //lonlat point
-          const {lon, lat} = req.params;
+        const {lon, lat} = req.data;
+
+        if (data.length === 1) {
           feature.geometry.type = 'Point';
           feature.geometry.coordinates = [lon, lat, data[0]];
         }
-        else if (req.params.locations) { //locations via stringified GET
-          const locations = parseLocations(req.params.locations, sepLocs, sepCoords);
-          locations.forEach((loc, k) => {
+        else if (data.length > 1) {
+          const locs = req.data
+          locs.forEach((loc, k) => {
             loc.push(data[k])
           });
-          feature.geometry.coordinates = locations;
+          feature.geometry.coordinates = locs;
         }
-        else {                           //location array in POST body
+        else {                         //location array in POST body
           feature.geometry.coordinates = data;
         }
       }
