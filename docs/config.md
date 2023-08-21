@@ -62,6 +62,13 @@ demopage:
   enabled: true
 ```
 
+## Validation
+
+Disabling input validation by json-schema, speedup the responses but not valid input values
+```yaml
+validation: false
+```
+
 ## More customization
 
 The Default config file includes some variables read from the execution environment(PREFIX,DATASET_DEFAULT...), but to have a greater
