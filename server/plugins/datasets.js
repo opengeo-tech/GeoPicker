@@ -1,5 +1,6 @@
-/*
-  manage dataset define in config.yml
+/**
+ * generate fastify.datasets decorators: datasets, datasetsNames, datasetDefault
+ * and check datasets defined in config.yml
  */
 const fs = require('fs')
     , fp = require('fastify-plugin');
@@ -68,13 +69,13 @@ module.exports = fp(async fastify => {
 
   if (fs.existsSync(defaultFile)) {
 
-    const defaultDataset = gpicker.openFile(defaultFile, def.band, def.epsg);
+    const datasetDefault = gpicker.openFile(defaultFile, def.band, def.epsg);
 
-    fastify.decorate('defaultDataset', defaultDataset );
+    fastify.decorate('datasetDefault', datasetDefault );
     fastify.log.info(`Dataset default loaded: ${defaultFile}`);
   }
   else {
-    fastify.status = errors.nodefaultdataset;
-    fastify.log.warn(errors.nodefaultdataset);
+    fastify.status = errors.nodatasetdefault;
+    fastify.log.warn(errors.nodatasetdefault);
   }
 });

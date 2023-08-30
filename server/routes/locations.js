@@ -1,7 +1,7 @@
 
 module.exports = async fastify => {
 
-  const {config, schemas, defaultDataset, gpicker/*, errors*/} = fastify
+  const {config, schemas, datasetDefault, gpicker/*, errors*/} = fastify
       , {compress, sepLocs, sepCoords} = config
       , {getValue, setValue} = gpicker;
 
@@ -10,7 +10,7 @@ module.exports = async fastify => {
    */
   fastify.get('/:dataset/:locations', {schema: schemas.locationsString, compress}, async req => {
 
-    return getValue(req.data, defaultDataset, {sepLocs, sepCoords});
+    return getValue(req.data, datasetDefault, {sepLocs, sepCoords});
   });
 
   /**
@@ -18,7 +18,7 @@ module.exports = async fastify => {
    */
   fastify.post('/:dataset/locations', {schema: schemas.locationsPost, compress}, async req => {
 
-    return setValue(req.data, defaultDataset);
+    return setValue(req.data, datasetDefault);
   });
 
   /* fastify.get('/densify/:locations', (req,res) => {

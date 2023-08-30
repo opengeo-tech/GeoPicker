@@ -1,6 +1,6 @@
 /**
- * set req.data parsing any type of endpoints
- *
+ * set attribute req.data parsing and converting
+ * for any type of endpoints
  */
 const fp = require('fastify-plugin');
 
