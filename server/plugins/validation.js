@@ -1,4 +1,7 @@
-
+/**
+ * manage, dis/enable input validation by configuration
+ * and expose some values validations
+ */
 const fp = require('fastify-plugin')
   , S = require('fluent-json-schema')
   , Ajv = require('ajv')

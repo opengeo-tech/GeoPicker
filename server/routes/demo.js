@@ -1,12 +1,14 @@
 
 const {resolve, join} = require('path')
-    , fs = require('fs')
-    , favicon = fs.readFileSync(`${__dirname}/../favicon.png`);
+    , fs = require('fs');
 
 module.exports = async fastify => {
 
   const {config} = fastify
       , {prefix, demopage: {path}} = config
+      , demopath = join(prefix, path)
+      , favicon = fs.readFileSync(`${__dirname}/../favicon.png`)
+      , favpath = join(demopath,'favicon.ico')
       , htmlpath = resolve(`${__dirname}/../../index.html`)
       , html = fs.readFileSync(htmlpath).toString()
       , noCache = {
@@ -17,20 +19,14 @@ module.exports = async fastify => {
       };
 
   fastify.addHook('onReady', async () => {
-    const demopath = join(prefix, path)
     fastify.log.info(`Demo page available at path: ${demopath}`);
   });
 
-  fastify.get(join(path,'favicon.ico'), {
-      schema: {
-        //hide from swagger
-        hide:true
-      }
-    }, async (req, res) => {
+  fastify.get(favpath, {schema: {hide: true}}, async (req, res) => {
     res.type('image/png').send(favicon);
   });
 
-  fastify.get(resolve(path), {
+  fastify.get(demopath, {
       schema: {
         description: 'Interactive demo page which demostrates how it works GeoPicker endpoints',
       }

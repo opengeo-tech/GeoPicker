@@ -1,4 +1,6 @@
-
+/**
+ * implements openApi Swagger interface
+ */
 const {resolve} = require('path')
     , fp = require('fastify-plugin')
     , Swagger = require('@fastify/swagger')

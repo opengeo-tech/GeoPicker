@@ -1,4 +1,6 @@
-
+/**
+ * expose all json-schema defintions
+ */
 const fp = require('fastify-plugin')
     , S = require('fluent-json-schema');
 

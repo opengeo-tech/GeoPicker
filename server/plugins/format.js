@@ -1,4 +1,6 @@
-
+/**
+ * manager format parameter and the output conversions defined in ../formats/ folder
+ */
 const fp = require('fastify-plugin');
 
 module.exports = fp(async fastify => {

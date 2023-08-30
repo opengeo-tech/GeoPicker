@@ -1,4 +1,6 @@
-
+/**
+ * defines commons errors texts in output
+ */
 const fp = require('fastify-plugin');
 
 module.exports = fp(async fastify => {

@@ -1,4 +1,6 @@
-
+/**
+ * manager precision parameter and apply conversions
+ */
 const fp = require('fastify-plugin');
 
 module.exports = fp(async fastify => {

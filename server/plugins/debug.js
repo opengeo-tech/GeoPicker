@@ -1,5 +1,6 @@
-// TODO https://github.com/opengeo-tech/geopicker/issues/19
-
+/**
+ * manage debug mode and log some debugging informations at startup
+ */
 const fp = require('fastify-plugin');
 
 function getRouteConfig(r) {
