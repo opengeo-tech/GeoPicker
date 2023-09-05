@@ -112,6 +112,22 @@ Get single location exchanging a few bytes:
 [195]
 ```
 
+```bash
+$ curl "https://opengeo.tech/geopicker/default/11.123/46.123?format=gpx"
+```
+output is a waypoint in GPX format:
+
+```xml
+<gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" version="1.1" creator="Geopicker 1.9.1 - https://opengeo.tech/geopicker/">
+<metadata/>
+<wpt lat="46.123" lon="11.123">
+<name/>
+<desc/>
+<ele>400</ele>
+</wpt>
+</gpx>
+```
+
 Post a json object and receive the same decorated with the result(still works with `longitude`,`latitude`):
 ```bash
 $ curl -X POST -d '{"lon": 11.123, "lat": 46.123"}' \
