@@ -103,7 +103,7 @@ some useful tools for contributors `npm run <scriptname>`
 - `dev` run in development mode
 
 
-# Requests
+# Requests Example
 
 Get single location exchanging a few bytes:
 ```bash
