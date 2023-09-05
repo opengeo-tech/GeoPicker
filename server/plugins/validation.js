@@ -13,12 +13,11 @@ module.exports = fp(async fastify => {
 
   if (!validation) {
     fastify.setValidatorCompiler(() => {
-      //return () => ({ value: true });
       return data => {
         //always valid
         return true
       }
-    })
+    });
   }
 
   function arrayNumbers(nums) {
