@@ -221,8 +221,8 @@ for details see the descriptions in the [Roadmap issues](https://github.com/open
 |  ❌  | manage multiple datasets |
 |  🚧  | ES6 modules |
 |  🚧  | extend benchmarks for any endpoints |
-|  ❌  | enable densify function |
-|  ❌  | enable simply function |
+|  ✔️  | enable densify function |
+|  🚧  | enable simply function |
 |  ❌  | unit testing |
 |  ❌  | support vector format in datasets, such as shapefile  |
 |  ❌  | supports complex geometries in input |
