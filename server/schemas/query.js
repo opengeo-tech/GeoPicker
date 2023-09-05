@@ -15,5 +15,12 @@ module.exports = (S, fastify) => {
             S.string().const('input')
           ])
         )
+        .prop('densify',
+          S.object()
+          .oneOf([
+            S.number().minimum(1),
+            S.string().const('input')
+          ])
+        )
   }
 }
