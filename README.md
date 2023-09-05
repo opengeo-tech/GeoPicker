@@ -183,6 +183,14 @@ output contains 3 additional interpolated locations with reduced precision digit
 }
 ```
 
+Get the elevation value between two locations every 100 meters
+
+```bash
+curl "http://localhost:9090/default/11,46|11.01,46.01?densify=100"
+
+[925,858,909,963,968,1001,1018,997,1025,1062,1064,1102,1115,1163,1187]
+```
+
 ## Benchmarks
 
 benchmarks scripts: `tests/benchmarks.js` using [AutoCannon](https://github.com/mcollina/autocannon)
