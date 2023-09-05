@@ -106,7 +106,7 @@ sepCoords: ','
 ## Default number of digits precision returned in geojson coordinates(false to disable, default is by input)
 precision: input
 
-## Default densify value in meters (false to disable, default is by input)
+## Default number of densification points in meters (false to disable, default is by input)
 densify: input
 
 ## Allowed formats in output by`format` parameter (`input` is same format of input)

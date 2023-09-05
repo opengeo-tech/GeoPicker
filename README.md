@@ -26,8 +26,8 @@ At present the index.html page contains a large implementation of browser side r
 
 and includes some other additional functions:
 
-- **Densify**: add more points in a sequence of coordinates, this improves the display on an elevation graph, adding intermediate positions at a minimum fixed distance.
-- **Simplify**: unlike densify it removes points that are too close together from a geometry.
+- **Densify**: add more interpolated points in input coordinates, this improves the display on an elevation graph, adding intermediate positions at a minimum fixed distance.
+- **Simplify**: unlike densify it removes points that are too close together from coordinates.
 - **Height**: add the vertical distance from the ground, if input has elevation add a fourth coordinate with this value.
 - **Metadata**: get additional informations for a certain geometry, can be for example the direction of a path.
 
@@ -61,16 +61,16 @@ This basic structure can be extended starting from the environment variable `PRE
 |Status|Parameter | Default  | Description |
 |------|----------|----------|-------------|
 |  ✔️  | precision| `input`  | rounded to digits decimal precision |
-|  ✔️  | format   | `input`  | output format (✔️`json`,✔️`geojson`,✔️`polyline`,✔️`gpx`, ❌`csv`, ❌`kml`) |
-|  🚧  | densify  | false    | enable densification of points in the result |
-|  ❌  | simplify | false    | enable simplication geometry of the result |
+|  ✔️  | format   | `input`  | output format (✔️`json`,🚧`geojson`,✔️`polyline`,✔️`gpx`, ❌`csv`, ❌`kml`) |
+|  ✔️  | densify  | `input`  | enable densification of points in the result |
+|  🚧  | simplify | false    | enable simplication geometry of the result |
 |  ❌  | height   | false    | add vertical distance from the ground(only input has elevation) |
 |  ❌  | metadata | false    | additional metadata(direction,length) in output |
 
 Some behaviors to know about parameters are that:
 
 - only `POST` endpoints and some formats return coordinates and then support `precision` and `densify` parameters.
-
+- from version v1.6.1 `/<datasetname>/...` is the same of `/datasets/<datasetname>/...` `datasets` is implicit.
 
 # Usage
 
@@ -146,8 +146,42 @@ $ curl -X POST -d '{"type":"LineString","coordinates":[[11.1,46.1],[11.2,46.2],[
 {"type":"LineString","coordinates":[[11.1,46.1,195],[11.2,46.2,1149],[11.3,46.3,1051]]}
 ```
 
-From version v1.6.1 `/elevation/...` is the same of `/datasets/elevation/...` `datasets` can be implicit.
+Post a GeoJSON geometry of 2 points and Densify the linestring adding point each 400 meters,
+this will help you build a less angular elevation graph:
 
+```bash
+$ curl -X POST -d '{"type":"LineString","coordinates":[[11,46],[11.01,46.01]]}' \
+  -H 'Content-Type: application/json' \
+  "http://localhost:9090/elevation/geometry?densify=400&precision=5"
+```
+
+output contains 3 additional interpolated locations with reduced precision digits:
+
+```json
+{
+    "type": "Feature",
+    "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11, 46, 897
+          ],
+          [
+            11.003, 46.003, 968
+          ],
+          [
+            11.006, 46.006, 1029
+          ],
+          [
+            11.009, 46.009, 1122
+          ],
+          [
+            11.01, 46.01, 1187
+          ]
+        ]
+    }
+}
+```
 
 ## Benchmarks
 
