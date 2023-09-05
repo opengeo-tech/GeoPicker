@@ -14,5 +14,3 @@ module.exports = fp(async fastify => {
     outofbounds: "Location is out of dataset bounds",
   });
 })
-
-

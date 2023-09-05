@@ -2,12 +2,13 @@
 module.exports = async fastify => {
 
   const {datasets, schemas, errors} = fastify
+      , datasetsList = Object.entries(datasets).map(d => ({id: d[0], ...d[1] }))
 
   /**
    * GET
    */
   fastify.get('/datasets', {schema: schemas.datasets}, async req => {
-    return datasets;
+    return datasetsList;
   });
 
   /**

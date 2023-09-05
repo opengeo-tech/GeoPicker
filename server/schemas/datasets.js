@@ -5,6 +5,7 @@ module.exports = (S, fastify) => {
 
   // eslint-disable-next-line
   const Dataset = S.object()
+        .prop('id', S.string())
         .prop('type', S.string().enum(['raster','vector']))
         .prop('band', S.integer())
         .prop('size', S.integer())
@@ -29,10 +30,11 @@ module.exports = (S, fastify) => {
     datasets: {
       description: 'Describe all datasets available',
       response: {
-        200: S.object()
+        200: S.array().items(Dataset)
+        /*200: S.object() //object version
             .patternProperties({
                 '.*': Dataset
-            })
+            })*/
       }
     }
   }

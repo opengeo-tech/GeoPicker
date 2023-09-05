@@ -11,11 +11,13 @@ module.exports = fp(async fastify => {
       , {datapath, datasets} = config
 
   if (!fs.existsSync(datapath)) {
-    throw errors.nodatadir
+    fastify.log.error(errors.nodatadir);
+    //throw errors.nodatadir
   }
 
   if (!datasets || !datasets.default) {
-    throw errors.nodatasets;
+    fastify.log.error(errors.nodatasets);
+    //throw errors.nodatasets;
   }
 
   // eslint-disable-next-line
@@ -40,6 +42,7 @@ module.exports = fp(async fastify => {
             , {size} = fs.statSync(file)
 
         listDatasets[ key ] = {
+          id: key,
           //path: val.path,
           size,
           epsg: val.epsg,
@@ -56,7 +59,8 @@ module.exports = fp(async fastify => {
   }
 
   if (Object.keys(listDatasets).length===0) {
-    throw errors.nodatasets;
+    fastify.log.error(errors.nodatasets);
+    //throw errors.nodatasets;
   }
 
   // eslint-disable-next-line
