@@ -97,10 +97,11 @@ Full configuration options can be found in [docs config](./docs/config.md)
 
 some useful tools for contributors `npm run <scriptname>`
 
-- `docker-up` run in local docker-compose container
 - `start` run in production mode
-- `bench` run benchmarks
 - `dev` run in development mode
+- `docker-up` run in local docker-compose container
+- `bench` run benchmarks
+- `npm publish .` build and publish new docker image
 
 
 # Requests Example
