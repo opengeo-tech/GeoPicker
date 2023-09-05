@@ -114,12 +114,12 @@ Get single location exchanging a few bytes:
 ```
 
 ```bash
-$ curl "http://localhost:9090/default/11.123/46.123?format=gpx"
+$ curl "http://localhost:9090/elevation/11.123/46.123?format=gpx"
 ```
 output is a waypoint in GPX format:
 
 ```xml
-<gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" version="1.1" creator="Geopicker 1.9.1 - https://opengeo.tech/geopicker/">
+<gpx version="1.1" creator="Geopicker">
 <metadata/>
 <wpt lat="46.123" lon="11.123">
 <name/>
@@ -193,7 +193,7 @@ output contains 3 additional interpolated locations with reduced precision digit
 Get the elevation value between two locations every 100 meters
 
 ```bash
-curl "http://localhost:9090/default/11,46|11.01,46.01?densify=100"
+curl "http://localhost:9090/elevation/11,46|11.01,46.01?densify=100"
 
 [925,858,909,963,968,1001,1018,997,1025,1062,1064,1102,1115,1163,1187]
 ```
