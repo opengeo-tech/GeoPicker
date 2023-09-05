@@ -101,13 +101,13 @@ maxLocations: 10000
 sepLocs: '|'
 sepCoords: ','
 
+### Output Parameters
+
 ## Default number of digits precision returned in geojson coordinates(false to disable, default is by input)
 precision: input
 
-## Default densify options
-densify:
-  length: 90
-  units: 'meters'
+## Default densify value in meters (false to disable, default is by input)
+densify: input
 
 ## Allowed formats in output by`format` parameter (`input` is same format of input)
 formats:

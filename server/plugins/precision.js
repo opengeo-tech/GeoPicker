@@ -12,7 +12,7 @@ module.exports = fp(async fastify => {
 
     const {precision = config.precision} = req.query
 
-    if (precision !== 'input') {
+    if (precision !== false && precision !== 'input') {
 
       fastify.log.debug(`Set Precision ${precision} ${req.url}`);
 

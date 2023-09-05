@@ -20,10 +20,4 @@ module.exports = async fastify => {
 
     return setValue(req.data, datasetDefault);
   });
-
-  /* fastify.get('/densify/:locations', (req,res) => {
-    // TODO
-    return {densify:1}//res.code(400).send({status: errors.densify_nobody})
-  }); */
-
 }
