@@ -113,7 +113,7 @@ Get single location exchanging a few bytes:
 ```
 
 ```bash
-$ curl "https://opengeo.tech/geopicker/default/11.123/46.123?format=gpx"
+$ curl "http://localhost:9090/default/11.123/46.123?format=gpx"
 ```
 output is a waypoint in GPX format:
 
