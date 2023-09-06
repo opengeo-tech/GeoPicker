@@ -400,6 +400,26 @@
             editableLayers.addLayer(layerElevation);
         });
     }
+    function postGeometryMeta(geo) {
+
+        const url = j(api, 'metadata', 'geometry');
+
+        logger('-> POST META', url)
+        return $.ajax({
+                url,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(geo),
+            })
+            .done(meta => {
+
+                logger('<-', meta)
+
+                L.circleMarker(meta.centroid.reverse(), {color:'green', radius: 6}).addTo(editableLayers);
+                L.circleMarker(meta.middlepoint.reverse(), {color:'yellow', radius: 6}).addTo(editableLayers);
+            });
+    }
 
     const map = L.map('map', {
         zoom,
@@ -492,12 +512,15 @@
             pathColour: '#f00'
         })
         .on('created edited', e => {
-            const { polyline } = e.polyline, { geometry } = polyline.toGeoJSON();
+            const { polyline } = e.polyline
+                , { geometry } = polyline.toGeoJSON();
 
             postLocations(geometry.coordinates).done(() => {
                 controlDrawFree.addTo(editableLayers);
                 controlDrawFree.setMode(L.Pather.MODE.ALL)
             });
+
+            postGeometryMeta(geometry);
         });
 
     const formats = [

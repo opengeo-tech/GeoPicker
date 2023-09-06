@@ -4,7 +4,7 @@ module.exports = async fastify => {
   const {config, /*schemas,*/ datasetDefault, gpicker} = fastify
       // eslint-disable-next-line
       , {compress} = config
-      , {setValue} = gpicker;
+      , {setValue, utils: {getMetadata} } = gpicker;
 
   /**
    * POST
@@ -14,7 +14,10 @@ module.exports = async fastify => {
     return setValue(req.data, datasetDefault);
   });
 
-  /* fastify.post('/meta/geometry', (req,res) => {
-    return meta(req.body)
-  }); */
+  /**
+   * POST
+   */
+  fastify.post('/metadata/geometry', /*{schema: schemas.metadata}, */ async req => {
+    return getMetadata(req.body)
+  });
 }

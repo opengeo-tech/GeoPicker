@@ -29,7 +29,7 @@ and includes some other additional functions:
 - **Densify**: add more interpolated points in input coordinates, this improves the display on an elevation graph, adding intermediate positions at a minimum fixed distance.
 - **Simplify**: unlike densify it removes points that are too close together from coordinates.
 - **Height**: add the vertical distance from the ground, if input has elevation add a fourth coordinate with this value.
-- **Metadata**: get additional informations for a certain geometry, can be for example the direction of a path.
+- **Metadata**: get additional informations for a certain geometry, for example: length, direction, bbox, centroid, middlepoint
 
 ## API Rest endpoints
 
@@ -52,9 +52,9 @@ This basic structure can be extended starting from the environment variable `PRE
 |  ✔️  | POST | /:dataset/locations  | arrays | accept array or object of locations in body (format is `[[lon,lat],[lon,lat],[lon,lat]]`) |
 |  ✔️  | POST | /:dataset/geometry   | object | geojson Point or LineString in body (support feature/geometry/f.collection)|
 |      |      |                      |        |             |
+|  ✔️  | POST | /metadata/geometry   | object | return info about direction, length, centroid, middlepoint of geometry |
 |  ❌  | GET  | /datasets/within/:lon/:lat    | object | search what dataset contains lon,lat |
 |  ❌  | POST | /datasets/within/geometry     | object | search what dataset contains geometry in body |
-|  ❌  | POST | /metadata/geometry   | object | return direction, length, centroid, middlepoint of geometry |
 
 ### Global Parameters
 
@@ -63,9 +63,8 @@ This basic structure can be extended starting from the environment variable `PRE
 |  ✔️  | precision| `input`  | rounded to digits decimal precision |
 |  ✔️  | format   | `input`  |  |
 |  ✔️  | densify  | `input`  | enable densification of points in the result |
-|  🚧  | simplify | false    | enable simplication geometry of the result |
+|  ✔️  | simplify | `input`  | enable simplication geometry of the result |
 |  ❌  | height   | false    | add vertical distance from the ground(only input has elevation) |
-|  ❌  | metadata | false    | additional metadata(direction,length) in output |
 
 Some behaviors to know about parameters are that:
 
