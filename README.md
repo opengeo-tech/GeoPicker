@@ -61,7 +61,7 @@ This basic structure can be extended starting from the environment variable `PRE
 |Status|Parameter | Default  | Description |
 |------|----------|----------|-------------|
 |  ✔️  | precision| `input`  | rounded to digits decimal precision |
-|  ✔️  | format   | `input`  | output format (✔️`json`,🚧`geojson`,✔️`polyline`,✔️`gpx`, ❌`csv`, ❌`kml`) |
+|  ✔️  | format   | `input`  |  |
 |  ✔️  | densify  | `input`  | enable densification of points in the result |
 |  🚧  | simplify | false    | enable simplication geometry of the result |
 |  ❌  | height   | false    | add vertical distance from the ground(only input has elevation) |
@@ -71,6 +71,29 @@ Some behaviors to know about parameters are that:
 
 - only `POST` endpoints and some formats return coordinates and then support `precision` and `densify` parameters.
 - from version v1.6.1 `/<datasetname>/...` is the same of `/datasets/<datasetname>/...` `datasets` is implicit.
+
+### Formats
+
+If the `format` parameter is not specified the default behavior is to output the same format as the input
+
+- **input** format can be specified by `Content-type:` header in request
+- **output** format can be specified by `format` parameter
+
+the support for various input and output formats is summarized in the table
+
+| Value     | In |Out | Description |
+|-----------|----|----|-------------|
+| `input`   | ✔️ | ✔️ | means the same format as the input data |
+| `array`   | ✔️ | 🚧 | each location is `Array` and a Z dimension as value `[lon,lat,val]` |
+| `json`    | ✔️ | 🚧 | each location is `Object` having `lon`,`lat` and `val` attributes |
+| `geojson` | ✔️ | 🚧 | standard GeoJSON objects `Feature`, `Geometry` with a Z dimension in `coordinates` as value |
+| `polyline`| 🚧 | ✔️ | [Encoded Polyline Algorithm](https://developers.google.com/maps/documentation/utilities/polylinealgorithm)|
+| `gpx`     | 🚧 | ✔️ | GPS eXchange Format is an XML textual format |
+| `csv`     | ❌ | ❌ | Comma-separated values is an textual format |
+| `kml`     | ❌ | ❌ | Keyhole Markup Language is an XML format for Google Earth|
+
+each endpoint has its own default format, for example endpoint `/dataset/lon/lat` return a simple array of one value.
+
 
 # Usage
 
