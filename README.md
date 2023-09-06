@@ -42,8 +42,10 @@ This basic structure can be extended starting from the environment variable `PRE
 |------|------|----------------------|--------|-------------|
 |  ✔️  | GET  | /                    | html   | default demo map page if enabled by env var `DEMO_PAGE=true` |
 |  ✔️  | GET  | /status              | object | service status, versions, datasets |
-|  ✔️  | GET  | /datasets            | object | list available datasets and their attributes |
-|  ✔️  | GET  | /:dataset            | object | show attributes of a certain dataset |
+|  ✔️  | GET  | /datasets            | array  | list available datasets and their attributes |
+|  ✔️  | GET  | /datasets/:dataset   | object | search dataset by id |
+|  ❌  | GET  | /datasets/within/:lon/:lat    | array | search dataset contains `lon`,`lat` |
+|  ✔️  | GET  | /:dataset            | object | show attributes of a certain dataset by id |
 |      |      |                      |        |             |
 |  ✔️  | GET  | /:dataset/:lon/:lat  | array  | get single location value of dataset, densify not supported|
 |  ✔️  | GET  | /:dataset/:locations | array  | locations is a string (format: `lon,lat|lon,lat|lon,lat`), densify not supported |
@@ -53,8 +55,6 @@ This basic structure can be extended starting from the environment variable `PRE
 |  ✔️  | POST | /:dataset/geometry   | object | geojson Point or LineString in body (support feature/geometry/f.collection)|
 |      |      |                      |        |             |
 |  ✔️  | POST | /metadata/geometry   | object | return info about direction, length, centroid, middlepoint of geometry |
-|  ❌  | GET  | /datasets/within/:lon/:lat    | object | search what dataset contains lon,lat |
-|  ❌  | POST | /datasets/within/geometry     | object | search what dataset contains geometry in body |
 
 ### Global Parameters
 
