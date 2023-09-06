@@ -112,14 +112,14 @@ densify: input
 ## Default factor of simplifycation points 0 to 1
 simplify: input
 
-## Allowed formats in output by`format` parameter (`input` is same format of input)
+## Allowed Output formats specified by `format` parameter (`input` value is same format of input)
 formats:
   - 'input'
   - 'polyline'
   - 'gpx'
   #- 'geojson'
   #- 'json'
-  #TODO - array
+  #TODO - 'array'
 
 ## Datasets for `dataset` api parameter
 datasets:

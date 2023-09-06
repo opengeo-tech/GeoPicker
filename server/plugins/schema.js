@@ -14,5 +14,4 @@ module.exports = fp(async fastify => {
     ...require('../schemas/params')(S, fastify),
     ...require('../schemas/query')(S, fastify),
   });
-  //TODO endpoint schemas fastify.getSchemas()
 })

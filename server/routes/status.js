@@ -8,7 +8,7 @@ module.exports = async fastify => {
       , {version, homepage} = package
       , {fastifyConf, attribution, swagger, compress, cors, demopage, formats} = config
       , {validation, maxLocations, precision} = config
-      , {maxParamLength, bodyLimit} = fastifyConf
+      , {maxParamLength, bodyLimit} = fastifyConf || {}
       , gdal = gpicker.gdal.version
       , datasets = datasetsNames
       , crossorigin = cors.enabled ? cors.origin : false

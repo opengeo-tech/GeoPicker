@@ -28,10 +28,6 @@ module.exports = fp(async fastify => {
       }
       //servers: [ Object ],
       //components: Object,
-      //security: [ Object ],
-      ////
-      //tags: [ Object ]
-      ////TODO keywords
     }
   });
 
