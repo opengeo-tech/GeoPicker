@@ -25,7 +25,7 @@ module.exports = fp(async fastify => {
       , defaultFile = `${datapath}/${def.path}`
       , listDatasets = {};
 
-  for (let [key, val] of Object.entries(datasets)) {
+  for (let [id, val] of Object.entries(datasets)) {
 
     if (val != null && typeof val.valueOf() === 'string' && datasets[ val ]) {  // entry is an alias
       val = datasets[ val ];
@@ -40,9 +40,11 @@ module.exports = fp(async fastify => {
         const dataset = gpicker.openFile(file, def.band, def.epsg)
             , meta = dataset.info()
             , {size} = fs.statSync(file)
+            , isDefault = (id === 'default' || id === datasets.default);
 
-        listDatasets[ key ] = {
-          id: key,
+        listDatasets[ id ] = {
+          id,
+          isDefault,
           //path: val.path,
           size,
           epsg: val.epsg,
@@ -51,9 +53,9 @@ module.exports = fp(async fastify => {
         }
       }
       else {
-        fastify.log.warn(`Dataset not exists! ${key} ${file} `);
+        fastify.log.warn(`Dataset not exists! ${id} ${file} `);
         //remove from config if not exists
-        delete datasets[key];
+        delete datasets[id];
       }
     }
   }

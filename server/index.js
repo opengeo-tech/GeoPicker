@@ -47,7 +47,7 @@ if (compress.enabled) {
     fastify.register(require('@fastify/compress'), compress);
 }
 if (swagger.enabled) {
-    fastify.register(require('./plugins/swagger'));
+    fastify.register(require('./plugins/swagger'), {prefix});
 }
 if (demopage.enabled) {
     fastify.register(require('./routes/demo'), {prefix});

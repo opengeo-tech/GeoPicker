@@ -61,7 +61,7 @@ fastifyConf:
 ## Enable Swagger front-end (options by: https://github.com/fastify/fastify-swagger)
 swagger:
   enabled: true
-  # prefix append to root `prefix`
+  # path append to main `prefix`
   routePrefix: '${prefix}/docs'
   # docExpansion
   # 'none' It'll Hide everything.
