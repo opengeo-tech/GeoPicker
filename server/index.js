@@ -33,6 +33,7 @@ fastify.register(require('./plugins/schema'));
 fastify.register(require('./plugins/validation'));
 fastify.register(require('./plugins/dataparser'));
 fastify.register(require('./plugins/densify'));
+fastify.register(require('./plugins/simplify'));
 fastify.register(require('./plugins/precision'));
 fastify.register(require('./plugins/format'));
 

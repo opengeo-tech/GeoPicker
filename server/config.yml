@@ -109,6 +109,9 @@ precision: input
 ## Default number of densification points in meters (false to disable, default is by input)
 densify: input
 
+## Default factor of simplifycation points 0 to 1
+simplify: input
+
 ## Allowed formats in output by`format` parameter (`input` is same format of input)
 formats:
   - 'input'

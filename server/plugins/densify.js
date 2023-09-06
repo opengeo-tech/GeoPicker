@@ -14,7 +14,7 @@ module.exports = fp(async fastify => {
 
     if (densify !== false && densify !== 'input') {
 
-      fastify.log.debug(`Set Densify ${densify} meters ${req.url}`);
+      fastify.log.debug(`Set densify ${densify} meters ${req.url}`);
 
       req.data = densifyLocations(req.data, densify);
     }
