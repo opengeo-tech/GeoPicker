@@ -6,6 +6,7 @@ module.exports = (S, fastify) => {
   // eslint-disable-next-line
   const Dataset = S.object()
         .prop('id', S.string())
+        .prop('isDefault', S.boolean())
         .prop('type', S.string().enum(['raster','vector']))
         .prop('band', S.integer())
         .prop('size', S.integer())

@@ -7,7 +7,7 @@ module.exports = async fastify => {
   /**
    * GET
    */
-  fastify.get('/datasets', /*{schema: schemas.datasets},*/ async req => {
+  fastify.get('/datasets', {schema: schemas.datasets}, async req => {
     return datasetsList;
   });
 
