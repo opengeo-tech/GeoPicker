@@ -44,7 +44,7 @@ This basic structure can be extended starting from the environment variable `PRE
 |  ✔️  | GET  | /status              | object | service status, versions, datasets |
 |  ✔️  | GET  | /datasets            | array  | list available datasets and their attributes |
 |  ✔️  | GET  | /datasets/:dataset   | object | search dataset by id |
-|  ❌  | GET  | /datasets/within/:lon/:lat    | array | search dataset contains `lon`,`lat` |
+|  ❌  | GET  | /datasets/:lon/:lat  | array  | search dataset contains `lon`,`lat` |
 |  ✔️  | GET  | /:dataset            | object | show attributes of a certain dataset by id |
 |      |      |                      |        |             |
 |  ✔️  | GET  | /:dataset/:lon/:lat  | array  | get single location value of dataset, densify not supported|
