@@ -22,5 +22,12 @@ module.exports = (S, fastify) => {
             S.string().const('input')
           ])
         )
+        .prop('simplify',
+          S.object()
+          .oneOf([
+            S.number().minimum(0).maximum(1),
+            S.string().const('input')
+          ])
+        )
   }
 }

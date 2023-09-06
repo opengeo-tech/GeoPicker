@@ -14,7 +14,7 @@ module.exports = fp(async fastify => {
 
     if (precision !== false && precision !== 'input') {
 
-      fastify.log.debug(`Set Precision ${precision} ${req.url}`);
+      fastify.log.debug(`Set precision ${precision} ${req.url}`);
 
       setPrecision(req.data, precision);
 
