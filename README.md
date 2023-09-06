@@ -61,7 +61,7 @@ This basic structure can be extended starting from the environment variable `PRE
 |Status|Parameter | Default  | Description |
 |------|----------|----------|-------------|
 |  ✔️  | precision| `input`  | rounded to digits decimal precision |
-|  ✔️  | format   | `input`  |  |
+|  ✔️  | format   | `input`  | output format conversion |
 |  ✔️  | densify  | `input`  | enable densification of points in the result |
 |  ✔️  | simplify | `input`  | enable simplication geometry of the result |
 |  ❌  | height   | false    | add vertical distance from the ground(only input has elevation) |
@@ -84,11 +84,11 @@ the support for various input and output formats is summarized in the table
 |-----------|----|----|-------------|
 | `input`   | ✔️ | ✔️ | means the same format as the input data |
 | `array`   | ✔️ | 🚧 | each location is `Array` and a Z dimension as value `[lon,lat,val]` |
-| `json`    | ✔️ | 🚧 | each location is `Object` having `lon`,`lat` and `val` attributes |
+| `json`    | ✔️ | 🚧 | each location is `Object` having `lon`,`lat` and `val` attributes   |
 | `geojson` | ✔️ | 🚧 | standard GeoJSON objects `Feature`, `Geometry` with a Z dimension in `coordinates` as value |
-| `polyline`| 🚧 | ✔️ | [Encoded Polyline Algorithm](https://developers.google.com/maps/documentation/utilities/polylinealgorithm)|
+| `polyline`| 🚧 | ✔️ | [Encoded Polyline Algorithm](https://developers.google.com/maps/documentation/utilities/polylinealgorithm) |
 | `gpx`     | 🚧 | ✔️ | GPS eXchange Format is an XML textual format |
-| `csv`     | ❌ | ❌ | Comma-separated values is an textual format |
+| `csv`     | ❌ | ❌ | Comma-separated values is an textual format  |
 | `kml`     | ❌ | ❌ | Keyhole Markup Language is an XML format for Google Earth|
 
 each endpoint has its own default format, for example endpoint `/dataset/lon/lat` return a simple array of one value.
