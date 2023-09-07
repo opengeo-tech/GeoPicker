@@ -1,6 +1,6 @@
 {
   "name": "@stefcud/geopicker",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "description": "Geospatial data picker via fast http rest interface",
   "repository": {
     "type": "git",
