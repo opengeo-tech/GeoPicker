@@ -17,11 +17,13 @@ module.exports = (S, fastify) => {
         .prop('unit', S.string())
         .prop('dataType', S.string())
         .prop('noData', S.number())
-        .prop('pixelSize', S.object()
+        .prop('pixelSize',
+          S.object()
           .prop('x', S.number())
           .prop('y', S.number())
         )
-        .prop('bbox', S.object()
+        .prop('bbox',
+          S.object()
           .prop('minLon', S.number())
           .prop('minLat', S.number())
           .prop('maxLon', S.number())

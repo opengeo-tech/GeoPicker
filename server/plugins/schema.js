@@ -11,6 +11,7 @@ module.exports = fp(async fastify => {
     ...require('../schemas/locations')(S, fastify),
     ...require('../schemas/geometry')(S, fastify),
     ...require('../schemas/metadata')(S, fastify),
+    ...require('../schemas/status')(S, fastify),
     ...require('../schemas/lonlat')(S, fastify),
     ...require('../schemas/params')(S, fastify),
     ...require('../schemas/query')(S, fastify),

@@ -33,9 +33,9 @@ module.exports = async fastify => {
       maxLocations,
       maxParamLength,
       bodyLimit,
+      crossorigin,
       datasets,
       formats,
-      crossorigin,
       compression
     }
   }

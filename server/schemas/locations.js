@@ -38,7 +38,10 @@ module.exports = (S, fastify) => {
     locationsGet: {
       description: 'Get multiple locations stringified',
       params: locations.extend(params),
-      query
+      query,
+      /*response: {
+        200: locationsArrayVal
+      }*/
     },
     locationsPost: {
       description: 'Post array locations in body',

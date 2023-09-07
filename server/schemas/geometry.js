@@ -10,9 +10,11 @@ module.exports = (S, fastify) => {
     .oneOf([
         S.object()
         .prop('type', S.string().const('LineString')).required()
-        .prop('coordinates', S.array().minItems(2).maxItems(maxLocations).items(
-          S.array().minItems(2).items(S.number())
-        )).required()
+        .prop('coordinates',
+          S.array().minItems(2).maxItems(maxLocations).items(
+            S.array().minItems(2).items(S.number())
+          )
+        ).required()
         ,
         S.object()
         .prop('type', S.string().const('Point')).required()
