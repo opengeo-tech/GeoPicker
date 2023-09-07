@@ -16,20 +16,18 @@ module.exports = async fastify => {
     return datasets[ datasetId ] || errors.nodataset;
   });
 
+  fastify.get('/datasets/:lon/:lat', {schema: schemas.datasetsLonlat}, async req => {
+
+    const {lon, lat} = req.params
+        , datasetsFound = datasetsList.filter(d => bboxContains(d.bbox, lon, lat));
+
+    return datasetsFound.length ? datasetsFound : errors.nodataset;
+  });
+
   fastify.get('/:datasetId', {schema: schemas.datasetGet}, async req => {
 
     const {datasetId} = req.params;
 
     return datasets[ datasetId ] || errors.nodataset;
   });
-
-  fastify.get('/datasets/:lon/:lat', {schema: schemas.datasetsLonlat}, async req => {
-
-    const {lon, lat} = req.params;
-
-    const datasetsFound = datasetsList.filter(d => bboxContains(d.bbox, lon, lat));
-
-    return datasetsFound.length ? datasetsFound : errors.nodataset;
-  });
-
 }
