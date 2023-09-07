@@ -8,17 +8,17 @@ module.exports = async fastify => {
     return datasetsList;
   });
 
-  fastify.get('/datasets/:dataset', {schema: schemas.datasetGet}, async req => {
+  fastify.get('/datasets/:datasetId', {schema: schemas.datasetGet}, async req => {
 
-    const {dataset} = req.params
+    const {datasetId} = req.params
 
-    return datasets[ dataset ] || errors.nodataset;
+    return datasets[ datasetId ] || errors.nodataset;
   });
 
-  fastify.get('/:dataset', {schema: schemas.datasetGet}, async req => {
+  fastify.get('/:datasetId', {schema: schemas.datasetGet}, async req => {
 
-    const {dataset} = req.params
+    const {datasetId} = req.params
 
-    return datasets[ dataset ] || errors.nodataset;
+    return datasets[ datasetId ] || errors.nodataset;
   });
 }

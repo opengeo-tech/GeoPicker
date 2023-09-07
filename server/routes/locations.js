@@ -5,12 +5,12 @@ module.exports = async fastify => {
       , {compress, sepLocs, sepCoords} = config
       , {getValue, setValue} = gpicker;
 
-  fastify.get('/:dataset/:locations', {schema: schemas.locationsGet, compress}, async req => {
+  fastify.get('/:datasetId/:locations', {schema: schemas.locationsGet, compress}, async req => {
 
     return getValue(req.data, datasetDefault, {sepLocs, sepCoords});
   });
 
-  fastify.post('/:dataset/locations', {schema: schemas.locationsPost, compress}, async req => {
+  fastify.post('/:datasetId/locations', {schema: schemas.locationsPost, compress}, async req => {
 
     return setValue(req.data, datasetDefault);
   });

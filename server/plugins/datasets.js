@@ -1,5 +1,5 @@
 /**
- * generate fastify.datasets decorators: datasets, datasetsNames, datasetDefault
+ * generate fastify.datasets decorators
  * and check datasets defined in config.yml
  */
 const fs = require('fs')
@@ -66,12 +66,12 @@ module.exports = fp(async fastify => {
   }
 
   // eslint-disable-next-line
-  const datasetsNames = Object.keys(listDatasets)
+  const datasetsIds = Object.keys(listDatasets)
 
   fastify.decorate('datasets', listDatasets);
-  fastify.decorate('datasetsNames', datasetsNames);
+  fastify.decorate('datasetsIds', datasetsIds);
 
-  fastify.log.info(`Datasets available: ${datasetsNames}`);
+  fastify.log.info(`Datasets available: ${datasetsIds}`);
 
   if (fs.existsSync(defaultFile)) {
 

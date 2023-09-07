@@ -43,16 +43,16 @@ This basic structure can be extended starting from the environment variable `PRE
 |  ✔️  | GET  | /                    | html   | default demo map page if enabled by env var `DEMO_PAGE=true` |
 |  ✔️  | GET  | /status              | object | service status, versions, datasets |
 |  ✔️  | GET  | /datasets            | array  | list available datasets and their attributes |
-|  ✔️  | GET  | /datasets/:dataset   | object | search dataset by id |
+|  ✔️  | GET  | /datasets/:datasetId | object | search dataset by id |
 |  ❌  | GET  | /datasets/:lon/:lat  | array  | search dataset contains `lon`,`lat` |
-|  ✔️  | GET  | /:dataset            | object | show attributes of a certain dataset by id |
+|  ✔️  | GET  | /:datasetId          | object | show attributes of a certain dataset by id |
 |      |      |                      |        |             |
-|  ✔️  | GET  | /:dataset/:lon/:lat  | array  | get single location value of dataset, densify not supported|
-|  ✔️  | GET  | /:dataset/:locations | array  | locations is a string (format: `lon,lat|lon,lat|lon,lat`), densify not supported |
+|  ✔️  | GET  | /:datasetId/:lon/:lat  | array  | get single location value of dataset, densify not supported|
+|  ✔️  | GET  | /:datasetId/:locations | array  | locations is a string (format: `lon,lat|lon,lat|lon,lat`), densify not supported |
 |      |      |                      |        |             |
-|  ✔️  | POST | /:dataset/lonlat     | arrays | accept array or object in body |
-|  ✔️  | POST | /:dataset/locations  | arrays | accept array or object of locations in body (format is `[[lon,lat],[lon,lat],[lon,lat]]`) |
-|  ✔️  | POST | /:dataset/geometry   | object | geojson Point or LineString in body (support feature/geometry/f.collection)|
+|  ✔️  | POST | /:datasetId/lonlat   | arrays | accept array or object in body |
+|  ✔️  | POST | /:datasetId/locations| arrays | accept array or object of locations in body (format is `[[lon,lat],[lon,lat],[lon,lat]]`) |
+|  ✔️  | POST | /:datasetId/geometry | object | geojson Point or LineString in body (support feature/geometry/f.collection)|
 |      |      |                      |        |             |
 |  ✔️  | GET  | /metadata/:locations | object | return info about direction, length, centroid, middlepoint of locations |
 |  ✔️  | POST | /metadata/geometry   | object | return info about direction, length, centroid, middlepoint of geometry |
@@ -69,8 +69,9 @@ This basic structure can be extended starting from the environment variable `PRE
 
 Some behaviors to know about parameters are that:
 
-- only `POST` endpoints and some formats return coordinates and then support `precision` and `densify` parameters.
-- from version v1.6.1 `/<datasetname>/...` is the same of `/datasets/<datasetname>/...` `datasets` is implicit.
+- `precision` and `densify` parameters is only supported by endpoints and formats that return coordinates
+- `datasetId` can have the value `default` to referring the main dataset defined in config
+- from version v1.6.1 `/<datasetId>/...` is the same of `/datasets/<datasetId>/...` `/datasets/` is implicit.
 
 ### Formats
 
@@ -131,13 +132,13 @@ some useful tools for contributors `npm run <scriptname>`
 
 Get single location exchanging a few bytes:
 ```bash
- $ curl "http://localhost:9090/elevation/11.123/46.123"
+ $ curl "http://localhost:9090/default/11.123/46.123"
 
 [195]
 ```
 
 ```bash
-$ curl "http://localhost:9090/elevation/11.123/46.123?format=gpx"
+$ curl "http://localhost:9090/default/11.123/46.123?format=gpx"
 ```
 output is a waypoint in GPX format:
 

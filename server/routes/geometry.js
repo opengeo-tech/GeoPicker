@@ -6,7 +6,7 @@ module.exports = async fastify => {
       // eslint-disable-next-line
       , {compress} = config;
 
-  fastify.post('/:dataset/geometry', {/*schema: schemas.geometryPost, */compress}, async req => {
+  fastify.post('/:datasetId/geometry', {/*schema: schemas.geometryPost, */compress}, async req => {
     //FIXME schema not work
 
     return setValue(req.data, datasetDefault);

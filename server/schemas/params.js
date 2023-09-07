@@ -1,12 +1,12 @@
 
 module.exports = (S, fastify) => {
 
-  const {datasetsNames} = fastify
+  const {datasetsIds} = fastify
 
   return {
     params: S.object()
-        .prop('dataset',
-          S.string().enum(datasetsNames)
+        .prop('datasetId',
+          S.string().enum(datasetsIds)
         )
         .default('default')
         .required()

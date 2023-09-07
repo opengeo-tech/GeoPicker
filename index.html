@@ -209,7 +209,7 @@
     <script>
 
     const api = location.href
-        , dataset = 'default'
+        , datasetId = 'default'
         , center = [46, 11]
         , zoom = 9;
 
@@ -262,14 +262,6 @@
             logger('<-', res)
         });
     }
-    function getDataset(name) {
-        const url = j(api, dataset);
-
-        logger('-> GET', url)
-        return $.getJSON(url).done(res => {
-            logger('<-', res)
-        });
-    }
     function getDatasets() {
         const url = j(api, 'datasets');
 
@@ -278,8 +270,16 @@
             logger('<-', res)
         });
     }
+    function getDataset(name) {
+        const url = j(api, datasetId);
+
+        logger('-> GET', url)
+        return $.getJSON(url).done(res => {
+            logger('<-', res)
+        });
+    }
     function getLonlat(lon, lat) {
-        const url = j(api, dataset, lon, lat);
+        const url = j(api, datasetId, lon, lat);
 
         logger('-> GET', url)
         return $.getJSON(url).done(res => {
@@ -287,7 +287,7 @@
         });
     }
     function postLonlat(lon, lat) {
-        const url = j(api, dataset, 'lonlat');
+        const url = j(api, datasetId, 'lonlat');
 
         logger('-> POST', url)
         return $.ajax({
@@ -302,7 +302,7 @@
     }
     function postGeometry(geo) {
 
-        const url = j(api, dataset, 'geometry');
+        const url = j(api, datasetId, 'geometry');
 
         logger('-> POST', url)
         return $.ajax({
@@ -346,7 +346,7 @@
     function getLocations(locs) {
         const locations = locs.map(a => a.join(',')).join('|');
 
-        const url = j(api, dataset, locations);
+        const url = j(api, datasetId, locations);
 
         logger('-> GET', url)
         return $.getJSON(url).done(values => {
@@ -373,7 +373,7 @@
         });
     }
     function postLocations(locs) {
-        const url = j(api, dataset, 'locations');
+        const url = j(api, datasetId, 'locations');
 
         logger('-> POST', locs);
         return $.ajax({
@@ -725,7 +725,7 @@
             e.preventDefault()
             e.stopImmediatePropagation();
 
-            getDataset(dataset).done(res => {
+            getDataset(datasetId).done(res => {
 
                 logger(JSON.stringify(res,null,4))
 
