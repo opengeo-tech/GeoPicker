@@ -412,12 +412,12 @@
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(geo),
             })
-            .done(meta => {
+            .done(res => {
 
-                logger('<-', meta)
+                logger('<- METADATA',JSON.stringify(res,null,4));
 
-                L.circleMarker(meta.centroid.reverse(), {color:'green', radius: 6}).addTo(editableLayers);
-                L.circleMarker(meta.middlepoint.reverse(), {color:'yellow', radius: 6}).addTo(editableLayers);
+                L.circleMarker(res.centroid.reverse(), {color:'green', radius: 6}).addTo(editableLayers);
+                L.circleMarker(res.middlepoint.reverse(), {color:'yellow', radius: 6}).addTo(editableLayers);
             });
     }
 
