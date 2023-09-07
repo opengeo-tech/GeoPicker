@@ -2,8 +2,10 @@
 module.exports = (S, fastify) => {
 
   const {config: {maxLocations, sepLocs, sepCoords}} = fastify
+      //, {lonlat} = require('./lonlat')(S, fastify)
       , {params} = require('./params')(S, fastify)
-      , {query} = require('./query')(S, fastify);
+      , {query} = require('./query')(S, fastify)
+
 
   //FIXME manage other chars for sepLocs (only pipe require a slash before `\|`)
   const regText = `(?=^([^\${sepLocs}]*${sepLocs}){1,}[^\${sepLocs}]*$)(?=^([^${sepCoords}]*${sepCoords}){2,}[^${sepCoords}]*$)`
@@ -13,14 +15,27 @@ module.exports = (S, fastify) => {
   //min 1 pipe: /^([^,]*,){2,}[^,]*$/
   //min 1 pipe: /^([^\|]*\|){1,}[^\|]*$/
 
+  const locationsString = S.string().pattern(regLocs)
+
   const locations = S.object()
         .prop('locations',
-            S.string().pattern(regLocs)
+            locationsString
           ).required()
+
+  const locationsArray = S.array().minItems(2).maxItems(maxLocations).items(
+          S.array().minItems(2).items(S.number())
+        );
+
+  const locationsArrayVal = S.array().minItems(2).maxItems(maxLocations).items(
+          S.array().minItems(3).items(S.number())
+        );
 
   return {
     locations,
-    locationsString: {
+    locationsArray,
+    locationsArrayVal,
+    locationsString,
+    locationsGet: {
       description: 'Get multiple locations stringified',
       params: locations.extend(params),
       query
@@ -29,14 +44,10 @@ module.exports = (S, fastify) => {
       description: 'Post array locations in body',
       params,
       query,
-      body: S.array().minItems(2).maxItems(maxLocations).items(
-          S.array().minItems(2).items(S.number())
-        ),
-      /*response: {
-        200: S.array().minItems(2).maxItems(maxLocations).items(
-          S.array().minItems(3).items(S.number())
-        )
-      }*/
+      body: locationsArray,
+      response: {
+        200: locationsArrayVal
+      }
     }
   }
 }
