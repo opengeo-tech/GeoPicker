@@ -23,14 +23,16 @@ module.exports = (S, fastify) => {
   return {
     metadata,
     metadataLocations: {
-      description: 'Metadata info about a list of locations',
+      description: 'Get Metadata info about a list of locations',
       params: locations,
+      //TODO add query for parameters: precision, simplify, densify
       response: {
         200: metadata
       }
     },
     metadataGeometry: {
-      description: 'Metadata info about a geojson',
+      description: 'Post Metadata info about a geojson',
+      //TODO add query for parameters: precision, simplify, densify
       //TODO body: geometry,
       response: {
         200: metadata

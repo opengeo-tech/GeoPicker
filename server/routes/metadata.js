@@ -6,11 +6,11 @@ module.exports = async fastify => {
 
   fastify.get('/metadata/:locations', {schema: schemas.metadataLocations}, async req => {
 
-    return getMetadata(req.body);
+    return getMetadata(req.data);
   });
 
   fastify.post('/metadata/geometry', {schema: schemas.metadataGeometry}, async req => {
 
-    return getMetadata(req.body);
+    return getMetadata(req.data);
   });
 }

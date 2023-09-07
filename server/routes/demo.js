@@ -28,6 +28,7 @@ module.exports = async fastify => {
 
   fastify.get(demourl, {
       schema: {
+        hide: true,
         description: 'Interactive demo page which demostrates how it works GeoPicker endpoints',
       }
     }, async (req, res) => {
