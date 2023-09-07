@@ -749,7 +749,7 @@
     var controlDatasets = new L.Control({ position: 'topleft' });
 
     controlDatasets.onAdd = map => {
-        var div = $('<a id="get_datasets" class="leaflet-control-btn"><i class="fa fa-database"></i> Show Datasets info</a>');
+        var div = $('<a id="get_datasets" class="leaflet-control-btn"><i class="fa fa-database"></i> Show Datasets list</a>');
         div.on('click', e => {
             e.preventDefault()
             e.stopImmediatePropagation();

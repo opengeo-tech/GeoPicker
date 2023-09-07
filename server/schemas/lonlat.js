@@ -12,13 +12,10 @@ module.exports = (S, fastify) => {
         .prop('lat', lat).required()
 
   const lonlatVal = S.object()
-          .prop('val', S.number())  //TODO change number to any
-          .extend(lonlat)
+        .prop('val', S.number())  //TODO change number to any
+        .extend(lonlat)
 
-  const lonlatArray = S.array().minItems(2).maxItems(2).items([
-          lon,
-          lat
-        ]);
+  const lonlatArray = S.array().minItems(2).maxItems(2).items([lon, lat]);
 
   return {
     lon,

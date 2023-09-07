@@ -2,6 +2,7 @@
 module.exports = (S, fastify) => {
 
   const {params} = require('./params')(S, fastify)
+      , {lonlat} = require('./lonlat')(S, fastify);
 
   // eslint-disable-next-line
   const dataset = S.object()
@@ -20,23 +21,28 @@ module.exports = (S, fastify) => {
           .prop('maxLat', S.number())
         );
 
+  const datasets = S.array().items(dataset);
+
   return {
     dataset,
     datasetGet: {
-      description: 'Describe single dataset',
+      description: 'Describe single dataset by id',
       params,
       response: {
         200: dataset
       }
     },
+    datasetsLonlat: {
+      description: 'Search datasets contains lon,lat',
+      params: lonlat,
+      response: {
+        200: datasets
+      }
+    },
     datasetsList: {
       description: 'Describe all datasets available',
       response: {
-        200: S.array().items(dataset)
-        /*200: S.object() //object version
-            .patternProperties({
-                '.*': dataset
-            })*/
+        200: datasets
       }
     }
   }

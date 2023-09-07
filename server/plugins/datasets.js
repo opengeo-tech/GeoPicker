@@ -11,12 +11,12 @@ module.exports = fp(async fastify => {
       , {datapath, datasets} = config
 
   if (!fs.existsSync(datapath)) {
-    fastify.log.error(errors.nodatadir);
+    fastify.log.error(errors.nodatadir.message);
     //throw errors.nodatadir
   }
 
   if (!datasets || !datasets.default) {
-    fastify.log.error(errors.nodatasets);
+    fastify.log.error(errors.nodatasets.message);
     //throw errors.nodatasets;
   }
 
@@ -61,7 +61,7 @@ module.exports = fp(async fastify => {
   }
 
   if (Object.keys(listDatasets).length===0) {
-    fastify.log.error(errors.nodatasets);
+    fastify.log.error(errors.nodatasets.message);
     //throw errors.nodatasets;
   }
 
@@ -81,7 +81,7 @@ module.exports = fp(async fastify => {
     fastify.log.info(`Dataset default loaded: ${defaultFile}`);
   }
   else {
-    fastify.status = errors.nodatasetdefault;
-    fastify.log.warn(errors.nodatasetdefault);
+    fastify.status = errors.nodatasetdefault.message;
+    fastify.log.warn(errors.nodatasetdefault.message);
   }
 });

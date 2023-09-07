@@ -3,14 +3,23 @@
  */
 const fp = require('fastify-plugin');
 
+const errors = {
+  nodatadir: ["Data directory not exists", 500],
+  nodataset: ["Dataset not found", 404],
+  nodatasets: ["At least one default dataset is required", 500],
+  nodatasetdefault: ["Default dataset file not exists", 500],
+  //noformat: ["Request format not supported", 400],
+  //nolocations: ["Require array of locations", 400],
+};
+
 module.exports = fp(async fastify => {
-  fastify.decorate('errors', {
-    nodatadir: "Data directory not exists",
-    nodataset: "Dataset name not exists",
-    nodatasets: "At least one default dataset is required",
-    nodatasetdefault: "Default dataset file not exists",
-    noformat: "Request format not supported",
-    nolocations: "Require array of locations",
-    outofbounds: "Location is out of dataset bounds",
-  });
+
+  //convert in Error objects
+  for (const id in errors) {
+    const [message, code] = errors[id]
+    errors[id] = new Error(message);
+    errors[id].statusCode = code;
+  }
+
+  fastify.decorate('errors', errors);
 })
