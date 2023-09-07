@@ -46,7 +46,7 @@ module.exports = fp(async fastify => {
           id,
           isDefault,
           //path: val.path,
-          size,
+          fileSize: size,
           epsg: val.epsg,
           band: val.band || 1,
           ...meta
