@@ -4,7 +4,7 @@ module.exports = (S, fastify) => {
   const {params} = require('./params')(S, fastify)
 
   // eslint-disable-next-line
-  const Dataset = S.object()
+  const dataset = S.object()
         .prop('id', S.string())
         .prop('isDefault', S.boolean())
         .prop('type', S.string().enum(['raster','vector']))
@@ -21,20 +21,21 @@ module.exports = (S, fastify) => {
         );
 
   return {
-    dataset: {
+    dataset,
+    datasetGet: {
       description: 'Describe single dataset',
       params,
       response: {
-        200: Dataset
+        200: dataset
       }
     },
-    datasets: {
+    datasetsList: {
       description: 'Describe all datasets available',
       response: {
-        200: S.array().items(Dataset)
+        200: S.array().items(dataset)
         /*200: S.object() //object version
             .patternProperties({
-                '.*': Dataset
+                '.*': dataset
             })*/
       }
     }

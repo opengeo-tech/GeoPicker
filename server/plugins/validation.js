@@ -9,7 +9,9 @@ const fp = require('fastify-plugin')
 
 module.exports = fp(async fastify => {
 
-  const {config: {validation, maxLocations}, schemas: {locationsString}} = fastify;
+  const {config, schemas} = fastify
+      , {validation, maxLocations} = config
+      , {locationsString} = schemas;
 
   if (!validation) {
     fastify.setValidatorCompiler(() => {

@@ -4,27 +4,18 @@ module.exports = async fastify => {
   const {datasets, schemas, errors} = fastify
       , datasetsList = Object.entries(datasets).map(d => d[1])
 
-  /**
-   * GET
-   */
-  fastify.get('/datasets', {schema: schemas.datasets}, async req => {
+  fastify.get('/datasets', {schema: schemas.datasetsList}, async req => {
     return datasetsList;
   });
 
-  /**
-   * GET
-   */
-  fastify.get('/datasets/:dataset', {schema: schemas.dataset}, async req => {
+  fastify.get('/datasets/:dataset', {schema: schemas.datasetGet}, async req => {
 
     const {dataset} = req.params
 
     return datasets[ dataset ] || errors.nodataset;
   });
 
-  /**
-   * GET short alias enpoint
-   */
-  fastify.get('/:dataset', {schema: schemas.dataset}, async req => {
+  fastify.get('/:dataset', {schema: schemas.datasetGet}, async req => {
 
     const {dataset} = req.params
 

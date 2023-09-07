@@ -9,6 +9,6 @@ module.exports = (S, fastify) => {
           S.string().enum(datasetsNames)
         )
         .default('default')
-        .required(),
+        .required()
   }
 }

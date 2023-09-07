@@ -13,15 +13,16 @@ module.exports = (S, fastify) => {
   //min 1 pipe: /^([^,]*,){2,}[^,]*$/
   //min 1 pipe: /^([^\|]*\|){1,}[^\|]*$/
 
-  const Locations = params
+  const locations = S.object()
         .prop('locations',
             S.string().pattern(regLocs)
           ).required()
 
   return {
+    locations,
     locationsString: {
       description: 'Get multiple locations stringified',
-      params: Locations,
+      params: locations.extend(params),
       query
     },
     locationsPost: {

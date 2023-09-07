@@ -1,7 +1,10 @@
 
 module.exports = (S, fastify) => {
 
-  const Metadata = S.object()
+  const {locations} = require('./locations')(S, fastify)
+      //, {geometry} = require('./geometry')(S, fastify)
+
+  const metadata = S.object()
         .prop('length', S.integer())
         .prop('direction', S.integer())
         .prop('centroid',
@@ -18,11 +21,19 @@ module.exports = (S, fastify) => {
         );
 
   return {
-    metadata: {
-      description: 'Metadata info about geometry',
-      //body: Geometry,
+    metadata,
+    metadataLocations: {
+      description: 'Metadata info about a list of locations',
+      params: locations,
       response: {
-        200: Metadata
+        200: metadata
+      }
+    },
+    metadataGeometry: {
+      description: 'Metadata info about a geojson',
+      //TODO body: geometry,
+      response: {
+        200: metadata
       }
     }
   }

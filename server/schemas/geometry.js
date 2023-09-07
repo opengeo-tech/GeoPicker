@@ -6,7 +6,7 @@ module.exports = (S, fastify) => {
       , {params} = require('./params')(S, fastify);
 
   // eslint-disable-next-line
-  const Geometry = S.object()
+  const geometry = S.object()
     .oneOf([
         S.object()
         .prop('type', S.string().const('LineString')).required()
@@ -22,13 +22,14 @@ module.exports = (S, fastify) => {
     ]);
 
   return {
-    geometry: {
+    geometry,
+    geometryPost: {
       description: 'JSON as geojson geometry',
       params,
       query,
-      body: Geometry,
+      body: geometry,
       response: {
-        200: Geometry
+        200: geometry
       }
     }
   }
