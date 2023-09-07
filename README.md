@@ -258,15 +258,14 @@ for details see the descriptions in the [Roadmap issues](https://github.com/open
 
 |Status| Goal        |
 |------|-------------|
-|  ✔️   | Swagger Documentation Interface |
-|  ❌  | manage multiple datasets |
+|  ✔️  | Swagger Documentation Interface |
+|  🚧  | manage multiple datasets |
 |  🚧  | ES6 modules |
 |  🚧  | extend benchmarks for any endpoints |
 |  ✔️  | enable densify function |
 |  🚧  | enable simply function |
 |  ❌  | unit testing |
-|  ❌  | support vector format in datasets, such as shapefile  |
-|  ❌  | supports complex geometries in input |
+|  ❌  | support vector format in datasets, such as shapefile |
 |  ❌  | limit access by api key |
 |  ❌  | caching responses |
 |  ❌  | interfaces: websocket, jsonrpc |

@@ -4,12 +4,10 @@
  * https://opengeo.tech
  */
 const basepath = __dirname
-    , {resolve} = require('path')
-    , configYml = require('@stefcud/configyml')
+    , config = require('@stefcud/configyml')({basepath})
     , Fastify = require('fastify')
     , gpicker = require('../lib')
-    , package = require(resolve(`${basepath}/../package.json`))
-    , config = configYml({basepath})
+    , {utils, package} = gpicker
     , {fastifyConf, port, host, prefix} = config
     , {cors, compress, swagger, demopage, isDev} = config;
 
@@ -19,13 +17,14 @@ const fastify = Fastify(fastifyConf);
 /**
  * Decorators
  */
-fastify.decorate('package', package);
-fastify.decorate('gpicker', gpicker);
 fastify.decorate('config',  config);
+fastify.decorate('gpicker', gpicker);
+fastify.decorate('package', package);
+fastify.decorate('utils',   utils);
 fastify.decorate('status', 'OK');
 
 /**
- * Base Plugins configs and utils
+ * Base Plugins
  */
 fastify.register(require('./plugins/errors'));
 fastify.register(require('./plugins/datasets'));
@@ -55,6 +54,7 @@ if (demopage.enabled) {
 if (isDev) {
     fastify.register(require('./plugins/debug'));
 }
+
 /**
  * Routes
  */

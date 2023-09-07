@@ -3,9 +3,7 @@ const {resolve} = require('path');
 
 module.exports = async fastify => {
 
-  const {config, status, gpicker, package, schemas, datasetsIds} = fastify
-      , {utils: {humanSize} } = gpicker
-      , {version, homepage} = package
+  const {config, status, gpicker, package, utils: {humanSize}, schemas, datasetsIds} = fastify
       , {fastifyConf, attribution, swagger, compress, cors, demopage, formats} = config
       , {validation, maxLocations, precision} = config
       , {maxParamLength, bodyLimit} = fastifyConf || {}
@@ -14,6 +12,7 @@ module.exports = async fastify => {
       , crossorigin = cors.enabled ? cors.origin : false
       , compression = compress.enabled ? compress.encodings : false
       , frontend = demopage ? demopage.path : false
+      , {version, homepage} = package
       , documentation = swagger.enabled ? resolve(swagger.routePrefix) : homepage;
 
   // eslint-disable-next-line

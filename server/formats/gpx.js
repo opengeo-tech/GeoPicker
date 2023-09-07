@@ -3,8 +3,7 @@ const togpx = require('togpx');
 
 module.exports = fastify => {
   const {package} = fastify
-      , {version, homepage} = package
-      , creator = `Geopicker ${version} - ${homepage}`;
+      , creator = `Geopicker v${package.version} - ${package.homepage}`;
 
   return {
     gpxRead: (data, req) => {

@@ -1,8 +1,7 @@
 
 module.exports = async fastify => {
 
-  const {gpicker, datasets, schemas, errors} = fastify
-      , {utils: {bboxContains} } = gpicker
+  const {datasets, schemas, errors, utils: {bboxContains}} = fastify
       , datasetsList = Object.entries(datasets).map(d => d[1])
 
   fastify.get('/datasets', {schema: schemas.datasetsList}, async req => {

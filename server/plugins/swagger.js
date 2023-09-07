@@ -26,8 +26,6 @@ module.exports = fp(async fastify => {
         url: homepage,
         description: attribution
       }
-      //servers: [ Object ],
-      //components: Object,
     }
   });
 

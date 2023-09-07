@@ -5,8 +5,7 @@ const fp = require('fastify-plugin');
 
 module.exports = fp(async fastify => {
 
-  const {config, gpicker} = fastify
-      , {utils: {setPrecision}} = gpicker;
+  const {config, utils: {setPrecision}} = fastify;
 
   fastify.addHook('preHandler', (req, res, done) => {
 

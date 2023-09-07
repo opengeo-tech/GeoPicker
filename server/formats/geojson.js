@@ -2,8 +2,7 @@
 
 module.exports = fastify => {;
 
-  const {utils: {parseLocations}} = fastify.gpicker
-  //TODO Response set schema
+  const {utils: {parseLocations}} = fastify;
 
   return {
     geojsonRead: (data, req) => {

@@ -5,8 +5,7 @@ const fp = require('fastify-plugin');
 
 module.exports = fp(async fastify => {
 
-  const {config, gpicker} = fastify
-      , {utils: {densifyLocations}} = gpicker;
+  const {config, utils: {densifyLocations}} = fastify;
 
   fastify.addHook('preHandler', (req, res, done) => {
 

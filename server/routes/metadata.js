@@ -1,8 +1,7 @@
 
 module.exports = async fastify => {
 
-  const {schemas, gpicker} = fastify
-      , {utils: {getMetadata} } = gpicker;
+  const {schemas, utils: {getMetadata}} = fastify;
 
   fastify.get('/metadata/:locations', {schema: schemas.metadataLocations}, async req => {
 
