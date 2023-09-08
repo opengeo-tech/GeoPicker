@@ -26,11 +26,11 @@ module.exports = (S, fastify) => {
           S.number()
         );
 
-  const locationsArray = S.array().minItems(2).maxItems(maxLocations).items(
+  const locationsArray = S.array().minItems(1).maxItems(maxLocations).items(
           S.array().minItems(2).items(S.number())
         );
 
-  const locationsArrayVal = S.array().minItems(2).maxItems(maxLocations).items(
+  const locationsArrayVal = S.array().minItems(1).maxItems(maxLocations).items(
           S.array().minItems(3).items(S.number())
         );
 

@@ -4,8 +4,8 @@ module.exports = (S, fastify) => {
   const {query} = require('./query')(S, fastify)
       , {params} = require('./params')(S, fastify);
 
-  const lon = S.number().minimum(-180).maximum(180)
-      , lat = S.number().minimum(-90).maximum(90);
+  const lon = S.number()//.minimum(-180).maximum(180)
+      , lat = S.number()//.minimum(-90).maximum(90);
 
   const lonlat = S.object()
         .prop('lon', lon).required()
@@ -28,7 +28,7 @@ module.exports = (S, fastify) => {
       params: lonlat.extend(params),
       query,
       response: {
-        200: S.array().items(S.number()) //single array value
+        200: S.array()//.items(S.number()) //single array value
       }
     },
     lonlatPost: {

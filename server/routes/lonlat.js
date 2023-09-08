@@ -6,9 +6,7 @@ module.exports = async fastify => {
 
   fastify.get('/:datasetId/:lon/:lat', {schema: schemas.lonlatGet}, async req => {
 
-    const val = getValue(req.data, datasetDefault);
-
-    return [val];
+    return getValue(req.data, datasetDefault);
   });
 
   fastify.post('/:datasetId/lonlat', {schema: schemas.lonlatPost}, async req => {
