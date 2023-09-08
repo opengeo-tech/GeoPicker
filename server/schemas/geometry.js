@@ -23,15 +23,20 @@ module.exports = (S, fastify) => {
         ).required()
     ]);
 
+const feature = S.object()
+    .prop('type', S.string().const('Feature')).required()
+    .prop('properties', S.object())//.required()
+    .prop('geometry', geometry).required()
+
   return {
     geometry,
     geometryPost: {
       description: 'JSON as geojson geometry',
       params,
       query,
-      body: geometry,
+      body: S.object().oneOf([feature, geometry]),
       response: {
-        200: geometry
+        200: S.object().oneOf([feature, geometry])
       }
     }
   }

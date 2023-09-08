@@ -22,6 +22,10 @@ module.exports = (S, fastify) => {
             locationsString
           ).required()
 
+  const valuesArray = S.array().minItems(2).maxItems(maxLocations).items(
+          S.number()
+        );
+
   const locationsArray = S.array().minItems(2).maxItems(maxLocations).items(
           S.array().minItems(2).items(S.number())
         );
@@ -32,6 +36,7 @@ module.exports = (S, fastify) => {
 
   return {
     locations,
+    valuesArray,
     locationsArray,
     locationsArrayVal,
     locationsString,
@@ -39,9 +44,9 @@ module.exports = (S, fastify) => {
       description: 'Get multiple locations stringified',
       params: locations.extend(params),
       query,
-      /*response: {
-        200: locationsArrayVal
-      }*/
+      response: {
+        200: valuesArray
+      }
     },
     locationsPost: {
       description: 'Post array locations in body',
