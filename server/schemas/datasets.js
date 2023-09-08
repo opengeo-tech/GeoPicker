@@ -26,6 +26,12 @@ module.exports = (S, fastify) => {
           .prop('unit', S.string())
           .prop('x', S.number())
           .prop('y', S.number())
+          //TODO meter
+        )
+        .prop('centroid',
+          S.object()
+          .prop('lon', S.number())
+          .prop('lat', S.number())
         )
         .prop('bbox',
           S.object()
