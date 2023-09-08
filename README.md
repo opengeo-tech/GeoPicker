@@ -18,7 +18,7 @@ Each endpoint and the parameters it accepts have been designed on the basis of t
 At present the index.html page contains a large implementation of browser side requests using LeafletJs as basemap and jQuery.
 
 ## Features
-- **Large Rest API**: ergonomic endpoints suitable for any type of use case
+- **Large API Rest**: ergonomic endpoints suitable for any type of use case
 - **Validation**: full validation of endpoint and parameters via **JSON-Schema** which allows output optimization
 - **Configuration**: friendly configs and to help devs in many deployment contexts
 - **Formats**: support for different geospatial input and output formats
@@ -28,8 +28,9 @@ and includes some other additional functions:
 
 - **Densify**: add more interpolated points in input coordinates, this improves the display on an elevation graph, adding intermediate positions at a minimum fixed distance.
 - **Simplify**: unlike densify it removes points that are too close together from coordinates.
+- **Precision**: alter the coordinates precision digits to lossily reduce the size of a geometry.
 - **Height**: add the vertical distance from the ground, if input has elevation add a fourth coordinate with this value.
-- **Metadata**: get additional informations for a certain geometry, for example: length, direction, bbox, centroid, middlepoint
+- **Metadata**: get on the fly metadata informations for a geometry (ex. length, direction, bbox, centroid, middlepoint)
 
 ## API Rest endpoints
 
@@ -46,14 +47,14 @@ This basic structure can be extended starting from the environment variable `PRE
 |  ✔️  | GET  | /datasets/:datasetId | object | search dataset by id |
 |  ✔️  | GET  | /datasets/:lon/:lat  | array  | search dataset contains `lon`,`lat` |
 |  ✔️  | GET  | /:datasetId          | object | show attributes of a certain dataset by id |
-|      |      |                      |        |             |
+|     |      |                      |        |             |
 |  ✔️  | GET  | /:datasetId/:lon/:lat  | array  | get single location value of dataset, densify not supported|
 |  ✔️  | GET  | /:datasetId/:locations | array  | locations is a string (format: `lon,lat|lon,lat|lon,lat`), densify not supported |
-|      |      |                      |        |             |
+|     |      |                      |        |             |
 |  ✔️  | POST | /:datasetId/lonlat   | arrays | accept array or object in body |
 |  ✔️  | POST | /:datasetId/locations| arrays | accept array or object of locations in body (format is `[[lon,lat],[lon,lat],[lon,lat]]`) |
 |  ✔️  | POST | /:datasetId/geometry | object | geojson Point or LineString in body (support feature/geometry/f.collection)|
-|      |      |                      |        |             |
+|     |      |                      |        |             |
 |  ✔️  | GET  | /metadata/:locations | object | return info about direction, length, centroid, middlepoint of locations |
 |  ✔️  | POST | /metadata/geometry   | object | return info about direction, length, centroid, middlepoint of geometry |
 
@@ -61,10 +62,10 @@ This basic structure can be extended starting from the environment variable `PRE
 
 |Status|Parameter | Default  | Description |
 |------|----------|----------|-------------|
-|  ✔️  | precision| `input`  | rounded to digits decimal precision |
-|  ✔️  | format   | `input`  | output format conversion |
-|  ✔️  | densify  | `input`  | enable densification of points in the result |
-|  ✔️  | simplify | `input`  | enable simplication geometry of the result |
+|  ✔️   | precision| `input`  | rounded to digits decimal precision |
+|  ✔️   | format   | `input`  | output format conversion |
+|  ✔️   | densify  | `input`  | enable densification of points in the result |
+|  ✔️   | simplify | `input`  | enable simplication geometry of the result |
 |  ❌  | height   | false    | add vertical distance from the ground(only input has elevation) |
 
 Some behaviors to know about parameters are that:
