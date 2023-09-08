@@ -16,7 +16,7 @@ module.exports = fp(async fastify => {
 
     //all types of input objects
     if (lon && lat) {
-      req.data = {lon, lat};
+      req.data = [lon, lat];
     }
     else if (typeof locations === 'string') {
       req.data = parseLocations(locations, sepLocs, sepCoords);
