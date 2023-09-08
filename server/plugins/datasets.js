@@ -37,19 +37,13 @@ module.exports = fp(async fastify => {
 
       if (fs.existsSync(file)) {
 
-        const dataset = gpicker.openFile(file, def.band, def.epsg)
-            , meta = dataset.info()
-            , {size} = fs.statSync(file)
+        const dataset = gpicker.openFile(file, val.band)
             , isDefault = (id === 'default' || id === datasets.default);
 
         listDatasets[ id ] = {
           id,
           isDefault,
-          //path: val.path,
-          fileSize: size,
-          epsg: val.epsg,
-          band: val.band || 1,
-          ...meta
+          ...dataset.info
         }
       }
       else {

@@ -52,7 +52,7 @@ if (demopage.enabled) {
     fastify.register(require('./routes/demo'), {prefix});
 }
 if (isDev) {
-    fastify.register(require('./plugins/debug'));
+    //fastify.register(require('./plugins/debug'));
 }
 
 /**

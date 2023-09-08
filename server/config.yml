@@ -127,23 +127,20 @@ datasets:
   test:
     path: test_4611_dem.tif
     band: 1
-    epsg: 4326
   # aliases of same dataset
   altitude: elevation
   elevation:
     path: trentino-altoadige_dem_90m.tif
     band: 1
-    epsg: 4326
   alps:
     path: alps_dem_10m.tif
     band: 1
-    epsg: 4326
-  aspect:
-    path: italia_aspect_30m.tif
+  veneto_elevation:
+    path: veneto_30m_2bands_ele_aspect.tif
+    band: 1
+  veneto_aspect:
+    path: veneto_30m_2bands_ele_aspect.tif
     band: 2
-    epsg: 4326
-  elevation_veneto:
-    path: veneto_30m.tif
   nope:
     path: this-file-not-exists.tif
   #TODO wms:
@@ -152,7 +149,6 @@ datasets:
   #       wmspath: wms.xml
   #       bboxpath:
   #   band: 1
-  #   epsg: 3857
   # TODO band: * # TODO espose all bands if value is *
   # TODO manage shape
   #  admins:
