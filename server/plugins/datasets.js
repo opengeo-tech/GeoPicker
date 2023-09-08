@@ -37,13 +37,13 @@ module.exports = fp(async fastify => {
 
       if (fs.existsSync(file)) {
 
-        const dataset = gpicker.openFile(file, val.band)
+        const {info} = gpicker.openFile(file, val.band)
             , isDefault = (id === 'default' || id === datasets.default);
 
         listDatasets[ id ] = {
           id,
           isDefault,
-          ...dataset.info
+          ...info
         }
       }
       else {

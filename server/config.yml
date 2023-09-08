@@ -135,14 +135,20 @@ datasets:
   alps:
     path: alps_dem_10m.tif
     band: 1
+  ## load from same Geotif different bands
   veneto_elevation:
     path: veneto_30m_2bands_ele_aspect.tif
     band: 1
   veneto_aspect:
     path: veneto_30m_2bands_ele_aspect.tif
     band: 2
+  veneto_mercator3857:
+    path: veneto_30m_3857.tif
+    band: 1
+  ## if path not exists not listed in the endpoint /datasets
   nope:
     path: this-file-not-exists.tif
+  #
   #TODO wms:
   #   path: wms.tif
   #   download:

@@ -12,19 +12,30 @@ Note that some of these(ex. `altitude: elevation`,`ele: elevation`) may be alias
 
 ```yaml
 datapath: '/data'
+## Datasets for `dataset` api parameter
 datasets:
-  default: elevation
-  #aliases of same dataset
+  default: ${DATASET_DEFAULT}
+  test:
+    path: test_4611_dem.tif
+    band: 1
+  # aliases of same dataset
   altitude: elevation
-  ele: elevation
   elevation:
     path: trentino-altoadige_dem_90m.tif
     band: 1
-  aspect:
-    path: trentino-altoadige_aspect_90m.tif
+  alps:
+    path: alps_dem_10m.tif
     band: 1
-  slope:
-    path: trentino-altoadige_slope_90m.tif
+  ## load from same Geotif different bands
+  veneto_elevation:
+    path: veneto_30m_2bands_ele_aspect.tif
+    band: 1
+  veneto_aspect:
+    path: veneto_30m_2bands_ele_aspect.tif
+    band: 2
+  ## if path not exists not listed in the endpoint /datasets
+  nope:
+    path: this-file-not-exists.tif
 ```
 
 ## Fastify Config
