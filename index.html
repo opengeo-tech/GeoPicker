@@ -300,9 +300,13 @@
             logger('<-', res)
         });
     }
-    function postGeometry(geo) {
+    function postGeometry(geo, customParms) {
 
-        const url = j(api, datasetId, 'geometry');
+        let url = j(api, datasetId, 'geometry');
+
+        if( Object.keys(customParms).length>0) {
+            url += '?'+$.param(customParms);
+        }
 
         logger('-> POST', url)
         return $.ajax({
@@ -499,7 +503,7 @@
             } else if (e.layer) {
                 geo = e.layer.toGeoJSON();
             }
-            postGeometry(geo);
+            postGeometry(geo, {densify: 90});  //add point any 90m
         });
 
     /**
