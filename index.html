@@ -62,22 +62,40 @@
     }
     #map {
         margin: 4px 0;
-        width: 100%;
-        height: 500px;
         user-select: none;
+        width: 100%;
+        min-height: 500px;
     }
-    #log {
-        height: auto;
-        max-height: 300px;
-        overflow-y: hidden;
+    #log-handle {
+        color: white;
+        font-size: 20px;
+        line-height: 5px;
+        text-align: center;
+        height: 12px;
+        cursor: ns-resize;
+        background: #0078c2;
+        border-bottom: 1px solid #bbb;
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        z-index: 10;
+    }
+    #log-container {
         font-family: monospace;
         font-size: 14px;
-        background: #ddd;
+        background: #e0f1fb;
         overflow-y: scroll;
         overflow-x: hidden;
-        text-overflow: ellipsis;
         padding: 4px;
         z-index: 10000;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        min-height: 80px;
+        max-height: 300px;
+    }
+    #log {
+        height: 100px;
     }
     .btn-share {
         font-size: 16px;
@@ -204,7 +222,11 @@
     </aside>
     <div id="map">
     </div>
-    <pre id="log"></pre>
+    <div id="log-container">
+        <div id="log-handle">...</div>
+        <pre id="log" style="margin-top:8px;">
+        </pre>
+    </div>
     <script src="//unpkg.com/underscore@1.9.1/underscore.js"></script>
     <script src="//unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
     <script src="//unpkg.com/leaflet@1.4.0/dist/leaflet-src.js"></script>
@@ -255,7 +277,8 @@
 
         log = `<span style="color:${col}">${log}</span>`;
 
-        $divLog.append(`${log}\n`).scrollTop($divLog[0].scrollHeight);
+        $divLog.prepend(`${log}\n`);
+        //$divLog.append(`${log}\n`).scrollTop($divLog[0].parentElement.scrollHeight);
     }
     function j() {
       const args = Array.prototype.map.call(arguments, a => { return `${a}`.replace(/\/$/, '') })
@@ -860,6 +883,7 @@
       controlElevation.clear();
       $divLog.empty();
     }
+
     function showText(obj) {
       if (typeof obj === 'string') {
         $divText.find('span').text(obj)
@@ -871,6 +895,58 @@
         }
       }
     }
+
+    (function() {
+        //const container = document.getElementById('log-container');
+        const logHandle = document.getElementById('log-handle');
+        const log = document.getElementById('log');
+        const mapDiv = document.getElementById('map');
+        let dragging = false, startY = 0, startHeight = 0;
+
+        function adjustMapHeight() {
+            // Get the total height of the window
+            const windowHeight = window.innerHeight;
+            // Get the height of log-container
+            const logContainer = document.getElementById('log-container');
+            const logContainerHeight = logContainer.offsetHeight;
+            // Get the height of header elements above the map
+
+            let headerHeight = 0;
+
+            // Calculate available height for map
+            const available = windowHeight - logContainerHeight - headerHeight - 100; // 8px margin
+            //if (available > 100) {
+                //mapDiv.style.minHeight = available + 'px';
+                mapDiv.style.height = available + 'px';
+            //}
+            setTimeout(() => { map.invalidateSize(); }, 100);
+        }
+
+        logHandle.addEventListener('mousedown', function(e) {
+            dragging = true;
+            startY = e.clientY;
+            startHeight = log.offsetHeight;
+            document.body.style.userSelect = 'none';
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (!dragging) return;
+            let dy = e.clientY - startY;
+            let newHeight = Math.max(50, startHeight - dy);
+            log.style.height = newHeight + 'px';
+            // Adjust map height as log changes
+            adjustMapHeight();
+        });
+
+        document.addEventListener('mouseup', function() {
+            dragging = false;
+            document.body.style.userSelect = '';
+        });
+        window.addEventListener('resize', adjustMapHeight);
+        //window.addEventListener('DOMContentLoaded', adjustMapHeight);
+        setTimeout(adjustMapHeight, 300);
+    })();
+
     </script>
 </body>
 
