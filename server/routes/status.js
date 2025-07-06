@@ -3,7 +3,7 @@ const {resolve} = require('path');
 
 module.exports = async fastify => {
 
-  const {config, status, gpicker, package, utils: {humanSize}, schemas, datasetsIds} = fastify
+  const {config, gpicker, package, utils, datasetsIds} = fastify
       , {fastifyConf, attribution, swagger, compress, cors, demopage, formats} = config
       , {validation, maxLocations, precision} = config
       , {maxParamLength, bodyLimit} = fastifyConf || {}
@@ -17,7 +17,7 @@ module.exports = async fastify => {
 
   // eslint-disable-next-line
   const out = {
-    status,
+    status: fastify.status,
     name: 'GeoPicker',
     version,
     gdal,
@@ -44,9 +44,9 @@ module.exports = async fastify => {
     //https://github.com/fastify/fastify/issues/517#issuecomment-349958775
     //TODO https://github.com/fastify/under-pressure
     out.stats = {
-      memory: humanSize(process.memoryUsage().rss)
+      memory: utils.humanSize(process.memoryUsage().rss)
     }
   }
 
-  fastify.get('/status', {schema: schemas.status}, async () => out);
+  fastify.get('/status', async () => out);
 }

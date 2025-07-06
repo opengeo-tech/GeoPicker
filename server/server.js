@@ -9,7 +9,7 @@ const basepath = __dirname
     , Fastify = require('fastify')
     , {utils, package} = gpicker
     , {fastifyConf, port, host, prefix} = config
-    , {cors, compress, swagger, demopage, isDev} = config;
+    , {cors, compress, swagger, demopage, verbose} = config;
 
 // eslint-disable-next-line
 const fastify = Fastify(fastifyConf);
@@ -42,21 +42,33 @@ fastify.register(require('./plugins/format'));
 if (cors.enabled) {
     fastify.register(require('@fastify/cors'), () => cors);
 }
+/**
+ * Enable compression (gzip, deflate) for responses
+ */
 if (compress.enabled) {
     fastify.register(require('@fastify/compress'), compress);
 }
+/**
+ * Enable Swagger by `@fastify/swagger` and front-end by `@fastify/swagger-ui`
+ */
 if (swagger.enabled) {
     fastify.register(require('./plugins/swagger'), {prefix});
 }
+/**
+ * Enable demo page(index.html) in path defined by `config.demopage.path` url(default: root path)
+ */
 if (demopage.enabled) {
-    fastify.register(require('./routes/demo'), {prefix});
+    fastify.register(require('./routes/demopage'), {prefix});
 }
-if (isDev) {
-    fastify.register(require('./plugins/debug'));
+/**
+ * show configuration informations and endpoints at startup (enabled in development mode)
+ */
+if (verbose) {
+    fastify.register(require('./plugins/verbose'));
 }
 
 /**
- * Routes
+ * API Routes
  */
 fastify.register(require('./routes/status'),   {prefix});
 fastify.register(require('./routes/datasets'), {prefix});

@@ -1,5 +1,5 @@
 /**
- * manage debug mode and log some debugging informations at startup
+ * manage verbose mode and log some debugging informations at startup
  */
 const fp = require('fastify-plugin');
 
@@ -33,7 +33,7 @@ module.exports = fp(async fastify => {
     routes.push(route)
   })
   .addHook('onReady', async () => {
-    fastify.log.debug(fastify.config, 'CONFIG');
-    fastify.log.debug(listRoutes(routes), 'ENDPOINTS');
+    fastify.log.info(fastify.config, 'CONFIG');
+    fastify.log.info(listRoutes(routes), 'ENDPOINTS');
   });
 })

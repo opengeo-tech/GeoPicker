@@ -12,13 +12,14 @@ defaultsEnvVars:
 prod:
   port: 8080
   host: 0.0.0.0
-  datapath: '/data'
+  datapath: '/data' #default path in Docker container
 
 ## Development environment config override
 dev:
   port: 9090
   host: 127.0.0.1
   datapath: './tests/data'
+  verbose: true
   #validation: false
   status:
     config: true
@@ -36,6 +37,8 @@ dev:
     - 'geojson'
     - 'json'
     - 'array'
+
+## the `prod` and `dev` directives above can override any of the default following configurations
 
 ## Prefix for any endpoints url
 prefix: ${PREFIX}
@@ -56,6 +59,12 @@ fastifyConf:
     level: 'info'
     transport:
       target: 'pino-pretty'
+
+## enable verbose mode and log some debugging informations at startup
+verbose: false
+
+## Enable input validation by json-schemas, if false speedup the responses but not valid input locations
+validation: true
 
 ## Enable Swagger front-end (options by: https://github.com/fastify/fastify-swagger)
 swagger:
@@ -89,9 +98,6 @@ status:
   config: true
   #show usage stats in /status enpoint
   stats: false
-
-## Enable input validation by json-schemas, if false speedup the responses but not valid input locations
-validation: true
 
 ## Maximum number of locations picked in a single request
 maxLocations: 10000
