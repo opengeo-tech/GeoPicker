@@ -177,7 +177,7 @@
     </h1>
     <nav>
       <a href="https://github.com/opengeo-tech/GeoPicker/">
-        <i class="fa fa-github" aria-hidden="true"></i> <span>Source Code</span>
+        <i class="fa fa-github" aria-hidden="true"></i> <span>GitHub Sources</span>
       </a>
       |
       <a href="https://opengeo.tech/geopicker/docs">
@@ -216,6 +216,8 @@
         , datasetId = 'default'
         , center = [46, 11]
         , zoom = 9;
+
+    const tileUrl = 'https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}.png';
 
     const $divLog = $('#log');
     const $divText = $('<div id="help" class="leaflet-control-btn"><i class="fa fa-info"></i> <span>&nbsp;<span></div>');
@@ -428,7 +430,6 @@
                 L.circleMarker(res.middlepoint.reverse(), {color:'yellow', radius: 6}).addTo(editableLayers);
             });
     }
-
     const map = L.map('map', {
         zoom,
         center,
@@ -436,7 +437,7 @@
         attributionControl: false,
         doubleClickZoom: false,
         scrollWheelZoom: false,
-        layers: L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png', {
+        layers: L.tileLayer(tileUrl, {
             subdomains: 'abcd',
             minZoom: 8,
             maxZoom: 16
@@ -750,6 +751,12 @@
         });
         return div[0];
     };
+
+    //trigger click su div di controlBounds
+    // seleziona il div del controllo bounds e triggera il click
+    setTimeout(function() {
+      $('#get_dataset').trigger('click');
+    }, 0);
 
     /**
      * button show Datasets

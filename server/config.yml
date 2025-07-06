@@ -1,7 +1,12 @@
 ##
 ## Config file parsed by ConfigYml library
-## learn more about syntax: https://github.com/stefanocudini/configYml
 ##
+
+## Default values if not present in environment
+defaultsEnvVars:
+  PREFIX: '/'
+  DEMO_PAGE: false
+  DATASET_DEFAULT: 'test' #./tests/data/test_4611_dem.tif
 
 ## Production/Dockerized environment config override
 prod:
@@ -31,12 +36,6 @@ dev:
     - 'geojson'
     - 'json'
     - 'array'
-
-## Default values if not present in environment
-defaultsEnvVars:
-  PREFIX: '/'
-  DEMO_PAGE: false
-  DATASET_DEFAULT: 'test'
 
 ## Prefix for any endpoints url
 prefix: ${PREFIX}

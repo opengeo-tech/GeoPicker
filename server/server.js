@@ -4,9 +4,9 @@
  * https://opengeo.tech
  */
 const basepath = __dirname
-    , config = require('@stefcud/configyml')({basepath})
+    , config = require('./parserConfig')({basepath})
+    , gpicker = require('../lib/geopicker')
     , Fastify = require('fastify')
-    , gpicker = require('../lib')
     , {utils, package} = gpicker
     , {fastifyConf, port, host, prefix} = config
     , {cors, compress, swagger, demopage, isDev} = config;

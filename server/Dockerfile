@@ -7,4 +7,4 @@ COPY ./ ./
 RUN npm install
 RUN cd server && npm install
 
-CMD ["node", "server/index.js"]
+CMD ["node", "server/server.js"]
