@@ -11,7 +11,7 @@ const fs = require('fs')
   , { Console } = require('console')
   , console = new Console(process.stderr);
 
-const {setValue, getValue, densify} = require('../lib')
+const {setValue, getValue, densify} = require('../lib/geopicker')
   , fileRaster = process.argv[2]
   , fileLine = process.argv[3];
 

@@ -1,4 +1,4 @@
 #!/bin/sh
 
-node ../server/index.js
+node ../server/server.js
 #TODO
