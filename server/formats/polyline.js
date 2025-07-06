@@ -2,13 +2,17 @@
 const polyline = require('@mapbox/polyline');
 
 module.exports = fastify => {
+  const mimeType = 'text/plain';
   return {
-    polylineRead: raw => {
-      return polyline.decode(raw)
-    },
-    polylineWrite: data => {
-      //TODO convert in array of array
-      return polyline.encode(data)
+    'polyline': {
+        mimeType,
+        read: raw => {
+            return polyline.decode(raw)
+        },
+        write: (data, req) => {
+            //TODO convert in array of array
+            return polyline.encode(data)
+        }
     }
   }
 }

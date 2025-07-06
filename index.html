@@ -20,6 +20,7 @@
         padding: 0;
         color: #0079c2;
         background: #fff;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
     h1 {
         margin: 8px 0;
@@ -48,12 +49,16 @@
       vertical-align: middle;
     }
     nav {
-        padding: 7px;
+        padding: 10px;
         line-height: 80px;
+        float: left;
     }
     nav a {
         white-space: nowrap;
         margin: 0 10px;
+    }
+    aside {
+        padding: 20px;
     }
     #map {
         margin: 4px 0;
@@ -192,11 +197,11 @@
         <i class="fa fa-heart"></i> <span>Donate</span>
       </a>
     </nav>
-    <p>
-      Interactive map to play with GeoPicker <strong>elevation service API Rest</strong> .
-
-      Each buttons activates a different <strong>endpoint</strong> to requesting data, in the box below the data exchanged, green panel shown the <strong>elevation profile</strong> in real-time.
-    </p>
+    <aside>
+      Interactive map to play with GeoPicker <strong>elevation service API Rest</strong>.
+      Each button activates a different <strong>endpoint</strong> to request data,
+      in the box below the data exchanged, green panel shows the <strong>elevation profile</strong> in real-time.
+    </aside>
     <div id="map">
     </div>
     <pre id="log"></pre>

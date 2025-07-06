@@ -46,7 +46,7 @@ prefix: ${PREFIX}
 ## Enable Demo map front-end
 demopage:
   enabled: ${DEMO_PAGE}
-  path: '/'
+  url: '/'
 
 ## Attribution service show in /status endpoint
 attribution: "GeoPicker - Copyright Stefano Cudini - opengeo.tech"

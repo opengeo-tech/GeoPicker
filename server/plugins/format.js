@@ -7,7 +7,7 @@ module.exports = fp(async fastify => {
 
   const {config} = fastify
       , {formats} = config
-      , {polylineWrite, gpxWrite, geojsonWrite} = require('../formats')(fastify);
+      , {polyline, gpx, geojson} = require('../formats')(fastify);
 
   if (formats && formats.length > 0) {
 
@@ -29,18 +29,18 @@ module.exports = fp(async fastify => {
       if (format) {
         fastify.log.debug(`Format conversion in ${format}...`);
         switch(format) {
+          //TODO array, json
           case 'polyline':
-            payloadOut = polylineWrite(payload, req)
-            res.type('text/plain');
+            payloadOut = polyline.write(payload, req)
+            res.type(polyline.mimeType);
           break;
           case 'gpx':
-            payloadOut = gpxWrite(payload, req)
-            //res.type('application/gpx+xml');
-            res.type('application/xml');
+            payloadOut = gpx.write(payload, req)
+            res.type(gpx.mimeType);
           break;
           case 'geojson':
-            payloadOut = geojsonWrite(payload, req)
-            res.type('application/geo+json');
+            payloadOut = geojson.write(payload, req)
+            res.type(geojson.mimeType);
           break;
           case 'input':
           default:

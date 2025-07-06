@@ -4,7 +4,7 @@ const {resolve} = require('path');
 module.exports = async fastify => {
 
   const {config, gpicker, package, utils, datasetsIds} = fastify
-      , {fastifyConf, attribution, swagger, compress, cors, demopage, formats} = config
+      , {fastifyConf, attribution, swagger, compress, cors, demopage} = config
       , {validation, maxLocations, precision} = config
       , {maxParamLength, bodyLimit} = fastifyConf || {}
       , gdal = gpicker.gdal.version
@@ -14,6 +14,13 @@ module.exports = async fastify => {
       , frontend = demopage ? demopage.path : false
       , {version, homepage} = package
       , documentation = swagger.enabled ? resolve(swagger.routePrefix) : homepage;
+
+  const formatsDefs = require('../formats')(fastify);
+
+  const formats = config.formats.reduce((acc, name) => {
+    acc[name] = formatsDefs[name]?.mimeType
+    return acc;
+  }, {});
 
   // eslint-disable-next-line
   const out = {
@@ -34,9 +41,9 @@ module.exports = async fastify => {
       maxParamLength,
       bodyLimit,
       crossorigin,
-      datasets,
+      compression,
       formats,
-      compression
+      datasets,
     }
   }
 
