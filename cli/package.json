@@ -1,0 +1,29 @@
+{
+  "name": "geopicker-cli",
+  "homepage": "https://opengeo.tech/geopicker/",
+  "author": {
+    "name": "Stefano Cudini",
+    "email": "stefano.cudini@gmail.com",
+    "url": "https://opengeo.tech/"
+  },
+  "license": "BSD-3-Clause",
+  "main": "./geopicker-cli.js",
+  "engines": {
+    "node": ">= 16"
+  },
+  "bin": {
+    "geopicker": "../bin/geopicker-cli"
+  },
+  "scripts": {
+    "test-cli-get-lonlat": "../bin/geopicker-cli --get 11.01,46.01 -v -t -d ../tests/data/trentino-altoadige_dem_90m.tif",
+    "test-cli-get-locations": "../bin/geopicker-cli --get 11.01,46.01_11.02,46.02_11.03,46.03 -v -t -d ../tests/data/trentino-altoadige_dem_90m.tif",
+    "test-cli-set-point": "../bin/geopicker-cli --set -v -t -d ../tests/data/trentino-altoadige_dem_90m.tif -i ../tests/data/point_feature.geojson",
+    "test-cli-set-linestring": "../bin/geopicker-cli --set -v -t -d ../tests/data/trentino-altoadige_dem_90m.tif -i ../tests/data/linestring_10pt_feature.geojson",
+    "test-cli": "npm run test-cli-get-lonlat && npm run test-cli-get-locations && npm run test-cli-set-point && npm run test-cli-set-linestring",
+    "test": "npm run test-cli"
+
+  },
+  "dependencies": {
+    "commander": "^14.0.0"
+  }
+}
