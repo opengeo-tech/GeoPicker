@@ -12,7 +12,6 @@
     <link href="//unpkg.com/leaflet@1.4.0/dist/leaflet.css" rel="stylesheet" type="text/css" />
     <link href="//unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" rel="stylesheet" type="text/css" />
     <link href="//unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.css" rel="stylesheet" type="text/css" />
-    <!-- <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> -->
     <link href="//unpkg.com/fontawesome-4.7@4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <style>
     body {
@@ -21,6 +20,7 @@
         color: #0079c2;
         background: #fff;
         font-family: Verdana, Geneva, Tahoma, sans-serif;
+        overflow-y: hidden;
     }
     h1 {
         margin: 8px 0;
@@ -64,38 +64,8 @@
         margin: 4px 0;
         user-select: none;
         width: 100%;
-        min-height: 500px;
-    }
-    #log-handle {
-        color: white;
-        font-size: 20px;
-        line-height: 5px;
-        text-align: center;
-        height: 12px;
-        cursor: ns-resize;
-        background: #0078c2;
-        border-bottom: 1px solid #bbb;
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        z-index: 10;
-    }
-    #log-container {
-        font-family: monospace;
-        font-size: 14px;
-        background: #e0f1fb;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        padding: 4px;
-        z-index: 10000;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        min-height: 80px;
-        max-height: 300px;
-    }
-    #log {
-        height: 100px;
+        min-height: 450px;
+        height: 1000px;
     }
     .btn-share {
         font-size: 16px;
@@ -130,7 +100,7 @@
     }
     .leaflet-control-btn {
         float: left;
-        height: 26px;
+        height: auto;
         min-width: 160px;
         white-space: nowrap;
         line-height: 34px;
@@ -187,6 +157,40 @@
         width: 16px;
         height: 16px;
     }
+    /* logger */
+    #log-container {
+        font-family: monospace;
+        font-size: 14px;
+        background: #e0f1fb;
+        z-index: 10000;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        min-height: 100px;
+        max-height: 500px;
+    }
+    #log-handle {
+        color: white;
+        font-size: 20px;
+        line-height: 6px;
+        height: 16px;
+        text-align: center;
+        cursor: ns-resize;
+        background: #0078c2;
+        border-bottom: 1px solid #bbb;
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        z-index: 10;
+        user-select: none;
+    }
+    #log {
+        height: 100px;
+        overflow-y: scroll;
+        overflow-x: auto;
+        padding: 0;
+        margin: 0;
+    }
     </style>
 </head>
 
@@ -224,8 +228,7 @@
     </div>
     <div id="log-container">
         <div id="log-handle">...</div>
-        <pre id="log" style="margin-top:8px;">
-        </pre>
+        <pre id="log"></pre>
     </div>
     <script src="//unpkg.com/underscore@1.9.1/underscore.js"></script>
     <script src="//unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
@@ -244,10 +247,10 @@
         , center = [46, 11]
         , zoom = 9;
 
-    const tileUrl = 'https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}.png';
+    const tileUrl = 'https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png';
 
     const $divLog = $('#log');
-    const $divText = $('<div id="help" class="leaflet-control-btn"><i class="fa fa-info"></i> <span>&nbsp;<span></div>');
+    const $divHelp = $('<div id="help" class="leaflet-control-btn"><i class="fa fa-info"></i> <span>&nbsp;<span></div>');
 
     const Texts = {
       get_status: "get service status and versions",
@@ -273,12 +276,12 @@
         const args = Array.prototype.map.call(arguments, a => {return typeof a ==='object'?JSON.stringify(a) : a})
         let log = Array.prototype.join.call(args, ' ')
 
-        let col = args[0]==='<-' ? 'green' : 'blue';
+        let col = args[0]==='<-' ? '#0a0' : '#a00';
+        let type = args[0]==='<-' ? 'Response' : 'Request';
 
-        log = `<span style="color:${col}">${log}</span>`;
+        const row = `<span style="color:${col}"> ${type} ${log}</span>`;
 
-        $divLog.prepend(`${log}\n`);
-        //$divLog.append(`${log}\n`).scrollTop($divLog[0].parentElement.scrollHeight);
+        $divLog.append(`${row}\n`).scrollTop($divLog[0].scrollHeight);
     }
     function j() {
       const args = Array.prototype.map.call(arguments, a => { return `${a}`.replace(/\/$/, '') })
@@ -370,7 +373,7 @@
                 if (geometry.type === 'Point') {
                     const [lon, lat, ele] = geometry.coordinates;
                     let m = L.marker([lat, lon]).bindTooltip(`Elevation: ${ele}`, { permanent: true })
-                    editableLayers.addLayer(m);
+                    editableLayer.addLayer(m);
                     return
                 }
                 layerElevation.addData({
@@ -378,7 +381,7 @@
                     geometry
                 });
 
-                editableLayers.addLayer(layerElevation);
+                editableLayer.addLayer(layerElevation);
             });
     }
     function getLocations(locs) {
@@ -407,7 +410,7 @@
               }
             });
 
-            editableLayers.addLayer(layerElevation);
+            editableLayer.addLayer(layerElevation);
         });
     }
     function postLocations(locs) {
@@ -435,7 +438,7 @@
                 }
             });
 
-            editableLayers.addLayer(layerElevation);
+            editableLayer.addLayer(layerElevation);
         });
     }
     function postGeometryMeta(geo) {
@@ -454,8 +457,17 @@
 
                 logger('<- METADATA',JSON.stringify(res,null,4));
 
-                L.circleMarker(res.centroid.reverse(), {color:'green', radius: 6}).addTo(editableLayers);
-                L.circleMarker(res.middlepoint.reverse(), {color:'yellow', radius: 6}).addTo(editableLayers);
+                L.circleMarker(res.centroid.reverse(), {
+                    color:'green', radius: 6
+                })
+                .bindTooltip("Centroid", {permanent: true, direction: 'top'})
+                .addTo(editableLayer);
+
+                L.circleMarker(res.middlepoint.reverse(), {
+                    color:'yellow', radius: 6
+                })
+                .bindTooltip("Middlepoint", {permanent: true, direction: 'top'})
+                .addTo(editableLayer);
             });
     }
     const map = L.map('map', {
@@ -464,9 +476,9 @@
         zoomControl: false,
         attributionControl: false,
         doubleClickZoom: false,
-        scrollWheelZoom: false,
+        //scrollWheelZoom: false,
         layers: L.tileLayer(tileUrl, {
-            subdomains: 'abcd',
+            subdomains: 'abc',
             minZoom: 8,
             maxZoom: 16
         })
@@ -490,122 +502,8 @@
         onEachFeature: controlElevation.addData.bind(controlElevation)
     }).addTo(map);
 
-    const editableLayers = L.featureGroup().addTo(map);
+    const editableLayer = L.featureGroup().addTo(map);
 
-    //editLayers
-    const controlDraw = new L.Control.Draw({
-        position: 'topleft',
-        draw: {
-            polyline: {
-                shapeOptions: {
-                    color: '#f00',
-                    weight: 3
-                }
-            },
-            marker: true,
-            circle: false,
-            circlemarker: false,
-            rectangle: false,
-            polygon: false
-        },
-        edit: {
-            featureGroup: editableLayers,
-            edit: false,
-            remove: false
-        }
-    })
-
-    map.on('draw:toolbaropened', e => {
-            $(':radio').each(function() {
-              $(this).prop('checked', false).triggerHandler('change');
-            });
-        })
-        .on('draw:created draw:drawvertex', e => {
-
-            let geo;
-
-            if (e.layers) { //drawvertex
-                const { features } = e.layers.toGeoJSON();
-                //feature collection to single feature
-                geo = {
-                    type: 'LineString',
-                    coordinates: features.map(f => {
-                        return f.geometry.coordinates
-                    })
-                }
-            } else if (e.layer) {
-                geo = e.layer.toGeoJSON();
-            }
-            postGeometry(geo, {densify: 90});  //add point any 90m
-        });
-
-    /**
-     * Draw line freehand
-     */
-    const controlDrawFree = L.pather({
-            strokeWidth: 1,
-            smoothFactor: 0,
-            mode: L.Pather.MODE.ALL, // ALL,APPEND,CREATE,DELETE,EDIT,EDIT_APPEND,VIEW
-            pathColour: '#f00'
-        })
-        .on('created edited', e => {
-            const { polyline } = e.polyline
-                , { geometry } = polyline.toGeoJSON();
-
-            postLocations(geometry.coordinates).done(() => {
-                controlDrawFree.addTo(editableLayers);
-                controlDrawFree.setMode(L.Pather.MODE.ALL)
-            });
-
-            postGeometryMeta(geometry);
-        });
-
-    const formats = [
-        //'input',
-        'polyline',
-        'geojson',
-        //'json',
-        //'gpx'
-        ]
-
-    var controlFormat = new L.Control({ position: 'topleft' });
-
-    controlFormat.onAdd = map => {
-        var div = $('<label id="post_locations" class="leaflet-control-btn"><i class="fa fa-pencil"></i> Output Format</label>');
-        var sel = $('<select id="format" />').prependTo(div)
-
-        $('<option>').val('input').text('input').prop('selected',true).appendTo(sel)
-        formats.forEach(f => {
-            $('<option>').val(f).text(f).appendTo(sel)
-        });
-        sel.on('change', e => {
-            const format = $(e.target).val()
-            if (format) {
-                params.format = format;
-            }
-            else {
-                delete params.format;
-            }
-        })
-        return div[0]
-    }
-
-    var controlDrawFreeBtn = new L.Control({ position: 'topleft' });
-
-    controlDrawFreeBtn.onAdd = map => {
-        var div = $('<label id="post_locations" class="leaflet-control-btn"><i class="fa fa-pencil"></i> Draw Line Freehand</label>');
-        var check = $('<input id="" type="radio" name="drawtype" />').prependTo(div)
-        check.on('change', e => {
-
-            if ($(e.target).is(':checked')) {
-                controlDrawFree.addTo(editableLayers);
-                controlDrawFree.setMode(L.Pather.MODE.ALL);
-            } else {
-                controlDrawFree.removeFrom(editableLayers);
-            }
-        })
-        return div[0];
-    };
 
     /**
      * mouse click picker
@@ -627,53 +525,163 @@
         });
     })
     .once('dblclick', e => {
-        showText('');   //hide message below
+        showHelp('');   //hide message below
     });
-    showText(`Double Click on map ${Texts.post_lonlat}`);
+    showHelp(`Double Click on map ${Texts.post_lonlat}`);
+
+    //editLayers
+    const controlDraw = new L.Control.Draw({
+        position: 'topleft',
+        draw: {
+            polyline: {
+                shapeOptions: {
+                    color: '#f00',
+                    weight: 3
+                }
+            },
+            marker: true,
+            circle: false,
+            circlemarker: false,
+            rectangle: false,
+            polygon: false
+        },
+        edit: {
+            featureGroup: editableLayer,
+            edit: false,
+            remove: false
+        }
+    });
+
+    map.on('draw:toolbaropened', e => {
+        resetButtons();
+    })
+    .on('draw:created draw:drawvertex', e => {
+
+        let geo;
+
+        if (e.layers) { //drawvertex
+            const { features } = e.layers.toGeoJSON();
+            //feature collection to single feature
+            geo = {
+                type: 'LineString',
+                coordinates: features.map(f => {
+                    return f.geometry.coordinates
+                })
+            }
+        } else if (e.layer) {
+            geo = e.layer.toGeoJSON();
+        }
+        postGeometry(geo, {densify: 90});  //add point any 90m
+    });
 
     /**
-     * mouse move picker
+     * Draw line freehand
      */
-    var controlMousePoint = new L.Control({ position: 'topleft' });
+    const controlDrawFree = L.pather({
+            strokeWidth: 1,
+            smoothFactor: 0,
+            mode: L.Pather.MODE.ALL, // ALL,APPEND,CREATE,DELETE,EDIT,EDIT_APPEND,VIEW
+            pathColour: '#f00'
+        })
+        .on('created edited', e => {
+            const { polyline } = e.polyline
+                , { geometry } = polyline.toGeoJSON();
 
-    controlMousePoint._pickPoint = function(e) {
+            postLocations(geometry.coordinates).done(() => {
+                controlDrawFree.addTo(editableLayer);
+                controlDrawFree.setMode(L.Pather.MODE.ALL)
+            });
 
-        controlMousePoint._tooltip.setLatLng(e.latlng);
-
-        const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
-
-        getLonlat(lon, lat).done(res => {
-            const [val] = res;
-            controlMousePoint._tooltip.setContent(`<big>${val}m</big><br>${lon}, ${lat}`)
+            postGeometryMeta(geometry);
         });
+
+
+    const controlDownload = new L.Control({ position: 'topleft' });
+    controlDownload.onAdd = map => {
+        const $div = $(`<label id="download" class="leaflet-control-btn">
+                <i class="fa fa-download"></i> File format
+                <select></select>
+            </label>`)
+            .on('change','select', e => {
+                const format = $(e.target).val()
+                if (format) {
+                    params.format = format;
+                }
+                else {
+                    delete params.format;
+                }
+            });
+
+        getStatus().done(({config}) => {
+            const $sel = $div.find('select')
+            Object.keys(config?.formats).forEach(f => {
+                $('<option>').val(f).text(f).appendTo($sel);
+            });
+        });
+        return $div[0]
+    }
+
+    const controlDrawFreeBtn = new L.Control({ position: 'topleft' });
+    controlDrawFreeBtn.onAdd = map => {
+        const $div = $(`<label id="post_locations" class="leaflet-control-btn">
+                <input type="radio" name="drawmode" />
+                <i class="fa fa-pencil"></i> Draw Line Freehand
+            </label>`)
+            .on('change', ':radio', e => {
+                if ($(e.target).is(':checked')) {
+                    map.off('mousemove', controlMouseLine._pickTrack);
+                    map.off('mousemove', controlMousePoint._pickPoint);
+                    controlDrawFree.addTo(editableLayer);
+                    controlDrawFree.setMode(L.Pather.MODE.ALL);
+                } else {
+                    controlDrawFree.removeFrom(editableLayer);
+                }
+            });
+        return $div[0];
     };
 
+    /**
+     * mouse move Point
+     */
+    const controlMousePoint = new L.Control({ position: 'topleft' });
     controlMousePoint.onAdd = map => {
+
         controlMousePoint._tooltip = L.tooltip({
                 offset: L.point([0, -10]),
                 direction: 'top'
-            })
-            .setLatLng([0, 0]).addTo(map);
-        var div = $('<label id="get_lonlat" class="leaflet-control-btn"><i class="fa fa-mouse-pointer"></i> Mouse Move Point</label>');
-        var check = $('<input type="radio" name="drawtype" />').prependTo(div)
-        check.on('change', e => {
+            }).setLatLng([0, 0]);
 
-            if ($(e.target).is(':checked')) {
-                controlMousePoint._tooltip.setLatLng([0, 0]).addTo(map);
-                map.on('mousemove', controlMousePoint._pickPoint);
-                controlDraw._toolbars.draw.disable()
-            } else {
-                map.off('mousemove', controlMousePoint._pickPoint);
-                controlMousePoint._tooltip.removeFrom(map)
-            }
-        })
-        return div[0];
+        controlMousePoint._pickPoint = function(e) {
+            controlMousePoint._tooltip.setLatLng(e.latlng);
+            const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
+
+            getLonlat(lon, lat).done(res => {
+                const [val] = res;
+                controlMousePoint._tooltip.setContent(`<big>${val}m</big><br>${lon}, ${lat}`)
+            });
+        };
+
+        const $div = $(`<label id="get_lonlat" class="leaflet-control-btn">
+                <input type="radio" name="drawmode" />
+                <i class="fa fa-mouse-pointer"></i> Mouse Move Point
+            </label>`)
+            .on('change', ':radio', e => {
+                if ($(e.target).is(':checked')) {
+                    map.off('mousemove', controlMouseLine._pickTrack);
+                    map.on('mousemove', controlMousePoint._pickPoint);
+                    controlMousePoint._tooltip.setLatLng([0, 0]).addTo(map);
+                } else {
+                    map.off('mousemove', controlMousePoint._pickPoint);
+                    controlMousePoint._tooltip.removeFrom(map)
+                }
+            });
+        return $div[0];
     };
 
     const polylocs = L.polyline([], { color: 'red' }).addTo(map)
 
     /**
-     * mouse track picker
+     * mouse move Line
      */
     var controlMouseLine = new L.Control({ position: 'topleft' });
 
@@ -701,30 +709,31 @@
     };
 
     controlMouseLine.onAdd = map => {
-
-        var div = $('<label id="get_locations" class="leaflet-control-btn"><i class="fa fa-line-chart"></i> Mouse Move Line</label>');
-        var check = $('<input type="radio" name="drawtype" />').prependTo(div)
-        check.on('change', e => {
-
-            if ($(e.target).is(':checked')) {
-                map.on('mousemove', controlMouseLine._pickTrack);
-            } else {
-                map.off('mousemove', controlMouseLine._pickTrack);
-            }
-        });
-        return div[0];
+        const $div = $(`<label id="get_locations" class="leaflet-control-btn">
+                <input type="radio" name="drawmode" />
+                <i class="fa fa-line-chart"></i> Mouse Move Line
+            </label>`)
+            .on('change', ':radio', e => {
+                if ($(e.target).is(':checked')) {
+                    map.off('mousemove', controlMousePoint._pickPoint);
+                    map.on('mousemove', controlMouseLine._pickTrack);
+                } else {
+                    map.off('mousemove', controlMouseLine._pickTrack);
+                }
+            });
+        return $div[0];
     };
-
 
     /**
      * button File upload
      */
-    var fileLayer = L.geoJson([]).addTo(map);
+    const fileLayer = L.geoJson([]).addTo(map);
 
-    L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open"></i>'
+    L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open"></i>';
     L.Control.FileLayerLoad.TITLE = 'File uploader';
+    //aggiung etichetta di testo vicino a icona
 
-    var controlFileLoader = new L.Control.FileLayerLoad({
+    const controlUpload = new L.Control.FileLayerLoad({
         addToMap: false,
         fitBounds: true,
         fileSizeLimit: 2048, //TODO set by /status
@@ -741,14 +750,17 @@
         formats: [
             '.geojson'
         ]
-    }).addTo(map);
-
-    controlFileLoader.loader.on('data:loaded', e => {
-        console.log('loaded',e)
-    })
-    .on('data:error', e => {
-        console.log('File loader error', e.error);
     });
+    // map.on('layeradd', function(e) {
+    //     if (e.layer === controlUpload) {
+    //         controlUpload.loader.on('data:loaded', e => {
+    //             console.log('loaded', e)
+    //         })
+    //         .on('data:error', e => {
+    //             console.log('File loader error', e.error);
+    //         });
+    //     }
+    // });
 
 
     /**
@@ -757,27 +769,29 @@
     var controlBounds = new L.Control({ position: 'topleft' });
 
     controlBounds.onAdd = map => {
-        var div = $('<a id="get_dataset" class="leaflet-control-btn"><i class="fa fa-expand"></i> Show Dataset Bounds</a>');
-        div.on('click', e => {
-            e.preventDefault()
-            e.stopImmediatePropagation();
+        var $div = $(`<a id="get_dataset" class="leaflet-control-btn">
+            <i class="fa fa-expand"></i> Get Dataset Bounds
+            </a>`)
+            .on('click', e => {
+                e.preventDefault()
+                e.stopImmediatePropagation();
 
-            getDataset(datasetId).done(res => {
+                getDataset(datasetId).done(res => {
 
-                logger(JSON.stringify(res,null,4))
+                    logger(JSON.stringify(res,null,4))
 
-                const {minLon,minLat,maxLon,maxLat} = res.bbox;
+                    const {minLon,minLat,maxLon,maxLat} = res.bbox;
 
-                var bb = L.latLngBounds([minLat,minLon],[maxLat,maxLon])
-                  , cen = bb.getCenter()
+                    var bb = L.latLngBounds([minLat,minLon],[maxLat,maxLon])
+                    , cen = bb.getCenter()
 
-                L.rectangle(bb, {fill:false}).addTo(layerElevation);
+                    L.rectangle(bb, {fill:false}).addTo(layerElevation);
 
-                map.flyToBounds(bb);
-            })
+                    map.flyToBounds(bb);
+                })
 
-        });
-        return div[0];
+            });
+        return $div[0];
     };
 
     //trigger click su div di controlBounds
@@ -792,155 +806,173 @@
     var controlDatasets = new L.Control({ position: 'topleft' });
 
     controlDatasets.onAdd = map => {
-        var div = $('<a id="get_datasets" class="leaflet-control-btn"><i class="fa fa-database"></i> Show Datasets list</a>');
-        div.on('click', e => {
-            e.preventDefault()
-            e.stopImmediatePropagation();
-
-            getDatasets().done(res => {
-                logger(JSON.stringify(res,null,4))
+        const $div = $(`<a id="get_datasets" class="leaflet-control-btn">
+            <i class="fa fa-database"></i> Get Datasets list
+            </a>`)
+            .on('click', e => {
+                e.preventDefault()
+                e.stopImmediatePropagation();
+                getDatasets().done(res => {
+                    logger(JSON.stringify(res,null,4))
+                });
             });
-        });
-        return div[0];
+        return $div[0];
     };
 
     /**
      * button show Status
      */
-    var controlStatus = new L.Control({ position: 'topleft' });
-
+    const controlStatus = new L.Control({ position: 'topleft' });
     controlStatus.onAdd = map => {
-        var div = $('<a id="get_status" class="leaflet-control-btn"><i class="fa fa-info"></i> Show Service Status</a>');
-        div.on('click', e => {
-            e.preventDefault()
-            e.stopImmediatePropagation();
+        const $div = $(`<a id="get_status" class="leaflet-control-btn">
+            <i class="fa fa-info"></i> Get Service Status
+            </a>`)
+            .on('click', e => {
+                e.preventDefault()
+                e.stopImmediatePropagation();
 
-            getStatus().done(res => {
-                logger(JSON.stringify(res,null,4))
+                getStatus().done(res => {
+                    logger(JSON.stringify(res,null,4))
+                });
             });
-        });
-        return div[0];
+        return $div[0];
     };
 
     /**
      * Reset button clear all layers
      */
-    var controlClear = new L.Control({ position: 'topleft' });
-
+    const controlClear = new L.Control({ position: 'topleft' });
     controlClear.onAdd = map => {
-        var div = $('<a id="reset" class="leaflet-control-btn"><i class="fa fa-trash"></i> Clear All</a>');
-        div.on('click', e => {
-            e.preventDefault()
-            e.stopImmediatePropagation();
-            reset();
-        });
-        return div[0];
+        const $div = $(`<a id="reset" class="leaflet-control-btn">
+            <i class="fa fa-eraser"></i> Clear All
+            </a>`)
+            .on('click', e => {
+                e.preventDefault()
+                e.stopImmediatePropagation();
+                reset();
+            });
+        return $div[0];
     };
 
     /**
      * Reset button clear all layers
      */
-    var controlText = new L.Control({ position: 'bottomleft' });
-    controlText.onAdd = map => {
-        return $divText[0];
+    const controlHelp = new L.Control({ position: 'bottomleft' });
+    controlHelp.onAdd = map => {
+        return $divHelp[0];
     };
 
     map.addControl(controlElevation);
 
-    //map.addControl(controlFileLoader);
+    map.addControl(controlUpload);
+    map.addControl(controlDownload);
 
-    //TODO map.addControl(controlFormat);
-
-    map.addControl(controlDraw);
     map.addControl(controlMousePoint);
     map.addControl(controlMouseLine);
     map.addControl(controlDrawFreeBtn);
+    map.addControl(controlDraw);
 
     map.addControl(controlBounds);
     map.addControl(controlDatasets);
     map.addControl(controlStatus);
     map.addControl(controlClear);
 
-    map.addControl(controlText);
+    map.addControl(controlHelp);
 
     $('.leaflet-control-btn').on('mouseover', e => {
-      showText(e.target);
+      showHelp(e.target);
     });
     $('.leaflet-draw-draw-polyline, .leaflet-draw-draw-marker')
     .on('mouseover', e => {
-      showText(Texts.post_geometry);
+      showHelp(Texts.post_geometry);
     });
+
+    function resetButtons() {
+      $('.leaflet-control-container').find(':radio[name="drawmode"]').each(function() {
+        console.log(this.parentNode.id);
+        $(this).prop('checked', false).trigger('change');
+      });
+    }
 
     function reset() {
       layerElevation.clearLayers();
-      editableLayers.clearLayers();
+      editableLayer.clearLayers();
       fileLayer.clearLayers();
       polylocs.setLatLngs([]);
-      controlDraw._toolbars.draw.disable();
-      $(':radio').each(function() {
-        $(this).prop('checked', false).triggerHandler('change');
-      })
       controlElevation.clear();
       $divLog.empty();
+      controlDraw._toolbars.draw.disable();
+      resetButtons();
     }
 
-    function showText(obj) {
+    function showHelp(obj) {
       if (typeof obj === 'string') {
-        $divText.find('span').text(obj)
+        $divHelp.find('span').text(obj)
       }
       else {
         let id = $(obj).attr('id');
         if (Texts[ id ]) {
-          showText(Texts[ id ]);
+          showHelp(Texts[ id ]);
         }
       }
     }
 
+    // map.on('keydown', e => {
+    //     if (e.originalEvent && e.originalEvent.keyCode === 27) { // ESC
+    //         disableButtons();
+    //         showHelp('');
+    //     }
+    // });
+    $(document).on('keydown', e => {
+        if (e.keyCode === 27) { //ESC
+            resetButtons();
+            showHelp('');
+        }
+    });
+
     (function() {
-        //const container = document.getElementById('log-container');
+        const container = document.getElementById('log-container');
         const logHandle = document.getElementById('log-handle');
         const log = document.getElementById('log');
         const mapDiv = document.getElementById('map');
         let dragging = false, startY = 0, startHeight = 0;
 
+        const maxHeight = 500;
+        const minHeight = 100;
+
         function adjustMapHeight() {
-            // Get the total height of the window
             const windowHeight = window.innerHeight;
-            // Get the height of log-container
             const logContainer = document.getElementById('log-container');
             const logContainerHeight = logContainer.offsetHeight;
-            // Get the height of header elements above the map
-
-            let headerHeight = 0;
-
-            // Calculate available height for map
-            const available = windowHeight - logContainerHeight - headerHeight - 100; // 8px margin
-            //if (available > 100) {
-                //mapDiv.style.minHeight = available + 'px';
-                mapDiv.style.height = available + 'px';
-            //}
-            setTimeout(() => { map.invalidateSize(); }, 100);
+            const headerHeight = document.querySelector('nav').offsetHeight
+            const available = windowHeight - logContainerHeight - headerHeight;             //if (available > 100) {
+            //mapDiv.style.minHeight = available + 'px';
+            mapDiv.style.height = available + 'px';
+            setTimeout(() => { map.invalidateSize(); }, 10);
         }
 
         logHandle.addEventListener('mousedown', function(e) {
             dragging = true;
             startY = e.clientY;
             startHeight = log.offsetHeight;
-            document.body.style.userSelect = 'none';
         });
 
         document.addEventListener('mousemove', function(e) {
             if (!dragging) return;
             let dy = e.clientY - startY;
-            let newHeight = Math.max(50, startHeight - dy);
+            let newHeight = Math.max(20, startHeight - dy);
             log.style.height = newHeight + 'px';
-            // Adjust map height as log changes
+
+            // if(newHeight > maxHeight || newHeight < minHeight) {
+            //      dragging = false;
+            //      return
+            // }
+            //console.log('newHeight', maxHeight, newHeight);
             adjustMapHeight();
         });
 
         document.addEventListener('mouseup', function() {
             dragging = false;
-            document.body.style.userSelect = '';
         });
         window.addEventListener('resize', adjustMapHeight);
         //window.addEventListener('DOMContentLoaded', adjustMapHeight);
