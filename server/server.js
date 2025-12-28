@@ -76,6 +76,7 @@ fastify.register(require('./routes/lonlat'),   {prefix});
 fastify.register(require('./routes/locations'),{prefix});
 fastify.register(require('./routes/geometry'), {prefix});
 fastify.register(require('./routes/metadata'), {prefix});
+fastify.register(require('./routes/contour'),  {prefix});
 
 fastify.log.info(`Geopicker v${package.version} started...`);
 
