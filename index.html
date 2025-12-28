@@ -254,6 +254,7 @@
 
     const Texts = {
       get_status: "get service status and versions",
+      get_contour: "get contour line on click point to map",
       get_dataset: "get attributes of a certain dataset",
       get_datasets: "get list available datasets and their attributes",
       get_lonlat: "get single location value of dataset, densify not supported",
@@ -317,6 +318,14 @@
     }
     function getLonlat(lon, lat) {
         const url = j(api, datasetId, lon, lat);
+
+        logger('-> GET', url)
+        return $.getJSON(url).done(res => {
+            logger('<-', res)
+        });
+    }
+    function getContourLonLat(lon, lat) {
+        const url = j(api, datasetId, 'contour', lon, lat);
 
         logger('-> GET', url)
         return $.getJSON(url).done(res => {
@@ -683,7 +692,7 @@
     /**
      * mouse move Line
      */
-    var controlMouseLine = new L.Control({ position: 'topleft' });
+    const controlMouseLine = new L.Control({ position: 'topleft' });
 
     controlMouseLine.locs = []; //buffer of last coordinates
     controlMouseLine._pickTrack = function(e) {
@@ -723,6 +732,45 @@
             });
         return $div[0];
     };
+
+    /**
+     * button Contour Line
+     */
+    const controlContour = new L.Control({ position: 'topleft' });
+    controlContour.onAdd = map => {
+        const $div = $(`<label id="post_locations" class="leaflet-control-btn">
+                <input type="radio" name="drawmode" />
+                <i class="fa fa-wifi"></i> Contour Line
+            </label>`)
+            .on('change', ':radio', e => {
+                if ($(e.target).is(':checked')) {
+                    map.on('click', e => {
+
+                    const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
+
+                    getContourLonLat(lon, lat).done(res => {
+                        const {value} = res.features[0].properties;
+
+                        tooltipClick.setContent(`<big>${value}m</big><br>${lon}<br>${lat}`);
+
+                        editableLayer.addLayer(L.geoJSON(res, {
+                            style: {
+                                color: 'orange',
+                                weight: 2,
+                                dashArray: '4,4'
+                            }
+                        }));
+                    });
+                })
+                showHelp(`${Texts.get_contour}`);
+
+                } else {
+                    map.off('click');
+                }
+            });
+        return $div[0];
+    };
+
 
     /**
      * button File upload
@@ -766,10 +814,10 @@
     /**
      * button show Dataset Bounding box
      */
-    var controlBounds = new L.Control({ position: 'topleft' });
+    const controlBounds = new L.Control({ position: 'topleft' });
 
     controlBounds.onAdd = map => {
-        var $div = $(`<a id="get_dataset" class="leaflet-control-btn">
+        const $div = $(`<a id="get_dataset" class="leaflet-control-btn">
             <i class="fa fa-expand"></i> Get Dataset Bounds
             </a>`)
             .on('click', e => {
@@ -782,8 +830,8 @@
 
                     const {minLon,minLat,maxLon,maxLat} = res.bbox;
 
-                    var bb = L.latLngBounds([minLat,minLon],[maxLat,maxLon])
-                    , cen = bb.getCenter()
+                    const bb = L.latLngBounds([minLat,minLon],[maxLat,maxLon])
+                        , cen = bb.getCenter()
 
                     L.rectangle(bb, {fill:false}).addTo(layerElevation);
 
@@ -803,7 +851,7 @@
     /**
      * button show Datasets
      */
-    var controlDatasets = new L.Control({ position: 'topleft' });
+    const controlDatasets = new L.Control({ position: 'topleft' });
 
     controlDatasets.onAdd = map => {
         const $div = $(`<a id="get_datasets" class="leaflet-control-btn">
@@ -870,6 +918,7 @@
     map.addControl(controlMousePoint);
     map.addControl(controlMouseLine);
     map.addControl(controlDrawFreeBtn);
+    map.addControl(controlContour);
     map.addControl(controlDraw);
 
     map.addControl(controlBounds);
