@@ -55,6 +55,7 @@ This basic structure can be extended starting from the environment variable `PRE
 |  ✔️  | POST | /:datasetId/locations| arrays | accept array or object of locations in body (format is `[[lon,lat],[lon,lat],[lon,lat]]`) |
 |  ✔️  | POST | /:datasetId/geometry | object | geojson Point or LineString in body (support feature/geometry/f.collection)|
 |     |      |                      |        |             |
+|  ✔️  | GET  | /:datasetId/contour/:lon/:lat | object | get geojson LineString of contour line for a given location value |
 |  ✔️  | GET  | /metadata/:locations | object | return info about direction, length, centroid, middlepoint of locations |
 |  ✔️  | POST | /metadata/geometry   | object | return info about direction, length, centroid, middlepoint of geometry |
 
