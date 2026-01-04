@@ -744,25 +744,48 @@
             </label>`)
             .on('change', ':radio', e => {
                 if ($(e.target).is(':checked')) {
-                    map.on('click', e => {
+                    map.on('click mousemove', e => {
 
-                    const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
+                        const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
 
-                    getContourLonLat(lon, lat).done(res => {
-                        const {value} = res.features[0].properties;
+                        getContourLonLat(lon, lat).done(res => {
+                            const {value = ''} = res.features && res.features[0] && res.features[0].properties || {};
 
-                        tooltipClick.setContent(`<big>${value}m</big><br>${lon}<br>${lat}`);
-
-                        editableLayer.addLayer(L.geoJSON(res, {
-                            style: {
+                            editableLayer.clearLayers();
+                            const layerContour = L.geoJSON(res, {
+                                style: {
+                                    color: 'orange',
+                                    opacity: 1,
+                                    weight: 3,
+                                    dashArray: '4,4'
+                                },
+                                // useful fot debugging contour points
+                                // onEachFeature: (feature, layer) => {
+                                //     if (feature.geometry.type === 'LineString') {
+                                //         feature.geometry.coordinates.forEach(coord => {
+                                //             L.circleMarker([coord[1], coord[0]], {
+                                //                 radius: 3,
+                                //                 weight: 0,
+                                //                 color: 'orange',
+                                //                 fillColor: 'orange',
+                                //                 fillOpacity: 0.8
+                                //             }).addTo(editableLayer);
+                                //         });
+                                //     }
+                                // }
+                            });
+                            L.circleMarker(e.latlng, {
+                                radius: 8,
+                                weight: 0,
                                 color: 'orange',
-                                weight: 2,
-                                dashArray: '4,4'
-                            }
-                        }));
+                                fillColor: 'orange',
+                                opacity: 1,
+                                fillOpacity: 1
+                            }).addTo(editableLayer);
+                            editableLayer.addLayer(layerContour);
+                        });
                     });
-                })
-                showHelp(`${Texts.get_contour}`);
+                    showHelp(`${Texts.get_contour}`);
 
                 } else {
                     map.off('click');
@@ -835,7 +858,10 @@
 
                     L.rectangle(bb, {fill:false}).addTo(layerElevation);
 
-                    map.flyToBounds(bb);
+                    map.flyToBounds(bb, {
+                        duration: 0.8,
+                        easeLinearity: 0.5
+                    });
                 })
 
             });

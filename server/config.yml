@@ -6,7 +6,7 @@
 defaultsEnvVars:
   PREFIX: '/'
   DEMO_PAGE: false
-  DATASET_DEFAULT: 'test' #./tests/data/test_4611_dem.tif
+  DATASET_DEFAULT: 'alps30' #./tests/data/test_4611_dem.tif
 
 ## Production/Dockerized environment config override
 prod:
@@ -27,7 +27,7 @@ dev:
   fastifyConf:
     #logger: false
     logger:
-      level: 'debug'
+      level: 'warn' #'trace', 'debug', 'info', 'warn',' error', 'fatal'
       transport:
         target: 'pino-pretty'
   formats:
@@ -134,12 +134,19 @@ datasets:
     band: 1
   # aliases of same dataset
   altitude: elevation
+  trentino: elevation
   elevation:
     path: trentino-altoadige_dem_90m.tif
     band: 1
   alps:
     path: alps_dem_10m.tif
     band: 1
+  alps30:
+    path: alps_dem_30m.tif
+    band: 1
+  alps90:
+    path: alps_dem_90m.tif
+    band: 1        
   ## load from same Geotif different bands
   veneto_elevation:
     path: veneto_30m_2bands_ele_aspect.tif
