@@ -24,19 +24,19 @@ module.exports = fastify => {;
 
             if (Array.isArray(data)) {
                 if (data.length === 1) {          //lonlat point
-                const {lon, lat} = req.params;
-                feature.geometry.type = 'Point';
-                feature.geometry.coordinates = [lon, lat, data[0]];
+                    const {lon, lat} = req.params;
+                    feature.geometry.type = 'Point';
+                    feature.geometry.coordinates = [lon, lat, data[0]];
                 }
                 else if (req.params.locations) { //locations via stringified GET
-                const locations = parseLocations(req.params.locations);
-                locations.forEach((loc, k) => {
-                    loc.push(data[k])
-                });
-                feature.geometry.coordinates = locations;
+                    const locations = parseLocations(req.params.locations);
+                    locations.forEach((loc, k) => {
+                        loc.push(data[k])
+                    });
+                    feature.geometry.coordinates = locations;
                 }
                 else {                           //location array in POST body
-                feature.geometry.coordinates = data;
+                    feature.geometry.coordinates = data;
                 }
             }
             else if (data.coordinates || data.geometry) {

@@ -6,7 +6,7 @@
 defaultsEnvVars:
   PREFIX: '/'
   DEMO_PAGE: false
-  DATASET_DEFAULT: 'alps30' #./tests/data/test_4611_dem.tif
+  DATASET_DEFAULT: 'alps' #./tests/data/test_4611_dem.tif
 
 ## Production/Dockerized environment config override
 prod:

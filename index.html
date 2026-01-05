@@ -247,7 +247,26 @@
         , center = [46, 11]
         , zoom = 9;
 
-    const tileUrl = 'https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png';
+    
+    const urlTileOsm = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        , urlTileCycle = 'https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png'
+        , urlTileCarto = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}@2x.png'
+        , urlTileIgm = 'http://www.pcn.minambiente.it/arcgis/rest/services/immagini/IGM_25000/MapServer/tile/{z}/{y}/{x}'
+        , urlTileGooglesat = 'https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}'
+        , urlTileCartoLabels = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}.png'
+        , urlTileAlpsDtm = 'https://opengeo.tech/dtm/alps.jpg'
+        , boundsAlpsDtm = [
+            [45.43611111090769,9.198055555261936],
+            [47.89416666689944,13.21111111109092]
+        ];
+
+    const baselayers = {
+        'Roads': L.tileLayer(urlTileOsm),        
+        'Carto': L.tileLayer(urlTileCarto),
+        'Cycle': L.tileLayer(urlTileCycle),
+        'Satellite': L.tileLayer(urlTileGooglesat),
+        'Alps DTM': L.imageOverlay(urlTileAlpsDtm, boundsAlpsDtm)
+    };
 
     const $divLog = $('#log');
     const $divHelp = $('<div id="help" class="leaflet-control-btn"><i class="fa fa-info"></i> <span>&nbsp;<span></div>');
@@ -486,14 +505,11 @@
         attributionControl: false,
         doubleClickZoom: false,
         //scrollWheelZoom: false,
-        layers: L.tileLayer(tileUrl, {
-            subdomains: 'abc',
-            minZoom: 8,
-            maxZoom: 16
-        })
+        layers: baselayers.Cycle
     });
-
-    L.control.zoom({position:'topright'}).addTo(map)
+    
+    L.control.layers(baselayers, {}, {position:'topright', collapsed: true}).addTo(map);
+    L.control.zoom({position:'topright'}).addTo(map);
 
     // https://github.com/MrMufflon/Leaflet.Elevation
     const controlElevation = new L.Control.Elevation({
@@ -734,9 +750,41 @@
     };
 
     /**
-     * button Contour Line
+     * button Contour Lines
      */
     const controlContour = new L.Control({ position: 'topleft' });
+    controlContour._pickContour = function(e) {
+
+        const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
+
+        getContourLonLat(lon, lat).done(coordinates => {
+            
+            editableLayer.clearLayers();
+            const layerContour = L.geoJSON({
+                type: 'Feature',
+                geometry: {
+                    type: 'MultiLineString',
+                    coordinates
+                }
+            }, {
+                style: {
+                    color: 'orange',
+                    opacity: 1,
+                    weight: 3,
+                    dashArray: '4,4'
+                }
+            });
+            L.circleMarker(e.latlng, {
+                radius: 8,
+                weight: 0,
+                color: 'orange',
+                fillColor: 'orange',
+                opacity: 1,
+                fillOpacity: 1
+            }).addTo(editableLayer);
+            editableLayer.addLayer(layerContour);
+        });
+    };
     controlContour.onAdd = map => {
         const $div = $(`<label id="post_locations" class="leaflet-control-btn">
                 <input type="radio" name="drawmode" />
@@ -744,51 +792,10 @@
             </label>`)
             .on('change', ':radio', e => {
                 if ($(e.target).is(':checked')) {
-                    map.on('click mousemove', e => {
-
-                        const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
-
-                        getContourLonLat(lon, lat).done(res => {
-                            const {value = ''} = res.features && res.features[0] && res.features[0].properties || {};
-
-                            editableLayer.clearLayers();
-                            const layerContour = L.geoJSON(res, {
-                                style: {
-                                    color: 'orange',
-                                    opacity: 1,
-                                    weight: 3,
-                                    dashArray: '4,4'
-                                },
-                                // useful fot debugging contour points
-                                // onEachFeature: (feature, layer) => {
-                                //     if (feature.geometry.type === 'LineString') {
-                                //         feature.geometry.coordinates.forEach(coord => {
-                                //             L.circleMarker([coord[1], coord[0]], {
-                                //                 radius: 3,
-                                //                 weight: 0,
-                                //                 color: 'orange',
-                                //                 fillColor: 'orange',
-                                //                 fillOpacity: 0.8
-                                //             }).addTo(editableLayer);
-                                //         });
-                                //     }
-                                // }
-                            });
-                            L.circleMarker(e.latlng, {
-                                radius: 8,
-                                weight: 0,
-                                color: 'orange',
-                                fillColor: 'orange',
-                                opacity: 1,
-                                fillOpacity: 1
-                            }).addTo(editableLayer);
-                            editableLayer.addLayer(layerContour);
-                        });
-                    });
+                    map.on('click mousemove', controlContour._pickContour);
                     showHelp(`${Texts.get_contour}`);
-
                 } else {
-                    map.off('click');
+                    map.off('click mousemove', controlContour._pickContour);
                 }
             });
         return $div[0];
