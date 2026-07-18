@@ -4,3 +4,7 @@ tests/data
 .env
 server/custom.config.yml
 TODO
+.claude/
+CLAUDE.md
+AGENTS.md
+
