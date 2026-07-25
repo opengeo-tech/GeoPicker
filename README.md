@@ -226,33 +226,7 @@ curl "http://localhost:9090/elevation/11,46|11.01,46.01?densify=100"
 
 ## Benchmarks
 
-benchmarks scripts: `tests/benchmarks.js` using [AutoCannon](https://github.com/mcollina/autocannon)
-
-```bash
-cd tests && npm install && cd -
-npm run bench
-```
-
-The results testing a dataset of 2x2km [geotiff](https://github.com/opengeo-tech/geopicker/blob/master/tests/data/test_4611_dem.tif)
-```
-┌─────────┬──────┬──────┬───────┬──────┬─────────┬─────────┬──────┐
-│ Stat    │ 2.5% │ 50%  │ 97.5% │ 99%  │ Avg     │ Stdev   │ Max  │
-├─────────┼──────┼──────┼───────┼──────┼─────────┼─────────┼──────┤
-│ Latency │ 0 ms │ 0 ms │ 0 ms  │ 1 ms │ 0.02 ms │ 0.16 ms │ 6 ms │
-└─────────┴──────┴──────┴───────┴──────┴─────────┴─────────┴──────┘
-┌───────────┬─────────┬─────────┬─────────┬─────────┬──────────┬─────────┬─────────┐
-│ Stat      │ 1%      │ 2.5%    │ 50%     │ 97.5%   │ Avg      │ Stdev   │ Min     │
-├───────────┼─────────┼─────────┼─────────┼─────────┼──────────┼─────────┼─────────┤
-│ Req/Sec   │ 18111   │ 18111   │ 22783   │ 23471   │ 22175.28 │ 1473.21 │ 18099   │
-├───────────┼─────────┼─────────┼─────────┼─────────┼──────────┼─────────┼─────────┤
-│ Bytes/Sec │ 4.02 MB │ 4.02 MB │ 5.05 MB │ 5.21 MB │ 4.92 MB  │ 327 kB  │ 4.01 MB │
-└───────────┴─────────┴─────────┴─────────┴─────────┴──────────┴─────────┴─────────┘
-
-Req/Bytes counts sampled once per second.
-# of samples: 11
-
-244k requests in 11.01s, 54.1 MB read
-```
+Benchmarks metrics, methodology and results are documented in [docs/benchmarks.md](./docs/benchmarks.md)
 
 # Roadmap
 
@@ -261,9 +235,9 @@ for details see the descriptions in the [Roadmap issues](https://github.com/open
 |Status| Goal        |
 |------|-------------|
 |  ✔️  | Swagger Documentation Interface |
-|  🚧  | manage multiple datasets |
-|  🚧  | ES6 modules |
+|  ✔️  | manage multiple datasets |
 |  🚧  | extend benchmarks for any endpoints |
+|  🚧  | ES6 modules |
 |  ✔️  | enable densify function |
 |  🚧  | enable simply function |
 |  ❌  | unit testing |

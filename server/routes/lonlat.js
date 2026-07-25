@@ -1,16 +1,18 @@
 
 module.exports = async fastify => {
 
-  const {schemas, datasetDefault, gpicker} = fastify
+  const {schemas, datasetHandles, errors, gpicker} = fastify
       , {getValue, setValue} = gpicker;
 
   fastify.get('/:datasetId/:lon/:lat', {schema: schemas.lonlatGet}, async req => {
 
-    return getValue(req.data, datasetDefault);
+    const dataset = datasetHandles[req.params.datasetId];
+    return dataset ? getValue(req.data, dataset) : errors.nodataset;
   });
 
   fastify.post('/:datasetId/lonlat', {schema: schemas.lonlatPost}, async req => {
 
-    return setValue(req.data, datasetDefault)
+    const dataset = datasetHandles[req.params.datasetId];
+    return dataset ? setValue(req.data, dataset) : errors.nodataset;
   });
 }

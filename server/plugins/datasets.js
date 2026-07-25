@@ -23,7 +23,8 @@ module.exports = fp(async fastify => {
   // eslint-disable-next-line
   const def = datasets[ datasets.default ] // (datasets.default && typeof datasets.default.valueOf()==='string') ?
       , defaultFile = `${datapath}/${def.path}`
-      , listDatasets = {};
+      , listDatasets = {}
+      , datasetHandles = {};
 
   for (let [id, val] of Object.entries(datasets)) {
 
@@ -37,7 +38,8 @@ module.exports = fp(async fastify => {
 
       if (fs.existsSync(file)) {
 
-        const {info} = gpicker.openFile(file, val.band)
+        const handle = gpicker.openFile(file, val.band)
+            , {info} = handle
             , isDefault = (id === 'default' || id === datasets.default);
 
         listDatasets[ id ] = {
@@ -45,6 +47,7 @@ module.exports = fp(async fastify => {
           isDefault,
           ...info
         }
+        datasetHandles[ id ] = handle;
       }
       else {
         fastify.log.warn(`Dataset not exists! ${id} ${file} `);
@@ -64,14 +67,14 @@ module.exports = fp(async fastify => {
 
   fastify.decorate('datasets', listDatasets);
   fastify.decorate('datasetsIds', datasetsIds);
+  fastify.decorate('datasetHandles', datasetHandles);
 
   fastify.log.info(`Datasets available: ${datasetsIds}`);
 
-  if (fs.existsSync(defaultFile)) {
+  // eslint-disable-next-line
+  const datasetDefault = datasetHandles[ datasets.default ]
 
-    const datasetDefault = gpicker.openFile(defaultFile, def.band, def.epsg);
-
-    fastify.decorate('datasetDefault', datasetDefault );
+  if (datasetDefault) {
     fastify.log.info(`Dataset default loaded: ${defaultFile}`);
   }
   else {
