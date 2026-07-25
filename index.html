@@ -310,79 +310,99 @@
       }
       return url;
     }
-    function getStatus(name) {
-        const url = j(api, 'status');
+
+    function apiGet(...urlParts) {
+        const url = j(...urlParts);
 
         logger('-> GET', url)
-        return $.getJSON(url).done(res => {
-            logger('<-', res)
-        });
+        return fetch(url)
+            .then(res => res.json())
+            .then(res => {
+                logger('<-', res)
+                return res;
+            });
     }
-    function getDatasets() {
-        const url = j(api, 'datasets');
+    function apiPost(urlParts, body, customParms) {
+        let url = j(...urlParts);
 
-        logger('-> GET', url)
-        return $.getJSON(url).done(res => {
-            logger('<-', res)
-        });
-    }
-    function getDataset(name) {
-        const url = j(api, datasetId);
-
-        logger('-> GET', url)
-        return $.getJSON(url).done(res => {
-            logger('<-', res)
-        });
-    }
-    function getLonlat(lon, lat) {
-        const url = j(api, datasetId, lon, lat);
-
-        logger('-> GET', url)
-        return $.getJSON(url).done(res => {
-            logger('<-', res)
-        });
-    }
-    function getContourLonLat(lon, lat) {
-        const url = j(api, datasetId, 'contour', lon, lat);
-
-        logger('-> GET', url)
-        return $.getJSON(url).done(res => {
-            logger('<-', res)
-        });
-    }
-    function postLonlat(lon, lat) {
-        const url = j(api, datasetId, 'lonlat');
-
-        logger('-> POST', url)
-        return $.ajax({
-            url,
-            type: 'POST',
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify({lon, lat}),
-        }).done(res => {
-            logger('<-', res)
-        });
-    }
-    function postGeometry(geo, customParms) {
-
-        let url = j(api, datasetId, 'geometry');
-
-        if( Object.keys(customParms).length>0) {
-            url += '?'+$.param(customParms);
+        if (customParms && Object.keys(customParms).length > 0) {
+            url += '?' + $.param(customParms);
         }
 
         logger('-> POST', url)
-        return $.ajax({
-                url,
-                type: 'POST',
-                dataType: 'json',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify(geo),
+        return fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json; charset=utf-8'},
+                body: JSON.stringify(body),
             })
-            .done(geo => {
+            .then(res => res.json())
+            .then(res => {
+                logger('<-', res)
+                return res;
+            });
+    }
 
-                logger('<-', geo)
+    const GeoPickerAPI = {
+
+        /* GET /status */
+        getStatus(name) {
+            return apiGet(api, 'status');
+        },
+
+        /* GET /datasets */
+        getDatasets() {
+            return apiGet(api, 'datasets');
+        },
+
+        /* GET /:datasetId */
+        getDataset(name) {
+            return apiGet(api, datasetId);
+        },
+
+        /* GET /:datasetId/:lon/:lat */
+        getLonlat(lon, lat) {
+            return apiGet(api, datasetId, lon, lat);
+        },
+
+        /* GET /:datasetId/contour/:lon/:lat */
+        getContourLonLat(lon, lat) {
+            return apiGet(api, datasetId, 'contour', lon, lat);
+        },
+
+        /* GET /:datasetId/:locations */
+        getLocations(locs) {
+            const locations = locs.map(a => a.join(',')).join('|');
+
+            return apiGet(api, datasetId, locations).then(values => {
+
+                const coordinates = locs.map((loc, k) => {
+                  loc.push(values[k]);
+                  return loc;
+                });
+
+                controlElevation.clear();
+
+                layerElevation.clearLayers();
+                layerElevation.addData({
+                  type: 'Feature',
+                  geometry: {
+                    type: 'LineString',
+                    coordinates
+                  }
+                });
+
+                editableLayer.addLayer(layerElevation);
+            });
+        },
+
+        /* POST /:datasetId/lonlat */
+        postLonlat(lon, lat) {
+            return apiPost([api, datasetId, 'lonlat'], {lon, lat});
+        },
+
+        /* POST /:datasetId/geometry */
+        postGeometry(geo, customParms) {
+            return apiPost([api, datasetId, 'geometry'], geo, customParms).then(geo => {
 
                 controlElevation.clear();
 
@@ -410,79 +430,30 @@
 
                 editableLayer.addLayer(layerElevation);
             });
-    }
-    function getLocations(locs) {
-        const locations = locs.map(a => a.join(',')).join('|');
+        },
 
-        const url = j(api, datasetId, locations);
+        /* POST /:datasetId/locations */
+        postLocations(locs) {
+            return apiPost([api, datasetId, 'locations'], locs).then(coordinates => {
 
-        logger('-> GET', url)
-        return $.getJSON(url).done(values => {
+                controlElevation.clear();
 
-            logger('<-', values);
+                layerElevation.clearLayers();
+                layerElevation.addData({
+                    type: 'Feature',
+                    geometry: {
+                        type: 'LineString',
+                        coordinates
+                    }
+                });
 
-            const coordinates = locs.map((loc, k) => {
-              loc.push(values[k]);
-              return loc;
+                editableLayer.addLayer(layerElevation);
             });
+        },
 
-            controlElevation.clear();
-
-            layerElevation.clearLayers();
-            layerElevation.addData({
-              type: 'Feature',
-              geometry: {
-                type: 'LineString',
-                coordinates
-              }
-            });
-
-            editableLayer.addLayer(layerElevation);
-        });
-    }
-    function postLocations(locs) {
-        const url = j(api, datasetId, 'locations');
-
-        logger('-> POST', locs);
-        return $.ajax({
-            url,
-            type: 'POST',
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(locs),
-        }).done(coordinates => {
-
-            logger('<-', coordinates)
-
-            controlElevation.clear();
-
-            layerElevation.clearLayers();
-            layerElevation.addData({
-                type: 'Feature',
-                geometry: {
-                    type: 'LineString',
-                    coordinates
-                }
-            });
-
-            editableLayer.addLayer(layerElevation);
-        });
-    }
-    function postGeometryMeta(geo) {
-
-        const url = j(api, 'metadata', 'geometry');
-
-        logger('-> POST META', url)
-        return $.ajax({
-                url,
-                type: 'POST',
-                dataType: 'json',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify(geo),
-            })
-            .done(res => {
-
-                logger('<- METADATA',JSON.stringify(res,null,4));
+        /* POST /metadata/geometry */
+        postGeometryMeta(geo) {
+            return apiPost([api, 'metadata', 'geometry'], geo).then(res => {
 
                 L.circleMarker(res.centroid.reverse(), {
                     color:'green', radius: 6
@@ -496,7 +467,10 @@
                 .bindTooltip("Middlepoint", {permanent: true, direction: 'top'})
                 .addTo(editableLayer);
             });
-    }
+        },
+    };
+
+
     const map = L.map('map', {
         zoom,
         center,
@@ -543,7 +517,7 @@
 
         const { lng, lat } = e.latlng;
 
-        postLonlat(lng, lat).done(res => {
+        GeoPickerAPI.postLonlat(lng, lat).then(res => {
             const { lon, lat, val } = res;
             tooltipClick.setContent(`<big>${val}m</big><br>${lon}<br>${lat}`)
         });
@@ -595,7 +569,7 @@
         } else if (e.layer) {
             geo = e.layer.toGeoJSON();
         }
-        postGeometry(geo, {densify: 90});  //add point any 90m
+        GeoPickerAPI.postGeometry(geo, {densify: 90});  //add point any 90m
     });
 
     /**
@@ -611,12 +585,12 @@
             const { polyline } = e.polyline
                 , { geometry } = polyline.toGeoJSON();
 
-            postLocations(geometry.coordinates).done(() => {
+            GeoPickerAPI.postLocations(geometry.coordinates).then(() => {
                 controlDrawFree.addTo(editableLayer);
                 controlDrawFree.setMode(L.Pather.MODE.ALL)
             });
 
-            postGeometryMeta(geometry);
+            GeoPickerAPI.postGeometryMeta(geometry);
         });
 
 
@@ -636,7 +610,7 @@
                 }
             });
 
-        getStatus().done(({config}) => {
+        GeoPickerAPI.getStatus().then(({config}) => {
             const $sel = $div.find('select')
             Object.keys(config?.formats).forEach(f => {
                 $('<option>').val(f).text(f).appendTo($sel);
@@ -679,7 +653,7 @@
             controlMousePoint._tooltip.setLatLng(e.latlng);
             const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
 
-            getLonlat(lon, lat).done(res => {
+            GeoPickerAPI.getLonlat(lon, lat).then(res => {
                 const [val] = res;
                 controlMousePoint._tooltip.setContent(`<big>${val}m</big><br>${lon}, ${lat}`)
             });
@@ -729,7 +703,7 @@
         const { geometry } = polylocs.toGeoJSON(4),
               { coordinates } = geometry;
 
-        getLocations(coordinates);
+        GeoPickerAPI.getLocations(coordinates);
     };
 
     controlMouseLine.onAdd = map => {
@@ -756,7 +730,7 @@
 
         const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
 
-        getContourLonLat(lon, lat).done(coordinates => {
+        GeoPickerAPI.getContourLonLat(lon, lat).then(coordinates => {
             
             editableLayer.clearLayers();
             const layerContour = L.geoJSON({
@@ -820,7 +794,7 @@
 
             fileLayer.addData(data);
 
-            postGeometry(data)
+            GeoPickerAPI.postGeometry(data)
 
             return fileLayer;
         },
@@ -853,7 +827,7 @@
                 e.preventDefault()
                 e.stopImmediatePropagation();
 
-                getDataset(datasetId).done(res => {
+                GeoPickerAPI.getDataset(datasetId).then(res => {
 
                     logger(JSON.stringify(res,null,4))
 
@@ -892,7 +866,7 @@
             .on('click', e => {
                 e.preventDefault()
                 e.stopImmediatePropagation();
-                getDatasets().done(res => {
+                GeoPickerAPI.getDatasets().then(res => {
                     logger(JSON.stringify(res,null,4))
                 });
             });
@@ -911,7 +885,7 @@
                 e.preventDefault()
                 e.stopImmediatePropagation();
 
-                getStatus().done(res => {
+                GeoPickerAPI.getStatus().then(res => {
                     logger(JSON.stringify(res,null,4))
                 });
             });
