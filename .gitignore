@@ -5,6 +5,6 @@ tests/data
 server/custom.config.yml
 TODO
 .claude/
-CLAUDE.md
-AGENTS.md
+CLAUDE.*
+AGENTS.*
 
