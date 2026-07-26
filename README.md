@@ -67,7 +67,6 @@ This basic structure can be extended starting from the environment variable `PRE
 |  ✔️   | format   | `input`  | output format conversion |
 |  ✔️   | densify  | `input`  | enable densification of points in the result |
 |  ✔️   | simplify | `input`  | enable simplication geometry of the result |
-|  ❌  | height   | false    | add vertical distance from the ground(only input has elevation) |
 
 Some behaviors to know about parameters are that:
 
@@ -163,16 +162,17 @@ for details see the descriptions in the [Roadmap issues](https://github.com/open
 |------|-------------|
 |  ✔️  | Swagger Documentation Interface |
 |  ✔️  | manage multiple datasets |
+|  ✔️  | command line interface |
+|  ✔️  | enable densify function |
+|  ✔️  | enable simply function |
 |  🚧  | extend benchmarks for any endpoints |
 |  🚧  | ES6 modules |
-|  ✔️  | enable densify function |
-|  🚧  | enable simply function |
+|  ❌  | OGC API Features endpoint |
 |  ❌  | unit testing |
 |  ❌  | support vector format in datasets, such as shapefile |
 |  ❌  | limit access by api key |
 |  ❌  | caching responses |
 |  ❌  | interfaces: websocket, jsonrpc |
-|  ❌  | command line interface |
 
 ## Copyright
 
