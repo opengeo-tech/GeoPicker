@@ -15,38 +15,28 @@
     <link href="//unpkg.com/fontawesome-4.7@4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <style>
     body {
-        margin:0;
-        padding: 0;
-        color: #0079c2;
-        background: #fff;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        overflow-y: hidden;
+        margin:0;padding: 0;color: #0079c2;background: #fff;font-family: Verdana, Geneva, Tahoma, sans-serif;overflow-y: hidden;
     }
     h1 {
-        margin: 8px 0;
-        float: left;
+        margin: 8px 0;float: left;
     }
     h1, p {
       padding: 0 8px;
     }
     p {
-        margin: 0;
-        clear: both;
+        margin: 0;clear: both;
     }
     h1 a{
         color: #0079c2;
     }
     a {
-      text-decoration: none;
-      color: #41454d;
+      text-decoration: none;color: #41454d;
     }
     a:hover {
       color: #0079c2;
     }
     img {
-      height: 80px;
-      line-height: 80px;
-      vertical-align: middle;
+      height: 80px;line-height: 80px;vertical-align: middle;
     }
     nav {
         padding: 10px;
@@ -162,6 +152,14 @@
         margin-left: 0;
         font-size: 16px;
     }
+    .leaflet-touch .leaflet-control-layers-toggle {
+        width: 30px;
+        height: 30px;
+    }
+    .leaflet-retina .leaflet-control-layers-toggle {
+        background-image: url(images/layers-2x.png);
+        background-size: 20px 20px;
+    }
     #map.hide-cursor {
         cursor: none;
     }
@@ -180,7 +178,6 @@
     #help {
         background: #F4D03F;
         font-size: 18px;
-        padding: 10px;
         min-width: 10px;
         width: auto;
     }
@@ -225,39 +222,23 @@
     }
     </style>
 </head>
-
 <body>
-
     <h1>
-      <a href="https://opengeo.tech/geopicker">
-        <img src="https://raw.githubusercontent.com/opengeo-tech/GeoPicker/master/docs/logo.png" />
-        GeoPicker
-      </a>
+      <a href="https://opengeo.tech/geopicker"><img src="https://raw.githubusercontent.com/opengeo-tech/GeoPicker/master/docs/logo.png" /> GeoPicker</a>
     </h1>
     <nav>
-      <a href="https://github.com/opengeo-tech/GeoPicker/">
-        <i class="fa fa-github" aria-hidden="true"></i> <span>GitHub Sources</span>
-      </a>
-      |
-      <a href="https://opengeo.tech/geopicker/docs">
-        <i class="fa fa-question-circle"></i> <span>API Docs</span>
-      </a>
-      |
-      <a href="https://opengeo.tech/stefano-cudini">
-        <i class="fa fa-user"></i> <span>Author</span>
-      </a>
-      |
-      <a href="https://www.paypal.com/paypalme/stefanocudini" target="_blank" title="finance the project if it was useful for your work">
-        <i class="fa fa-heart"></i> <span>Donate</span>
-      </a>
+      <a href="https://github.com/opengeo-tech/GeoPicker/"><i class="fa fa-github" aria-hidden="true"></i> <span>GitHub Sources</span></a> | 
+      <a href="https://opengeo.tech/geopicker/docs"><i class="fa fa-question-circle"></i> <span>API Docs</span></a> | 
+      <a href="https://opengeo.tech/stefano-cudini"><i class="fa fa-user"></i> <span>Author</span></a> | 
+      <a href="https://www.paypal.com/paypalme/stefanocudini" target="_blank" title="finance the project if it was useful for your work"><i class="fa fa-heart"></i> <span>Donate</span></a>
     </nav>
     <aside>
       Interactive map to play with GeoPicker <strong>elevation service API Rest</strong>.
       Each button activates a different <strong>endpoint</strong> to request data,
       in the box below the data exchanged, green panel shows the <strong>elevation profile</strong> in real-time.
+      Consult the source code to study the API endpoints.
     </aside>
-    <div id="map">
-    </div>
+    <div id="map"></div>
     <div id="log-container">
         <div id="log-handle">...</div>
         <pre id="log"></pre>
@@ -275,76 +256,13 @@
 
     const apiBaseUrl = location.href
         , datasetDefault = 'default'
-        , datasetAspect = 'aspect'
-        , center = [46, 11]
-        , zoom = 9;
-
-    const baselayers = {
-        'Roads': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'),        
-        'Carto': L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}@2x.png'),
-        'Cycle': L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png'),
-        'Satellite': L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}'),
-        'Terrain': L.imageOverlay('https://opengeo.tech/dtm/alps.jpg', [
-            [45.436111,9.1980555], [47.894166,13.211111]
-        ])
-    };
-
-    const $divLog = $('#log');
-    const $divHelp = $('<div id="help" class="leaflet-control-btn"><i class="fa fa-info"></i> <span>&nbsp;<span></div>');
-
-    function logger() {
-        const args = Array.prototype.map.call(arguments, a => {return typeof a ==='object'?JSON.stringify(a) : a})
-        let log = Array.prototype.join.call(args, ' ')
-        let col = args[0]==='<-' ? '#0a0' : '#a00';
-        let type = args[0]==='<-' ? 'Response' : 'Request';
-        const row = `<span style="color:${col}"> ${type} ${log}</span>`;
-        $divLog.append(`${row}\n`).scrollTop($divLog[0].scrollHeight);
-    }
-    
-    function apiGet(...urlParts) {
-        let url = Array.prototype.join.call([apiBaseUrl, ...urlParts].map(a => `${a}`.replace(/\/$/, '')), '/');
-        if (Object.keys(GeoPickerAPI.globalParams).length > 0) {
-            url += '?' + $.param(GeoPickerAPI.globalParams);
-        }
-
-        logger('-> GET', url)
-        return fetch(url)
-            .then(res => res.json())
-            .then(res => {
-                logger('<-', res)
-                return res;
-            });
-    }
-
-    function apiPost(urlParts, body, customParms = {}) {
-        let url = Array.prototype.join.call([apiBaseUrl, ...urlParts].map(a => `${a}`.replace(/\/$/, '')), '/');
-        if (Object.keys(GeoPickerAPI.globalParams).length > 0) {
-            url += '?' + $.param(GeoPickerAPI.globalParams);
-        }
-
-        if (Object.keys(customParms).length > 0) {
-            url += '?' + $.param(customParms);
-        }
-
-        logger('-> POST', url)
-        return fetch(url, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json; charset=utf-8'},
-                body: JSON.stringify(body),
-            })
-            .then(res => res.json())
-            .then(res => {
-                logger('<-', res)
-                return res;
-            });
-    }
+        , datasetAspect = 'aspect';
 
     const GeoPickerAPI = {
-
         /* Additional parameters for each endpoint */
         globalParams: {
             //simplify: 0.02
-            //densify: 60  //add points each densify value (in meters)
+            //densify: 60
             //format: 'gpx'
             //precision: 7
         },
@@ -390,17 +308,64 @@
         postGeometryMetadataDescription: "post geojson geometry to get metadata (centroid, middlepoint, etc.)"
     };
 
+    const $divLog = $('#log');
+    const $divHelp = $('<div id="help" class="leaflet-control-btn"><i class="fa fa-question-circle"></i> <span>&nbsp;<span></div>');
+
+    function apiLogger() {
+        const args = Array.prototype.map.call(arguments, a => {return typeof a ==='object'?JSON.stringify(a) : a})
+        let log = Array.prototype.join.call(args, ' ')
+        let col = args[0]==='<-' ? '#0a0' : '#00a';
+        let type = args[0]==='<-' ? 'Response' : 'Request';
+        const row = `<span style="color:${col}"> ${type} ${log}</span>`;
+        $divLog.append(`${row}\n`).scrollTop($divLog[0].scrollHeight);
+    }
+    
+    function apiGet(...urlParts) {
+        let url = Array.prototype.join.call([apiBaseUrl, ...urlParts].map(a => `${a}`.replace(/\/$/, '')), '/');
+        if (Object.keys(GeoPickerAPI.globalParams).length > 0) {
+            url += '?' + $.param(GeoPickerAPI.globalParams);
+        }
+
+        apiLogger('-> GET', url)
+        return fetch(url)
+            .then(res => res.json())
+            .then(res => {
+                apiLogger('<-', JSON.stringify(res))
+                return res;
+            });
+    }
+
+    function apiPost(urlParts, body, customParms = {}) {
+        let url = Array.prototype.join.call([apiBaseUrl, ...urlParts].map(a => `${a}`.replace(/\/$/, '')), '/');
+        if (Object.keys(GeoPickerAPI.globalParams).length > 0) {
+            url += '?' + $.param(GeoPickerAPI.globalParams);
+        }
+
+        if (Object.keys(customParms).length > 0) {
+            url += '?' + $.param(customParms);
+        }
+
+        apiLogger('-> POST', url)
+        return fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json; charset=utf-8'},
+                body: JSON.stringify(body),
+            })
+            .then(res => res.json())
+            .then(res => {
+                apiLogger('<-', JSON.stringify(res))
+                return res;
+            });
+    }
 
     const map = L.map('map', {
-        zoom,
-        center,
+        zoom: 9,
+        center: [46, 11],
         zoomControl: false,
         attributionControl: false,
-        doubleClickZoom: false,
-        //scrollWheelZoom: false,
-        layers: baselayers.Cycle
+        doubleClickZoom: false
     });
-    
+
     /**
      * show help message at bottom left
      */
@@ -408,10 +373,17 @@
     controlHelp.onAdd = map => $divHelp[0];
     controlHelp.addTo(map);
 
-    L.control.layers(baselayers, {}, {position:'topright', collapsed: true}).addTo(map);
+    L.control.layers({
+        'Carto': L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png').addTo(map),
+        'Satellite': L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}'),
+        'Terrain': L.imageOverlay('https://opengeo.tech/dtm/alps.jpg', [[45.436111,9.1980555], [47.894166,13.211111]])
+    }, {}, {
+        position:'topright',
+        collapsed: false
+    }).addTo(map);
+
     L.control.zoom({position:'topright'}).addTo(map);
 
-    // https://github.com/MrMufflon/Leaflet.Elevation
     const controlElevation = new L.Control.Elevation({
             width: 500,
             height: 250,
@@ -428,7 +400,6 @@
     }).addTo(map);
 
     const editableLayer = L.featureGroup().addTo(map);
-
 
     /**
      * mouse click picker
@@ -893,8 +864,6 @@
 
                 GeoPickerAPI.getDataset(datasetDefault).then(res => {
 
-                    logger(JSON.stringify(res,null,4))
-
                     const {minLon,minLat,maxLon,maxLat} = res.bbox;
 
                     const bb = L.latLngBounds([minLat,minLon],[maxLat,maxLon])
@@ -932,9 +901,7 @@
             .on('click', e => {
                 e.preventDefault()
                 e.stopImmediatePropagation();
-                GeoPickerAPI.getDatasets().then(res => {
-                    logger(JSON.stringify(res,null,4))
-                });
+                GeoPickerAPI.getDatasets();
             });
         return $div[0];
     };
@@ -954,9 +921,7 @@
                 e.preventDefault()
                 e.stopImmediatePropagation();
 
-                GeoPickerAPI.getStatus().then(res => {
-                    logger(JSON.stringify(res,null,4))
-                });
+                GeoPickerAPI.getStatus();
             });
         return $div[0];
     };
