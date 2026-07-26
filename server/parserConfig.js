@@ -1,8 +1,6 @@
 /**
  * lodash only dependency replacement for old npm: @stefcud/configyml
  */
-const merge = require('lodash/merge')
-
 const fs = require('fs')
 const yaml = require('js-yaml')
 const Ajv = require('ajv')
@@ -38,6 +36,19 @@ function getPath(obj, path) {
 }
 function hasPath(obj, path) {
     return getPath(obj, path) !== undefined
+}
+function merge(a, b) {
+    return {
+        ...a,
+        ...Object.fromEntries(
+            Object.entries(b).map(([k, v]) => [
+                k,
+                isPlainObject(v) && isPlainObject(a[k])
+                    ? merge(a[k], v)
+                    : v
+            ])
+        )
+    };
 }
 let multiFile = false
 let envId
@@ -188,16 +199,13 @@ function swapVariables(configFile) {
     }
 
     let file = multiFile ? mapValues(configFile, readAndSwap) : configFile
-    file = merge({}, file || {}, file[environmentType] || {}, {
+    file = merge(merge(file || {}, file[environmentType] || {}), {
         envId,
         ENVID,
         isDev,
         timestamp
     })
 
-    /* unuseful replaced in loadConfigFile  const enved = transform(process.env, file).result;
-  file = readAndSwap(enved)
-  return file */
     return readAndSwap(file)
 }
 module.exports = function (opts) {

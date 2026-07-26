@@ -23,8 +23,7 @@
     "fluent-json-schema": "^4.0.0",
     "pino-pretty": "^9.1.1",
     "togpx": "^0.5.4",
-    "js-yaml": "^3.14.0",
-    "lodash": "^4.17.20"
+    "js-yaml": "^3.14.0"
   },
   "scripts": {
     "start": "node server.js"
