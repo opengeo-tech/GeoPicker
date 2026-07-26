@@ -1,21 +1,44 @@
 /**
  * lodash only dependency replacement for old npm: @stefcud/configyml
  */
-const flow = require('lodash/fp/flow')
-const head = require('lodash/fp/head')
-const pick = require('lodash/fp/pick')
-const keys = require('lodash/fp/keys')
-const mapValues = require('lodash/mapValues')
 const merge = require('lodash/merge')
-const isPlainObject = require('lodash/isPlainObject')
-const isString = require('lodash/isString')
-const has = require('lodash/has')
-const get = require('lodash/get')
 
 const fs = require('fs')
 const yaml = require('js-yaml')
-const args = require('yargs').argv
+const Ajv = require('ajv')
+const S = require('fluent-json-schema')
 const timestamp = new Date().toISOString()
+
+function validateConfig(config, schemaPath) {
+    const configSchema = require(schemaPath)(S)
+    const validate = new Ajv({ allErrors: true }).compile(configSchema.valueOf())
+
+    if (validate(config)) return
+
+    const details = validate.errors
+        .map(e => `${e.instancePath || '(root)'} ${e.message}`)
+        .join('; ')
+
+    throw new Error(`Invalid config.yml: ${details}`)
+}
+
+function isPlainObject(val) {
+    if (val === null || typeof val !== 'object') return false
+    const proto = Object.getPrototypeOf(val)
+    return proto === Object.prototype || proto === null
+}
+function isString(val) {
+    return typeof val === 'string'
+}
+function mapValues(obj, fn) {
+    return Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, fn(v, k)]))
+}
+function getPath(obj, path) {
+    return String(path).split('.').reduce((acc, key) => (acc == null ? undefined : acc[key]), obj)
+}
+function hasPath(obj, path) {
+    return getPath(obj, path) !== undefined
+}
 let multiFile = false
 let envId
 let ENVID
@@ -40,14 +63,15 @@ function load(opts) {
 
     config = loadConfig(basepath, configfile)
     environments = config.environments || { default: 'prod' }
-    envId = getEnvId(config, env)
+    envId = getEnvId(env)
     ENVID = envId.toUpperCase()
     isDev = ['DEV', 'DEVELOP', 'DEVELOPMENT'].includes(ENVID)
-    environmentTypes = environments.static || keys(config)
+    environmentTypes = environments.static || Object.keys(config)
     environmentType = environmentTypes.includes(envId)
         ? envId
         : environments.default
     config = swapVariables(config)
+
     return config
 }
 
@@ -87,22 +111,34 @@ function loadConfig(basepath = '.', configfile = 'config.yml') {
     }
 }
 
-function getEnvId(obj, env) {
-    return (
-        env ||
-        args.env ||
-        flow(pick(keys(obj)), keys, head)(args) ||
-        processEnv.NODE_ENV
-    )
+function getEnvId(env) {
+    return env || processEnv.NODE_ENV
 }
 
 function substitute(file, p) {
+    const wholeMatch = /^\${([\w.-]+)}$/.exec(p)
+    if (wholeMatch) {
+        const term = wholeMatch[1]
+        if (hasPath(file, term)) {
+            return { success: true, replace: getPath(file, term) }
+        }
+        if (hasPath(file.defaultsEnvVars, term)) {
+            return { success: true, replace: getPath(file.defaultsEnvVars, term) }
+        }
+        return { success: false, replace: p }
+    }
+
     let success = false
     const replaced = p.replace(/\${([\w.-]+)}/g, function (match, term) {
-        if (!success) {
-            success = has(file, term)
+        if (hasPath(file, term)) {
+            success = true
+            return getPath(file, term)
         }
-        return get(file, term) || get(file.defaultsEnvVars, term) || match
+        if (hasPath(file.defaultsEnvVars, term)) {
+            success = true
+            return getPath(file.defaultsEnvVars, term)
+        }
+        return match
     })
     return { success, replace: replaced }
 }
@@ -140,31 +176,6 @@ function transform(file, obj) {
     return { changed, result: resultant }
 }
 
-function log() {
-    console.log('CONFIG:', envId || '-', environmentType || '-')
-}
-
-function requireSettings(settings) {
-    const erredSettings = []
-    settings = isString(settings) ? [settings] : settings
-    settings.forEach(function (setting) {
-        if (!has(config, setting)) {
-            erredSettings.push(setting)
-        }
-    });
-
-    if (erredSettings.length > 1) {
-        throw new Error(
-            'The following settings are required in config yml file: ' +
-                erredSettings.join('; ')
-        )
-    }
-
-    if (erredSettings.length === 1) {
-        throw new Error(erredSettings[0] + ' is required in config yml file')
-    }
-}
-
 function swapVariables(configFile) {
     function readAndSwap(obj) {
         let altered = false
@@ -193,5 +204,4 @@ module.exports = function (opts) {
     return load(opts)
 }
 module.exports.load = load
-module.exports.log = log
-module.exports.require = requireSettings
+module.exports.validateConfig = validateConfig

@@ -3,13 +3,21 @@
  * Copyright Stefano Cudini stefano.cudini@gmail.com
  * https://opengeo.tech
  */
-const basepath = __dirname
-    , config = require('./parserConfig')({basepath})
+const Fastify = require('fastify')
     , gpicker = require('../lib/geopicker')
-    , Fastify = require('fastify')
-    , {utils, package} = gpicker
-    , {fastifyConf, port, host, prefix} = config
-    , {cors, compress, swagger, demopage, verbose} = config;
+    , parserConfig = require('./parserConfig')
+
+const config = parserConfig.load({basepath: __dirname, configfile: 'config.yml'})
+
+// TODO config validation before starting the server
+//     , configValid = parserConfig.validateConfig(config, {schema: './schemas/config'});
+// if(!configValid) {
+//     throw new Error('Invalid config.yml');
+// }
+
+const {utils, package} = gpicker
+const {fastifyConf, port, host, prefix} = config
+const {cors, compress, swagger, demopage, verbose} = config;
 
 // eslint-disable-next-line
 const fastify = Fastify(fastifyConf);
