@@ -148,6 +148,20 @@
         background: #000;
         border-radius: 50%;
     }
+    .leaflet-control-filelayer .leaflet-control-zoom-in.leaflet-bar-part {
+        min-width: 160px;
+        text-align: left;
+        padding: 0 4px;
+    }
+    .leaflet-control-filelayer span {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 12px;
+        font-weight: normal;
+    }
+    .leaflet-control-filelayer .fa {
+        margin-left: 0;
+        font-size: 16px;
+    }
     #map.hide-cursor {
         cursor: none;
     }
@@ -164,14 +178,11 @@
         font-weight: bold;
     }
     #help {
-      background: #F4D03F;
-      font-size: 18px;
-      padding: 10px;
-      min-width: 10px;
-      width: auto;
-    }
-    .leaflet-control-filelayer .fa {
-        margin-left: -6px;
+        background: #F4D03F;
+        font-size: 18px;
+        padding: 10px;
+        min-width: 10px;
+        width: auto;
     }
     .fa {
         display: inline-block;
@@ -251,7 +262,6 @@
         <div id="log-handle">...</div>
         <pre id="log"></pre>
     </div>
-    <script src="//unpkg.com/underscore@1.9.1/underscore.js"></script>
     <script src="//unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
     <script src="//unpkg.com/leaflet@1.4.0/dist/leaflet-src.js"></script>
     <script src="//unpkg.com/clipboard@2.0.4/dist/clipboard.js"></script>
@@ -263,79 +273,39 @@
     <script src="//unpkg.com/leaflet-filelayer@1.2.0/src/leaflet.filelayer.js"></script>
     <script>
 
-    const api = location.href
-        , datasetId = 'default'
+    const apiBaseUrl = location.href
+        , datasetDefault = 'default'
         , datasetAspect = 'aspect'
         , center = [46, 11]
         , zoom = 9;
 
-    
-    const urlTileOsm = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        , urlTileCycle = 'https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png'
-        , urlTileCarto = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}@2x.png'
-        , urlTileIgm = 'http://www.pcn.minambiente.it/arcgis/rest/services/immagini/IGM_25000/MapServer/tile/{z}/{y}/{x}'
-        , urlTileGooglesat = 'https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}'
-        , urlTileCartoLabels = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}.png'
-        , urlTileAlpsDtm = 'https://opengeo.tech/dtm/alps.jpg'
-        , boundsAlpsDtm = [
-            [45.43611111090769,9.198055555261936],
-            [47.89416666689944,13.21111111109092]
-        ];
-
     const baselayers = {
-        'Roads': L.tileLayer(urlTileOsm),        
-        'Carto': L.tileLayer(urlTileCarto),
-        'Cycle': L.tileLayer(urlTileCycle),
-        'Satellite': L.tileLayer(urlTileGooglesat),
-        'Alps DTM': L.imageOverlay(urlTileAlpsDtm, boundsAlpsDtm)
+        'Roads': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'),        
+        'Carto': L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}@2x.png'),
+        'Cycle': L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png'),
+        'Satellite': L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}'),
+        'Terrain': L.imageOverlay('https://opengeo.tech/dtm/alps.jpg', [
+            [45.436111,9.1980555], [47.894166,13.211111]
+        ])
     };
 
     const $divLog = $('#log');
     const $divHelp = $('<div id="help" class="leaflet-control-btn"><i class="fa fa-info"></i> <span>&nbsp;<span></div>');
 
-    const Texts = {
-      get_status: "get service status and versions",
-      get_contour: "get contour line on click point to map",
-      get_dataset: "get attributes of a certain dataset",
-      get_datasets: "get list available datasets and their attributes",
-      get_lonlat: "get single location value of dataset, densify not supported",
-      get_locations: "send via get locations as string in format: `lon,lat|lon,lat|lon,lat`), densify not supported",
-      post_lonlat: "send in POST body lon lat object",
-      post_geometry: "send in POST body geojson geometry Point or LineString",
-      post_locations: "send in POST body array or object of locations in format: `[[lon,lat],[lon,lat],[lon,lat]]`",
-      reset: "reset all interations and data loaded"
-    };
-
-    //GET parameters for each call
-    const params = {
-        //simplify: 0.02
-        //densify: 60  //add points each densify value (in meters)
-        //format: 'gpx'
-        //precision: 7
-    };
-
     function logger() {
         const args = Array.prototype.map.call(arguments, a => {return typeof a ==='object'?JSON.stringify(a) : a})
         let log = Array.prototype.join.call(args, ' ')
-
         let col = args[0]==='<-' ? '#0a0' : '#a00';
         let type = args[0]==='<-' ? 'Response' : 'Request';
-
         const row = `<span style="color:${col}"> ${type} ${log}</span>`;
-
         $divLog.append(`${row}\n`).scrollTop($divLog[0].scrollHeight);
     }
-    function j() {
-      const args = Array.prototype.map.call(arguments, a => { return `${a}`.replace(/\/$/, '') })
-      let url = Array.prototype.join.call(args, '/')
-      if( Object.keys(params).length>0) {
-        url += '?'+$.param(params);
-      }
-      return url;
-    }
-
+    
     function apiGet(...urlParts) {
-        const url = j(...urlParts);
+        let url = Array.prototype.join.call([apiBaseUrl, ...urlParts].map(a => `${a}`.replace(/\/$/, '')), '/');
+        if (Object.keys(GeoPickerAPI.globalParams).length > 0) {
+            url += '?' + $.param(GeoPickerAPI.globalParams);
+        }
 
         logger('-> GET', url)
         return fetch(url)
@@ -345,8 +315,12 @@
                 return res;
             });
     }
+
     function apiPost(urlParts, body, customParms = {}) {
-        let url = j(...urlParts);
+        let url = Array.prototype.join.call([apiBaseUrl, ...urlParts].map(a => `${a}`.replace(/\/$/, '')), '/');
+        if (Object.keys(GeoPickerAPI.globalParams).length > 0) {
+            url += '?' + $.param(GeoPickerAPI.globalParams);
+        }
 
         if (Object.keys(customParms).length > 0) {
             url += '?' + $.param(customParms);
@@ -367,135 +341,53 @@
 
     const GeoPickerAPI = {
 
-        /* GET /status */
-        getStatus(name) {
-            return apiGet(api, 'status');
+        /* Additional parameters for each endpoint */
+        globalParams: {
+            //simplify: 0.02
+            //densify: 60  //add points each densify value (in meters)
+            //format: 'gpx'
+            //precision: 7
         },
+
+        /* GET /status */
+        getStatus: () => apiGet('status'),
+        getStatusDescription: "get service status and versions",
 
         /* GET /datasets */
-        getDatasets() {
-            return apiGet(api, 'datasets');
-        },
+        getDatasets: () => apiGet('datasets'),
+        getDatasetsDescription: "get list available datasets and their attributes",
 
         /* GET /:datasetId */
-        getDataset(name) {
-            return apiGet(api, datasetId);
-        },
+        getDataset: (datasetId) => apiGet(datasetId),
+        getDatasetDescription: "get attributes of a certain dataset",
 
         /* GET /:datasetId/:lon/:lat */
-        getLonLat(lon, lat) {
-            return apiGet(api, datasetId, lon, lat);
-        },
-
-        /* GET /:datasetId/:lon/:lat */
-        getAspectLonLat(lon, lat) {
-            return apiGet(api, datasetAspect, lon, lat);
-        },
+        getLonLat: (datasetId, lon, lat) => apiGet(datasetId, lon, lat),
+        getLonLatDescription: "get data for a specific longitude and latitude",
 
         /* GET /:datasetId/contour/:lon/:lat */
-        getContourLonLat(lon, lat) {
-            return apiGet(api, datasetId, 'contour', lon, lat);
-        },
+        getContourLonLat: (datasetId, lon, lat) => apiGet(datasetId, 'contour', lon, lat),
+        getContourLonLatDescription: "get contour line on click point to map",
 
         /* GET /:datasetId/:locations */
-        getLocations(locs) {
-            const locations = locs.map(a => a.join(',')).join('|');
-
-            return apiGet(api, datasetId, locations).then(values => {
-
-                const coordinates = locs.map((loc, k) => {
-                  loc.push(values[k]);
-                  return loc;
-                });
-
-                controlElevation.clear();
-
-                layerElevation.clearLayers();
-                layerElevation.addData({
-                  type: 'Feature',
-                  geometry: {
-                    type: 'LineString',
-                    coordinates
-                  }
-                });
-
-                editableLayer.addLayer(layerElevation);
-            });
-        },
+        getLocations: (datasetId, locsString) => apiGet(datasetId, locsString),
+        getLocationsDescription: "get data for multiple locations",
 
         /* POST /:datasetId/lonlat */
-        postLonlat(lon, lat) {
-            return apiPost([api, datasetId, 'lonlat'], {lon, lat});
-        },
+        postLonlat: (datasetId, lon, lat) => apiPost([datasetId, 'lonlat'], {lon, lat}),
+        postLonlatDescription: "post longitude and latitude to get data",
 
         /* POST /:datasetId/geometry */
-        postGeometry(geo, customParms) {
-            return apiPost([api, datasetId, 'geometry'], geo, customParms).then(geo => {
-
-                controlElevation.clear();
-
-                let geometry
-
-                if (geo.coordinates) {   //is geometry
-                    geometry = geo
-                }
-                else if (geo.geometry) {  //is feature
-                    geometry = geo.geometry
-                }
-                else if (geo.features) { //is featureCollection
-                    geometry = geo.features[0].geometry
-                }
-                if (geometry.type === 'Point') {
-                    const [lon, lat, ele] = geometry.coordinates;
-                    let m = L.marker([lat, lon]).bindTooltip(`Elevation: ${ele}`, { permanent: true })
-                    editableLayer.addLayer(m);
-                    return
-                }
-                layerElevation.addData({
-                    type: 'Feature',
-                    geometry
-                });
-
-                editableLayer.addLayer(layerElevation);
-            });
-        },
+        postGeometry: (datasetId, geo, params) => apiPost([datasetId, 'geometry'], geo, params),
+        postGeometryDescription: "post geojson geometry to get data",
 
         /* POST /:datasetId/locations */
-        postLocations(locs) {
-            return apiPost([api, datasetId, 'locations'], locs).then(coordinates => {
-
-                controlElevation.clear();
-
-                layerElevation.clearLayers();
-                layerElevation.addData({
-                    type: 'Feature',
-                    geometry: {
-                        type: 'LineString',
-                        coordinates
-                    }
-                });
-
-                editableLayer.addLayer(layerElevation);
-            });
-        },
+        postLocations: (datasetId, locsArray) => apiPost([datasetId, 'locations'], locsArray),
+        postLocationsDescription: "post array of locations to get data",
 
         /* POST /metadata/geometry */
-        postGeometryMeta(geo) {
-            return apiPost([api, 'metadata', 'geometry'], geo).then(res => {
-
-                L.circleMarker(res.centroid.reverse(), {
-                    color:'green', radius: 6
-                })
-                .bindTooltip("Centroid", {permanent: true, direction: 'top'})
-                .addTo(editableLayer);
-
-                L.circleMarker(res.middlepoint.reverse(), {
-                    color:'yellow', radius: 6
-                })
-                .bindTooltip("Middlepoint", {permanent: true, direction: 'top'})
-                .addTo(editableLayer);
-            });
-        },
+        postGeometryMetadata: (geo) => apiPost(['metadata', 'geometry'], geo),
+        postGeometryMetadataDescription: "post geojson geometry to get metadata (centroid, middlepoint, etc.)"
     };
 
 
@@ -509,6 +401,13 @@
         layers: baselayers.Cycle
     });
     
+    /**
+     * show help message at bottom left
+     */
+    const controlHelp = new L.Control({ position: 'topright' })
+    controlHelp.onAdd = map => $divHelp[0];
+    controlHelp.addTo(map);
+
     L.control.layers(baselayers, {}, {position:'topright', collapsed: true}).addTo(map);
     L.control.zoom({position:'topright'}).addTo(map);
 
@@ -545,7 +444,7 @@
 
         const { lng, lat } = e.latlng;
 
-        GeoPickerAPI.postLonlat(lng, lat).then(res => {
+        GeoPickerAPI.postLonlat(datasetDefault, lng, lat).then(res => {
             const { lon, lat, val } = res;
             tooltipClick.setContent(`<big>${val}m</big><br>${lon}<br>${lat}`)
         });
@@ -553,7 +452,7 @@
     .once('dblclick', e => {
         showHelp('');   //hide message below
     });
-    showHelp(`Double Click on map ${Texts.post_lonlat}`);
+    showHelp(`Double Click on map ${GeoPickerAPI.postLonlatDescription}`);
 
     //editLayers
     const controlDraw = new L.Control.Draw({
@@ -583,21 +482,50 @@
     })
     .on('draw:created draw:drawvertex', e => {
 
-        let geo;
+        let geojson;
 
         if (e.layers) { //drawvertex
             const { features } = e.layers.toGeoJSON();
             //feature collection to single feature
-            geo = {
+            geojson = {
                 type: 'LineString',
                 coordinates: features.map(f => {
                     return f.geometry.coordinates
                 })
             }
         } else if (e.layer) {
-            geo = e.layer.toGeoJSON();
+            geojson = e.layer.toGeoJSON();
         }
-        GeoPickerAPI.postGeometry(geo, {densify: 90});  //add point any 90m
+
+        GeoPickerAPI.postGeometry(datasetDefault, geojson, {densify: 90})  //add point any 90m
+            .then(geo => {
+
+                controlElevation.clear();
+
+                let geometry;
+
+                if (geo.coordinates) {   //is geometry
+                    geometry = geo
+                }
+                else if (geo.geometry) {  //is feature
+                    geometry = geo.geometry
+                }
+                else if (geo.features) { //is featureCollection
+                    geometry = geo.features[0].geometry
+                }
+                if (geometry.type === 'Point') {
+                    const [lon, lat, ele] = geometry.coordinates;
+                    let m = L.marker([lat, lon]).bindTooltip(`Elevation: ${ele}`, { permanent: true })
+                    editableLayer.addLayer(m);
+                    return
+                }
+                layerElevation.addData({
+                    type: 'Feature',
+                    geometry
+                });
+
+                editableLayer.addLayer(layerElevation);
+            });
     });
 
     /**
@@ -613,28 +541,58 @@
             const { polyline } = e.polyline
                 , { geometry } = polyline.toGeoJSON();
 
-            GeoPickerAPI.postLocations(geometry.coordinates).then(() => {
+            GeoPickerAPI.postLocations(datasetDefault, geometry.coordinates).then(coordinates => {
+
+                controlElevation.clear();
                 controlDrawFree.addTo(editableLayer);
                 controlDrawFree.setMode(L.Pather.MODE.ALL)
+
+                layerElevation.clearLayers();
+                layerElevation.addData({
+                    type: 'Feature',
+                    geometry: {
+                        type: 'LineString',
+                        coordinates
+                    }
+                });
+
+                editableLayer.addLayer(layerElevation);
+                
             });
 
-            GeoPickerAPI.postGeometryMeta(geometry);
+            GeoPickerAPI.postGeometryMetadata(geometry).then(res => {
+
+                L.circleMarker(res.centroid.reverse(), {
+                    color:'green', radius: 6
+                })
+                .bindTooltip("Centroid", {permanent: true, direction: 'top'})
+                .addTo(editableLayer);
+
+                L.circleMarker(res.middlepoint.reverse(), {
+                    color:'yellow', radius: 6
+                })
+                .bindTooltip("Middlepoint", {permanent: true, direction: 'top'})
+                .addTo(editableLayer);
+            });
         });
 
 
-    const controlDownload = new L.Control({ position: 'topleft' });
-    controlDownload.onAdd = map => {
-        const $div = $(`<label id="download" class="leaflet-control-btn">
-                <i class="fa fa-download"></i> File format
-                <select></select>
+    const controlFormat = new L.Control({ position: 'topleft' });
+    controlFormat.onAdd = map => {
+        const $div = $(`<label id="format" class="leaflet-control-btn">
+                <i class="fa fa-download"></i> Out format
+                <select><option value="" selected>json</option></select>
             </label>`)
+            .on('mouseenter', e => {
+                showHelp('Select file format to download the elevation profile');
+            })
             .on('change','select', e => {
-                const format = $(e.target).val()
-                if (format) {
-                    params.format = format;
+                const newFormat = $(e.target).val();
+                if (newFormat) {
+                    GeoPickerAPI.globalParams.format = newFormat;
                 }
                 else {
-                    delete params.format;
+                    delete GeoPickerAPI.globalParams.format;
                 }
             });
 
@@ -653,6 +611,9 @@
                 <input type="radio" name="drawmode" />
                 <i class="fa fa-pencil"></i> Draw Line Freehand
             </label>`)
+            .on('mouseenter', e => {
+                showHelp(GeoPickerAPI.postLocationsDescription);
+            })
             .on('change', ':radio', e => {
                 if ($(e.target).is(':checked')) {
                     map.off('mousemove', controlMouseLine._pickTrack);
@@ -681,7 +642,7 @@
             controlMousePoint._tooltip.setLatLng(e.latlng);
             const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
 
-            GeoPickerAPI.getLonLat(lon, lat).then(res => {
+            GeoPickerAPI.getLonLat(datasetDefault, lon, lat).then(res => {
                 const [val] = res;
                 controlMousePoint._tooltip.setContent(`<big>${val}m</big><br>${lon}, ${lat}`)
             });
@@ -691,6 +652,9 @@
                 <input type="radio" name="drawmode" />
                 <i class="fa fa-mouse-pointer"></i> Mouse Move Point
             </label>`)
+            .on('mouseenter', e => {
+                showHelp(GeoPickerAPI.getLonLatDescription);
+            })
             .on('change', ':radio', e => {
                 if ($(e.target).is(':checked')) {
                     map.off('mousemove', controlMouseLine._pickTrack);
@@ -724,7 +688,7 @@
             controlMousePointAspect._marker.setLatLng(e.latlng);
             const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
 
-            GeoPickerAPI.getAspectLonLat(lon, lat).then(([res]) => {
+            GeoPickerAPI.getLonLat(datasetAspect, lon, lat).then(([res]) => {
                 controlMousePointAspect._marker._icon.querySelector('.aspect-triangle').style.transform = `rotate(${res}deg)`;
             });
         };
@@ -733,6 +697,9 @@
                 <input type="radio" name="drawmode" />
                 <i class="fa fa-compass"></i> Mouse Point Aspect
             </label>`)
+            .on('mouseenter', e => {
+                showHelp(GeoPickerAPI.getLonLatDescription);
+            })
             .on('change', ':radio', e => {
                 if ($(e.target).is(':checked')) {
                     map.off('mousemove', controlMouseLine._pickTrack);
@@ -772,10 +739,32 @@
         }
         polylocs.setLatLngs(locs);
 
-        const { geometry } = polylocs.toGeoJSON(4),
-              { coordinates } = geometry;
+        const { geometry } = polylocs.toGeoJSON(4);
+        
+        /* convert to geopicker locations string `lon1,lat1|lon2,lat2|...` */
+        const locsString = geometry.coordinates.map(a => a.join(',')).join('|');
 
-        GeoPickerAPI.getLocations(coordinates);
+        GeoPickerAPI.getLocations(datasetDefault, locsString).then(values => {
+
+            /* populate the coordinates with the values returned from the API */
+            const coordinates = geometry.coordinates.map((loc, k) => {
+                loc.push(values[k]);
+                return loc;
+            });
+
+            controlElevation.clear();
+
+            layerElevation.clearLayers();
+            layerElevation.addData({
+                type: 'Feature',
+                geometry: {
+                    type: 'LineString',
+                    coordinates
+                }
+            });
+
+            editableLayer.addLayer(layerElevation);
+        });
     };
 
     controlMouseLine.onAdd = map => {
@@ -783,6 +772,9 @@
                 <input type="radio" name="drawmode" />
                 <i class="fa fa-line-chart"></i> Mouse Move Line
             </label>`)
+            .on('mouseenter', e => {
+                showHelp(GeoPickerAPI.getLocationsDescription);
+            })
             .on('change', ':radio', e => {
                 if ($(e.target).is(':checked')) {
                     map.off('mousemove', controlMousePoint._pickPoint);
@@ -802,7 +794,7 @@
 
         const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
 
-        GeoPickerAPI.getContourLonLat(lon, lat).then(coordinates => {
+        GeoPickerAPI.getContourLonLat(datasetDefault, lon, lat).then(coordinates => {
             
             editableLayer.clearLayers();
             const layerContour = L.geoJSON({
@@ -835,26 +827,26 @@
                 <input type="radio" name="drawmode" />
                 <i class="fa fa-wifi"></i> Contour Line
             </label>`)
+            .on('mouseenter', e => {
+                showHelp(GeoPickerAPI.getContourLonLatDescription);
+            })
             .on('change', ':radio', e => {
                 if ($(e.target).is(':checked')) {
                     map.on('click mousemove', controlContour._pickContour);
-                    showHelp(`${Texts.get_contour}`);
                 } else {
                     map.off('click mousemove', controlContour._pickContour);
                 }
-            });
+            })
         return $div[0];
     };
-
 
     /**
      * button File upload
      */
     const fileLayer = L.geoJson([]).addTo(map);
 
-    L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open"></i>';
+    L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open"></i> <span>File uploader</span>';
     L.Control.FileLayerLoad.TITLE = 'File uploader';
-    //aggiung etichetta di testo vicino a icona
 
     const controlUpload = new L.Control.FileLayerLoad({
         addToMap: false,
@@ -866,40 +858,40 @@
 
             fileLayer.addData(data);
 
-            GeoPickerAPI.postGeometry(data)
+            GeoPickerAPI.postGeometry(datasetDefault, data)
 
             return fileLayer;
         },
         formats: [
             '.geojson'
         ]
-    });
-    // map.on('layeradd', function(e) {
-    //     if (e.layer === controlUpload) {
-    //         controlUpload.loader.on('data:loaded', e => {
-    //             console.log('loaded', e)
-    //         })
-    //         .on('data:error', e => {
-    //             console.log('File loader error', e.error);
-    //         });
-    //     }
-    // });
+    })
 
+    const controlUploadOnAdd = controlUpload.onAdd.bind(controlUpload);
+    controlUpload.onAdd = map => {
+        const container = controlUploadOnAdd(map);
+        $(container).on('mouseenter', e => {
+            showHelp(GeoPickerAPI.postGeometryDescription);
+        });
+        return container;
+    };
 
     /**
      * button show Dataset Bounding box
      */
     const controlBounds = new L.Control({ position: 'topleft' });
-
     controlBounds.onAdd = map => {
         const $div = $(`<a id="get_dataset" class="leaflet-control-btn">
             <i class="fa fa-expand"></i> Get Dataset Bounds
             </a>`)
+            .on('mouseenter', e => {
+                showHelp(GeoPickerAPI.getDatasetDescription);
+            })
             .on('click', e => {
                 e.preventDefault()
                 e.stopImmediatePropagation();
 
-                GeoPickerAPI.getDataset(datasetId).then(res => {
+                GeoPickerAPI.getDataset(datasetDefault).then(res => {
 
                     logger(JSON.stringify(res,null,4))
 
@@ -930,11 +922,13 @@
      * button show Datasets
      */
     const controlDatasets = new L.Control({ position: 'topleft' });
-
     controlDatasets.onAdd = map => {
         const $div = $(`<a id="get_datasets" class="leaflet-control-btn">
             <i class="fa fa-database"></i> Get Datasets list
             </a>`)
+            .on('mouseenter', e => {
+                showHelp(GeoPickerAPI.getDatasetsDescription);
+            })
             .on('click', e => {
                 e.preventDefault()
                 e.stopImmediatePropagation();
@@ -953,6 +947,9 @@
         const $div = $(`<a id="get_status" class="leaflet-control-btn">
             <i class="fa fa-info"></i> Get Service Status
             </a>`)
+            .on('mouseenter', e => {
+                showHelp(GeoPickerAPI.getStatusDescription);
+            })
             .on('click', e => {
                 e.preventDefault()
                 e.stopImmediatePropagation();
@@ -972,6 +969,9 @@
         const $div = $(`<a id="reset" class="leaflet-control-btn">
             <i class="fa fa-eraser"></i> Clear All
             </a>`)
+            .on('mouseenter', e => {
+                showHelp('Clear all layers and reset controls');
+            })
             .on('click', e => {
                 e.preventDefault()
                 e.stopImmediatePropagation();
@@ -980,18 +980,10 @@
         return $div[0];
     };
 
-    /**
-     * Reset button clear all layers
-     */
-    const controlHelp = new L.Control({ position: 'bottomleft' });
-    controlHelp.onAdd = map => {
-        return $divHelp[0];
-    };
-
     map.addControl(controlElevation);
 
     map.addControl(controlUpload);
-    map.addControl(controlDownload);
+    map.addControl(controlFormat);
 
     map.addControl(controlMousePoint);
     map.addControl(controlMousePointAspect);
@@ -1005,14 +997,12 @@
     map.addControl(controlStatus);
     map.addControl(controlClear);
 
-    map.addControl(controlHelp);
-
     $('.leaflet-control-btn').on('mouseover', e => {
       showHelp(e.target);
     });
     $('.leaflet-draw-draw-polyline, .leaflet-draw-draw-marker')
     .on('mouseover', e => {
-      showHelp(Texts.post_geometry);
+      showHelp(GeoPickerAPI.postGeometryDescription);
     });
 
     function resetButtons() {
@@ -1039,21 +1029,13 @@
       }
       else {
         let id = $(obj).attr('id');
-        if (Texts[ id ]) {
-          showHelp(Texts[ id ]);
+        if (GeoPickerAPI[ id + 'Description' ]) {
+          showHelp(GeoPickerAPI[ id + 'Description' ]);
         }
       }
     }
 
-    function debounce(func, wait = 100) {
-        let timeout;
-        return function() {
-            const context = this, args = arguments;
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(context, args), wait);
-        };
-    }
-
+    // TODO
     // map.on('keydown', e => {
     //     if (e.originalEvent && e.originalEvent.keyCode === 27) { // ESC
     //         disableButtons();
@@ -1085,6 +1067,7 @@
             const available = windowHeight - logContainerHeight - headerHeight;             //if (available > 100) {
             //mapDiv.style.minHeight = available + 'px';
             mapDiv.style.height = available + 'px';
+            document.querySelector('.leaflet-bottom.leaflet-left').style.marginBottom = '50px';
             setTimeout(() => { map.invalidateSize(); }, 10);
         }
 
