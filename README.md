@@ -128,9 +128,9 @@ Browse the demo page: http://localhost:9090/
 
 Full configuration options can be found in [docs config](./docs/config.md)
 
-## Command line interface
+## CLI
 
-Useful for side operations and config validation:
+Command Line interface isuseful for side operations and config validation:
 
 ```bash
 $ geopicker-cli --help
