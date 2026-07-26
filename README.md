@@ -128,6 +128,16 @@ Browse the demo page: http://localhost:9090/
 
 Full configuration options can be found in [docs config](./docs/config.md)
 
+## Command line interface
+
+Useful for side operations and config validation:
+
+```bash
+$ geopicker-cli --help
+$ geopicker-cli validate-config custom.config.yml
+```
+
+Full CLI options can be found in [docs cli](./docs/cli.md)
 
 ### Requests Example
 
