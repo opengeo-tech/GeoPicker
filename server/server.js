@@ -10,7 +10,7 @@ const Fastify = require('fastify')
 const config = parserConfig.load({basepath: __dirname, configfile: 'config.yml'})
 
 // TODO config validation before starting the server
-//     , configValid = parserConfig.validateConfig(config, {schema: './schemas/config'});
+//     , configValid = parserConfig.validateConfig(config, './schemas/config');
 // if(!configValid) {
 //     throw new Error('Invalid config.yml');
 // }

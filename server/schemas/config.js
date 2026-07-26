@@ -10,5 +10,16 @@ module.exports = S => {
     .prop('swagger', S.object().prop('enabled', S.boolean()).required(['enabled']))
     .prop('demopage', S.object().prop('enabled', S.boolean()).required(['enabled']))
     .prop('datasets', S.object().prop('default', S.string()).required(['default']))
-    .required(['port', 'host', 'prefix', 'fastifyConf', 'verbose', 'cors', 'compress', 'swagger', 'demopage', 'datasets']);
+    .required([
+      'port',
+      'host',
+      'prefix',
+      'fastifyConf',
+      'verbose',
+      'cors',
+      'compress',
+      'swagger',
+      'demopage',
+      'datasets'
+    ]);
 }

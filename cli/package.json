@@ -21,7 +21,6 @@
     "test-cli-set-linestring": "../bin/geopicker-cli --set -v -t -d ../tests/data/trentino-altoadige_dem_90m.tif -i ../tests/data/linestring_10pt_feature.geojson",
     "test-cli": "npm run test-cli-get-lonlat && npm run test-cli-get-locations && npm run test-cli-set-point && npm run test-cli-set-linestring",
     "test": "npm run test-cli"
-
   },
   "dependencies": {
     "commander": "^14.0.0"
