@@ -58,7 +58,7 @@ module.exports = process => {
     });
 
   program
-    .option('-g, --get <lonlat>', `pick only values from dataset by "lon,lat" param`)
+    .option('-g, --get <lon,lat>', `pick only values from dataset by longitude and latitude param`)
     .option('-s, --set', 'set properties in the input geojson picking values from dataset')
     .option('-d, --dataset <file>', 'input dataset file like a raster .tif')
     .option('-i, --input-file <file>', 'input geojson file')

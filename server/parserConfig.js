@@ -1,11 +1,10 @@
 /**
- * lodash only dependency replacement for old npm: @stefcud/configyml
+ * standalone replacement for old npm library @stefcud/configyml
  */
 const fs = require('fs')
 const yaml = require('js-yaml')
 const Ajv = require('ajv')
 const S = require('fluent-json-schema')
-const timestamp = new Date().toISOString()
 
 function validateConfig(config, schemaPath) {
     const configSchema = require(schemaPath)(S)
@@ -203,7 +202,7 @@ function swapVariables(configFile) {
         envId,
         ENVID,
         isDev,
-        timestamp
+        timestamp: new Date().toISOString()
     })
 
     return readAndSwap(file)
