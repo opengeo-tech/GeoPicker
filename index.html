@@ -129,6 +129,28 @@
     .leaflet-editing-icon {
         background: blue;
     }
+    .aspect-triangle {
+        width: 0;
+        height: 0;
+        border-left: 25px solid transparent;
+        border-right: 25px solid transparent;
+        border-bottom: 55px solid #d00;
+        filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.8));
+    }
+    .aspect-center {
+        position: absolute;
+        left: 25px;
+        top: 27px;
+        width: 12px;
+        height: 12px;
+        margin-left: -6px;
+        margin-top: -6px;
+        background: #000;
+        border-radius: 50%;
+    }
+    #map.hide-cursor {
+        cursor: none;
+    }
     .lime-theme .leaflet-control.elevation .background {
         background-color: rgba(156, 194, 34, .65);
         margin: 0 0 -5px 0;
@@ -243,6 +265,7 @@
 
     const api = location.href
         , datasetId = 'default'
+        , datasetAspect = 'aspect'
         , center = [46, 11]
         , zoom = 9;
 
@@ -322,10 +345,10 @@
                 return res;
             });
     }
-    function apiPost(urlParts, body, customParms) {
+    function apiPost(urlParts, body, customParms = {}) {
         let url = j(...urlParts);
 
-        if (customParms && Object.keys(customParms).length > 0) {
+        if (Object.keys(customParms).length > 0) {
             url += '?' + $.param(customParms);
         }
 
@@ -360,8 +383,13 @@
         },
 
         /* GET /:datasetId/:lon/:lat */
-        getLonlat(lon, lat) {
+        getLonLat(lon, lat) {
             return apiGet(api, datasetId, lon, lat);
+        },
+
+        /* GET /:datasetId/:lon/:lat */
+        getAspectLonLat(lon, lat) {
+            return apiGet(api, datasetAspect, lon, lat);
         },
 
         /* GET /:datasetId/contour/:lon/:lat */
@@ -653,7 +681,7 @@
             controlMousePoint._tooltip.setLatLng(e.latlng);
             const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
 
-            GeoPickerAPI.getLonlat(lon, lat).then(res => {
+            GeoPickerAPI.getLonLat(lon, lat).then(res => {
                 const [val] = res;
                 controlMousePoint._tooltip.setContent(`<big>${val}m</big><br>${lon}, ${lat}`)
             });
@@ -671,6 +699,50 @@
                 } else {
                     map.off('mousemove', controlMousePoint._pickPoint);
                     controlMousePoint._tooltip.removeFrom(map)
+                }
+            });
+        return $div[0];
+    };
+    /**
+     * mouse move Point retrieve Terrain Aspect
+     */
+    const controlMousePointAspect = new L.Control({ position: 'topleft' });
+    controlMousePointAspect.onAdd = map => {
+        
+        controlMousePointAspect._icon = L.divIcon({
+            className: 'aspect-marker',
+            html: '<div class="aspect-triangle"></div><div class="aspect-center"></div>',
+            iconSize: [50, 55],
+            iconAnchor: [25, 27]
+        });
+        controlMousePointAspect._marker = L.marker([0, 0], {
+            icon: controlMousePointAspect._icon,
+            interactive: false
+        });
+
+        controlMousePointAspect._pickPoint = function(e) {
+            controlMousePointAspect._marker.setLatLng(e.latlng);
+            const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
+
+            GeoPickerAPI.getAspectLonLat(lon, lat).then(([res]) => {
+                controlMousePointAspect._marker._icon.querySelector('.aspect-triangle').style.transform = `rotate(${res}deg)`;
+            });
+        };
+
+        const $div = $(`<label id="get_lonlat" class="leaflet-control-btn">
+                <input type="radio" name="drawmode" />
+                <i class="fa fa-compass"></i> Mouse Point Aspect
+            </label>`)
+            .on('change', ':radio', e => {
+                if ($(e.target).is(':checked')) {
+                    map.off('mousemove', controlMouseLine._pickTrack);
+                    map.on('mousemove', controlMousePointAspect._pickPoint);
+                    controlMousePointAspect._marker.addTo(map);
+                    map.getContainer().classList.add('hide-cursor');
+                } else {
+                    map.off('mousemove', controlMousePointAspect._pickPoint);
+                    controlMousePointAspect._marker.removeFrom(map);
+                    map.getContainer().classList.remove('hide-cursor');
                 }
             });
         return $div[0];
@@ -922,6 +994,7 @@
     map.addControl(controlDownload);
 
     map.addControl(controlMousePoint);
+    map.addControl(controlMousePointAspect);
     map.addControl(controlMouseLine);
     map.addControl(controlDrawFreeBtn);
     map.addControl(controlContour);
@@ -970,6 +1043,15 @@
           showHelp(Texts[ id ]);
         }
       }
+    }
+
+    function debounce(func, wait = 100) {
+        let timeout;
+        return function() {
+            const context = this, args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), wait);
+        };
     }
 
     // map.on('keydown', e => {
