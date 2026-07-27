@@ -28,7 +28,7 @@ module.exports = (S, fastify) => {
       params: lonlat.extend(params),
       query,
       response: {
-        200: S.array()//.items(S.number()) //single array value
+        200: S.array().items(S.raw({})) //single array value, unconstrained item type
       }
     },
     lonlatPost: {
