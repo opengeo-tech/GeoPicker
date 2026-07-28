@@ -169,16 +169,9 @@ More request examples (POST body, locations, GeoJSON geometry, densify) are docu
 
 ## Development
 
-some useful tools for contributors `npm run <scriptname>`
+To run from source in development mode: `npm install` then `npm run dev` (see [Usage](#usage) for requirements).
 
-- `start` run in production mode
-- `dev` run in development mode
-- `lint` run eslint on the whole repo
-- `validate-custom-config` validate `server/custom.config.yml` via the cli
-- `docker-build` build the docker image
-- `docker-up` run in local docker-compose container
-- `bench` run benchmarks
-- `npm publish .` build and publish new docker image
+Contributor scripts and the release/publishing flow are documented in [docs development](./docs/development.md)
 
 ## Benchmarks
 
