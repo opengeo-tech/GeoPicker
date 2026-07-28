@@ -1,10 +1,16 @@
 
 # CLI
 
-GeoPicker ships a command line entry point `bin/geopicker-cli` (installed as the `geopicker` command when the package is installed globally or linked), backed by `cli/geopicker-cli.js`.
+GeoPicker ships a command line entry point `cli/bin/geopicker-cli` (installed as the `geopicker` command by npm, e.g. inside the Docker container), backed by `cli/geopicker-cli.js`.
 
 ```bash
-node bin/geopicker-cli --help
+node cli/bin/geopicker-cli --help
+```
+
+Inside the Docker container the command is available by name from any directory:
+
+```bash
+docker exec <container> geopicker --help
 ```
 
 ## Dataset get/set
@@ -12,7 +18,7 @@ node bin/geopicker-cli --help
 Read or write values from/into a dataset file (e.g. a GeoTIFF), the default action when no other command is given.
 
 ```bash
-geopicker-cli -d path/to/dataset.tif -g "11.01,46.01"
+geopicker -d path/to/dataset.tif -g "11.01,46.01"
 ```
 
 Options:
@@ -27,8 +33,8 @@ Options:
 Examples:
 
 ```bash
-geopicker-cli --get 11.01,46.01 -v -t -d tests/data/trentino-altoadige_dem_90m.tif
-geopicker-cli --set -v -t -d tests/data/trentino-altoadige_dem_90m.tif -i tests/data/point_feature.geojson
+geopicker --get 11.01,46.01 -v -t -d tests/data/trentino-altoadige_dem_90m.tif
+geopicker --set -v -t -d tests/data/trentino-altoadige_dem_90m.tif -i tests/data/point_feature.geojson
 ```
 
 ## validate-config
@@ -36,7 +42,7 @@ geopicker-cli --set -v -t -d tests/data/trentino-altoadige_dem_90m.tif -i tests/
 Validate a `config.yml` file against the GeoPicker config schema (`server/schemas/config.js`), without starting the server.
 
 ```bash
-geopicker-cli validate-config [file]
+geopicker validate-config [file]
 ```
 
 `file` defaults to `server/config.yml`. Prints an error and exits with code 1 if the config is invalid; see also `npm run validate-custom-config` (validates `server/custom.config.yml`).
@@ -46,7 +52,7 @@ geopicker-cli validate-config [file]
 Same validation as `validate-config`, then prints the parsed config object as JSON — useful to see the final config after environment variable substitution and `prod:`/`dev:` merging.
 
 ```bash
-geopicker-cli show-config [file]
+geopicker show-config [file]
 ```
 
 ## start-server
@@ -54,5 +60,5 @@ geopicker-cli show-config [file]
 Start the GeoPicker HTTP server, equivalent to `npm start`.
 
 ```bash
-geopicker-cli start-server
+geopicker start-server
 ```

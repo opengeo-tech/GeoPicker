@@ -18,4 +18,11 @@ ENV PATH="/home/node_modules/.bin:${PATH}"
 # the npm install step above.
 COPY ./ ./
 
-CMD ["node", "server/server.js"]
+# npm only symlinks a workspace's `bin` entry into node_modules/.bin if the
+# target file already exists at install time. It didn't during the first
+# `npm install` above (only manifests were present), so re-run it now that
+# cli/bin/geopicker-cli exists; --ignore-scripts avoids re-triggering native
+# builds (gdal-async), making this a fast local relink with no registry access.
+RUN npm install --ignore-scripts
+
+CMD ["geopicker", "start-server"]

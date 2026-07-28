@@ -131,11 +131,12 @@ Full configuration options can be found in [docs config](./docs/config.md)
 
 ## CLI
 
-Command Line interface isuseful for side management operations, for example inside docker container, and it's config validation tool:
+Command Line interface isuseful for side management operations, for example inside docker container, and it's config validation tool.
+The `geopicker` command is installed by npm as bin of the `cli/` workspace and is available by name inside the Docker container:
 
 ```bash
-$ geopicker-cli --help
-$ geopicker-cli validate-config custom.config.yml
+$ geopicker --help
+$ geopicker validate-config custom.config.yml
 ```
 
 Full CLI options can be found in [docs cli](./docs/cli.md)

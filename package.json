@@ -29,17 +29,13 @@
     "postpublish": "npm run docker-build && npm run docker-push",
     "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -e js,yml -w lib -w server -w index.html server/server.js",
     "start": "node server/server.js",
-    "validate-custom-config": "node bin/geopicker-cli validate-config server/custom.config.yml",
+    "validate-custom-config": "node cli/bin/geopicker-cli validate-config server/custom.config.yml",
     "bench": "node tests/benchmarks.js"
   },
   "pre-commit": [
     "lint"
   ],
-  "bin": {
-    "geopicker": "./bin/geopicker-cli"
-  },
   "files": [
-    "bin/",
     "cli/",
     "lib/"
   ],
