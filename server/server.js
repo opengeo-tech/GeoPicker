@@ -93,4 +93,8 @@ fastify.listen({port, host}, err => {
         fastify.log.error(err);
         process.exit(1)
     }
+    const {datasetsIds, datasetHandles} = fastify;
+    setInterval(() => {
+        console.log({datasetsIds, datasetHandles});
+    }, 5000);
 });

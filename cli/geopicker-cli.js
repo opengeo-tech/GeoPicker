@@ -57,6 +57,8 @@ module.exports = process => {
       require('../server/server.js');
     });
 
+  //TODO command status-server
+
   program
     .option('-g, --get <lon,lat>', `pick only values from dataset by longitude and latitude param`)
     .option('-s, --set', 'set properties in the input geojson picking values from dataset')

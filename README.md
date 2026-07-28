@@ -115,13 +115,14 @@ Running by official [Docker image](https://hub.docker.com/r/stefcud/geopicker):
 docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 9090:9090 stefcud/geopicker
 ```
 
-Running from source code in development mode, requirements: _nodejs 16.x_ > and _glibc 2.28_ (_Ubuntu 20.x_ > ):
+Running from source code in development mode, requirements: _nodejs 18.x_ > , _npm 8.x_ > and _glibc 2.28_ (_Ubuntu 20.x_ > ):
 
 ```bash
 npm install
-cd server && npm install && cd -
 npm run dev
 ```
+
+`npm install` at the repository root installs `server/` and `cli/` too, via [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces).
 Browse the demo page: http://localhost:9090/
 
 ## Configuration
@@ -130,7 +131,7 @@ Full configuration options can be found in [docs config](./docs/config.md)
 
 ## CLI
 
-Command Line interface isuseful for side operations and config validation:
+Command Line interface isuseful for side management operations, for example inside docker container, and it's config validation tool:
 
 ```bash
 $ geopicker-cli --help

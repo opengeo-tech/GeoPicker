@@ -39,11 +39,17 @@
     "geopicker": "./bin/geopicker-cli"
   },
   "files": [
-    "lib/",
-    "bin/"
+    "bin/",
+    "cli/",
+    "lib/"
+  ],
+  "workspaces": [
+    "server",
+    "cli"
   ],
   "engines": {
-    "node": ">= 16"
+    "node": ">= 18",
+    "npm": ">= 8"
   },
   "keywords": [
     "geospatial",
