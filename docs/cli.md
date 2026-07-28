@@ -2,6 +2,7 @@
 # CLI
 
 GeoPicker ships a command line entry point `cli/bin/geopicker-cli` (installed as the `geopicker` command by npm, e.g. inside the Docker container), backed by `cli/geopicker-cli.js`.
+The CLI is the `cli/` npm workspace, declared as a dependency of `server/`, so npm installs it as `node_modules/.bin/geopicker`.
 
 ```bash
 node cli/bin/geopicker-cli --help

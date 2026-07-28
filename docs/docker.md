@@ -1,0 +1,73 @@
+
+# Docker
+
+## Quick start
+
+Run the official [Docker image](https://hub.docker.com/r/stefcud/geopicker):
+
+```bash
+docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 8080:8080 stefcud/geopicker
+```
+
+then browse the demo page: http://localhost:8080/ — in production the server listens on port `8080` (see the `prod:` section in [Configuration](config.md)).
+
+The raster datasets must be mounted in `/data`, the default `datapath` of the production config.
+
+## How the image is structured
+
+The image is built from `server/Dockerfile` with the **repository root as build context** (the Dockerfile lives in `server/` but needs `lib/`, `cli/` and the root `package.json` too):
+
+```bash
+docker build -f server/Dockerfile -t stefcud/geopicker:latest .
+# or, from the repo root:
+npm run docker-build
+```
+
+The build follows the npm workspaces layout of the repository (root + `server/` + `cli/`, see Architecture in the main README):
+
+1. only the dependency manifests (`package.json`, `package-lock.json`, `server/package.json`, `cli/package.json`) are copied first, then a single `npm install` installs the dependencies of all three workspaces — as long as the manifests don't change, Docker reuses this cached layer even when source files change;
+2. `node_modules/.bin` is added to the container `PATH`, so the `geopicker` command (the bin of the `cli/` workspace, a dependency of `server/`) is invocable by name from any directory;
+3. the source code is copied last, followed by a second `npm install --ignore-scripts`: npm creates the bin symlink only when the target file exists, and `cli/bin/geopicker-cli` was not present during the first manifest-only install — this re-run is a fast local relink that does not re-trigger native builds;
+4. the container starts the server through the CLI itself: `CMD ["geopicker", "start-server"]`.
+
+`.dockerignore` (repo root) excludes `node_modules`, `tests`, `data`, `.git` and `.env` from the build context, so the source copy can never overwrite the installed dependencies.
+
+## Using the CLI inside the container
+
+The `geopicker` command is available in the running container, see [CLI](cli.md) for all commands:
+
+```bash
+docker exec <container> geopicker --help
+docker exec <container> geopicker validate-config
+docker exec <container> geopicker -d /data/trentino-altoadige_dem_90m.tif -g "11.123,46.123"
+```
+
+## docker-compose
+
+`server/docker-compose.yml` defines the `geopicker` service: it builds the image from the repo root context, publishes port `8080` on localhost, and shows the recommended volume mounts for a custom deployment:
+
+```yaml
+ports:
+  - "127.0.0.1:8080:8080"
+volumes:
+  - "../tests/data:/data"                          # raster datasets
+  - "./custom.config.yml:/home/server/config.yml"  # replace the whole config
+  - "../index.html:/home/index.html"               # (optional) custom demo page
+environment:
+  - PREFIX=$PREFIX
+  - DEMO_PAGE=true
+  - DATASET_DEFAULT=$DATASET_DEFAULT
+```
+
+Mounting a replacement `config.yml` is the recommended way to customize a deployment (instead of patching the config inside the image); the environment variables cover the simpler cases, see [Configuration](config.md).
+
+From the repo root:
+
+```bash
+npm run docker-up      # docker compose up from server/
+npm run docker-reup    # git pull + rebuild + recreate the container
+```
+
+## Publishing
+
+`npm publish .` from the repo root triggers (via the `postpublish` script) `docker-build` and `docker-push`, which tag `stefcud/geopicker` with both `latest` and the current package version.

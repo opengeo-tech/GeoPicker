@@ -13,9 +13,13 @@ Geospatial dataset picker via fast Api Rest interface written in [NodeJs for GDA
 
 ## Scope
 
-It is basically an advanced **elevation service** and Geopicker has been specially designed to offer the widest range of formats and methods of data requests that is possible, to adapt to any context of use by the client.
-Each endpoint and the parameters it accepts have been designed on the basis of the functioning of already existing services, gathering a complete and coherent collection of APIs.
-At present the index.html page contains a large implementation of browser side requests using LeafletJs as basemap and jQuery.
+GeoPicker is essentially an advanced **elevation service**: given one or more `lon,lat` coordinates, it reads the corresponding pixel values (elevation or any other raster band) from the configured datasets (e.g. GeoTIFF DEMs) through GDAL, and returns them in the same shape the request came in.
+
+It is designed to offer the widest possible range of request methods and input/output formats — coordinates in the URL, JSON objects, arrays of locations, GeoJSON geometries, encoded polylines, GPX — so that any client can integrate it without adapting its own data model. Endpoints and parameters follow the conventions of already existing elevation services, gathered here into a single complete and coherent API.
+
+Beyond value picking, it provides supporting geometry functions: densify, simplify, precision rounding, contour lines and on-the-fly metadata (length, direction, centroid, bbox).
+
+The `index.html` demo page exercises the whole API browser-side, using LeafletJs as basemap and jQuery.
 
 ## Features
 - **Large API Rest**: ergonomic endpoints suitable for any type of use case
@@ -98,10 +102,10 @@ each endpoint has its own default format, for example endpoint `/dataset/lon/lat
 
 # Architecture
 
-The repository has 3 independent npm packages:
+The repository has 3 independent npm packages, linked as [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces) from the root `package.json`:
 
 - `lib/` core logic defining utils and GDAL bindings
-- `cli/` standalone CLI (`bin/geopicker-cli`) for dataset get/set, config validation and other side operations
+- `cli/` standalone CLI (`cli/bin/geopicker-cli`) for dataset get/set, config validation and other side operations; declared as a dependency of `server/` and installed by npm as the `geopicker` command
 - `server/` a standard Fastify HTTP server defining routes, plugins and schemas for the API Rest endpoints
 - `index.html` demo page with LeafletJs map that demostrates the usage of the API Rest endpoints
 
@@ -112,8 +116,19 @@ Other folders: `docs/` extended documentation, `tests/` sample datasets and benc
 Running by official [Docker image](https://hub.docker.com/r/stefcud/geopicker):
 
 ```bash
-docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 9090:9090 stefcud/geopicker
+docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 8080:8080 stefcud/geopicker
 ```
+
+then browse the demo page: http://localhost:8080/ (in production the server listens on port `8080`, see `prod:` section in `server/config.yml`)
+
+The `geopicker` command is also available inside the running container, for example:
+
+```bash
+docker exec <container> geopicker validate-config
+docker exec <container> geopicker -d /data/trentino-altoadige_dem_90m.tif -g "11.123,46.123"
+```
+
+More details about the Docker image structure, docker-compose and custom deployments in [docs docker](./docs/docker.md)
 
 Running from source code in development mode, requirements: _nodejs 18.x_ > , _npm 8.x_ > and _glibc 2.28_ (_Ubuntu 20.x_ > ):
 
@@ -123,7 +138,7 @@ npm run dev
 ```
 
 `npm install` at the repository root installs `server/` and `cli/` too, via [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces).
-Browse the demo page: http://localhost:9090/
+Then browse the demo page (in dev mode the server listens on port `9090`): http://localhost:9090/
 
 ## Configuration
 
@@ -131,7 +146,7 @@ Full configuration options can be found in [docs config](./docs/config.md)
 
 ## CLI
 
-Command Line interface isuseful for side management operations, for example inside docker container, and it's config validation tool.
+Command Line interface is useful for side management operations, for example inside docker container, and its config validation tool.
 The `geopicker` command is installed by npm as bin of the `cli/` workspace and is available by name inside the Docker container:
 
 ```bash
@@ -158,6 +173,9 @@ some useful tools for contributors `npm run <scriptname>`
 
 - `start` run in production mode
 - `dev` run in development mode
+- `lint` run eslint on the whole repo
+- `validate-custom-config` validate `server/custom.config.yml` via the cli
+- `docker-build` build the docker image
 - `docker-up` run in local docker-compose container
 - `bench` run benchmarks
 - `npm publish .` build and publish new docker image

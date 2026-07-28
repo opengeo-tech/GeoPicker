@@ -56,7 +56,7 @@ Measured `process.memoryUsage().rss` (Node 18.20.8) before/after opening handles
 
 ```js
 const gpicker = require('./lib/geopicker');
-const h1 = gpicker.openFile('./tests/data/alps_dem_10m.tif', 1);              // fine resolution (10m)
+const h1 = gpicker.openFile('path/to/fine_resolution_10m_dem.tif', 1);        // fine resolution (10m)
 const h2 = gpicker.openFile('./tests/data/trentino-altoadige_dem_90m.tif', 1); // coarser resolution (90m)
 for (let i = 0; i < 1000; i++) h1.locPixel([11 + Math.random()*0.1, 46 + Math.random()*0.1]);
 ```
@@ -66,7 +66,7 @@ for (let i = 0; i < 1000; i++) h1.locPixel([11 + Math.random()*0.1, 46 + Math.ra
 | Step | RSS | Delta |
 |------|-----|-------|
 | baseline (node + gdal-async loaded) | 88.32 MB | — |
-| after opening `alps_dem_10m.tif` (10m res.) | 95.13 MB | +6.8 MB |
+| after opening a fine resolution DEM (10m res.) | 95.13 MB | +6.8 MB |
 | after opening `trentino-altoadige_dem_90m.tif` (90m res.) | 95.58 MB | +0.45 MB |
 | after 1000 random `locPixel()` reads | 109.39 MB | +13.8 MB |
 

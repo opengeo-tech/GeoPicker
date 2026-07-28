@@ -3,6 +3,8 @@
 
 For full API documentation, see the [Swagger API Documentation](https://opengeo.tech/geopicker/docs).
 
+The examples below use `http://localhost:9090` (development mode, `npm run dev`); with the Docker container the port is `8080`.
+
 Get single location exchanging a few bytes:
 ```bash
  $ curl "http://localhost:9090/default/11.123/46.123"

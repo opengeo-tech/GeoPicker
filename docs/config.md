@@ -2,7 +2,27 @@
 # Configuration
 
 The main configuration file is `/server/config.yml`
-this file is compiled with a special library [configyml](https://github.com/stefanocudini/configyml) that take some options values from environment variables that can be set via docker-compose.yml
+this file is parsed by `server/parserConfig.js`, which substitutes `${VAR}` placeholders with values from environment variables (falling back to the defaults in `defaultsEnvVars`) and then merges the environment-specific block (`prod:`/`dev:`) selected by `NODE_ENV`. Environment variables can be set via docker-compose.yml
+
+## Environments
+
+The `prod:` and `dev:` blocks override the base config depending on `NODE_ENV` (any value other than `dev` selects `prod`), for example:
+
+```yaml
+## Production/Dockerized environment config override
+prod:
+  port: 8080
+  host: 0.0.0.0
+  datapath: '/data' #default path in Docker container
+
+## Development environment config override
+dev:
+  port: 9090
+  host: 127.0.0.1
+  datapath: './tests/data'
+```
+
+this is why the server listens on port `8080` inside the Docker container and on `9090` in development mode (`npm run dev`).
 
 
 ## Datasets
@@ -22,9 +42,6 @@ datasets:
   altitude: elevation
   elevation:
     path: trentino-altoadige_dem_90m.tif
-    band: 1
-  alps:
-    path: alps_dem_10m.tif
     band: 1
   ## load from same Geotif different bands
   veneto_elevation:
@@ -91,3 +108,5 @@ volumes:
   - "../mypath/for/data:/data"
   - "./custom.config.yml:/home/server/config.yml"
 ```
+
+To check a custom config file before deploying it, or to inspect the final parsed config (after environment variable substitution and `prod:`/`dev:` merging), use the [CLI](cli.md) commands `geopicker validate-config` and `geopicker show-config`.
