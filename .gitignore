@@ -1,10 +1,30 @@
-node_modules
-*.pyc
-tests/data
+# dependencies — npm workspaces: only the root node_modules is real,
+# nested ones in server/ and cli/ are leftovers of the pre-workspaces layout
+node_modules/
+
+# local environment / secrets
 .env
+.env.*
+
+# local deployment config (mounted as docker volume, see docs/config.md)
 server/custom.config.yml
+
+# sample raster datasets: large binaries kept out of git
+# (the small samples already tracked in tests/data remain tracked)
+tests/data
+
+# logs & temp
+*.log
+npm-debug.log*
+
+# OS / editor leftovers
+.DS_Store
+Thumbs.db
+*.swp
+*.pyc
+
+# local notes & AI assistant files
 TODO
 .claude/
 CLAUDE.*
 AGENTS.*
-

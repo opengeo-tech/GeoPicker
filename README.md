@@ -124,7 +124,7 @@ then browse the demo page: http://localhost:8080/ (in production the server list
 The `geopicker` command is also available inside the running container, for example:
 
 ```bash
-docker exec <container> geopicker validate-config
+docker exec <container> geopicker config-validate
 docker exec <container> geopicker -d /data/trentino-altoadige_dem_90m.tif -g "11.123,46.123"
 ```
 
@@ -151,7 +151,7 @@ The `geopicker` command is installed by npm as bin of the `cli/` workspace and i
 
 ```bash
 $ geopicker --help
-$ geopicker validate-config custom.config.yml
+$ geopicker config-validate custom.config.yml
 ```
 
 Full CLI options can be found in [docs cli](./docs/cli.md)

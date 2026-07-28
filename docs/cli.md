@@ -38,28 +38,47 @@ geopicker --get 11.01,46.01 -v -t -d tests/data/trentino-altoadige_dem_90m.tif
 geopicker --set -v -t -d tests/data/trentino-altoadige_dem_90m.tif -i tests/data/point_feature.geojson
 ```
 
-## validate-config
+## config-validate
 
 Validate a `config.yml` file against the GeoPicker config schema (`server/schemas/config.js`), without starting the server.
 
 ```bash
-geopicker validate-config [file]
+geopicker config-validate [file]
 ```
 
 `file` defaults to `server/config.yml`. Prints an error and exits with code 1 if the config is invalid; see also `npm run validate-custom-config` (validates `server/custom.config.yml`).
 
-## show-config
+## config-show
 
-Same validation as `validate-config`, then prints the parsed config object as JSON — useful to see the final config after environment variable substitution and `prod:`/`dev:` merging.
+Same validation as `config-validate`, then prints the parsed config object as JSON — useful to see the final config after environment variable substitution and `prod:`/`dev:` merging.
 
 ```bash
-geopicker show-config [file]
+geopicker config-show [file]
 ```
 
-## start-server
+## server-start
 
 Start the GeoPicker HTTP server, equivalent to `npm start`.
 
 ```bash
-geopicker start-server
+geopicker server-start
 ```
+
+## server-status
+
+Show the status JSON of the running GeoPicker HTTP server, the same returned by its `/status` endpoint (host, port and prefix are read from the config). Prints an error and exits with code 1 if the server is not reachable.
+
+```bash
+geopicker server-status
+```
+
+## completion
+
+Generate a bash completion script for the `geopicker` command. The script is built at runtime from the commands and options currently registered in the CLI, so it is always in sync — regenerate it after upgrading GeoPicker.
+
+```bash
+geopicker completion > /etc/bash_completion.d/geopicker   # system-wide
+source <(geopicker completion)                            # only current shell
+```
+
+In the official Docker image the completion is already installed, see [Docker](docker.md).

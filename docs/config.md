@@ -109,4 +109,4 @@ volumes:
   - "./custom.config.yml:/home/server/config.yml"
 ```
 
-To check a custom config file before deploying it, or to inspect the final parsed config (after environment variable substitution and `prod:`/`dev:` merging), use the [CLI](cli.md) commands `geopicker validate-config` and `geopicker show-config`.
+To check a custom config file before deploying it, or to inspect the final parsed config (after environment variable substitution and `prod:`/`dev:` merging), use the [CLI](cli.md) commands `geopicker config-validate` and `geopicker config-show`.

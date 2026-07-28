@@ -1,5 +1,31 @@
-node_modules
-.env
+# dependencies are installed inside the image, never shipped from the host
+# (**/ also excludes the leftover server/node_modules and cli/node_modules)
+**/node_modules
+
+# vcs
 .git
+.gitignore
+
+# local environment / secrets
+**/.env
+server/custom.config.yml
+
+# datasets & tests: raster data is mounted at runtime in /data
 data
 tests
+
+# documentation and repo metadata, not needed at runtime
+docs
+*.md
+TODO
+.claude
+CLAUDE.*
+AGENTS.*
+
+# toolchain configs not used inside the container
+.editorconfig
+.eslintrc
+.prettierrc
+.nvmrc
+.npmignore
+.dockerignore
