@@ -20,7 +20,9 @@ some useful tools for contributors `npm run <scriptname>`
 - `validate-custom-config` validate `server/custom.config.yml` via the cli
 - `docker-build` build the docker image
 - `docker-up` run in local docker-compose container
-- `bench` run benchmarks
+- `benchmark` run the benchmarks, alias of `npm start --workspace=benchmark`
+
+Benchmarks live in their own npm workspace, which spawns the server by itself (see [Benchmarks](benchmarks.md))
 
 ## Release
 

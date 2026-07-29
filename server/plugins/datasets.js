@@ -26,13 +26,16 @@ module.exports = fp(async fastify => {
       , datasets = {}
       , openDatasets = {}; // open dataset handles (gdal.Dataset) for each unique dataset file and band
 
-  //TODO in the future there could be a mechanism for automatically closing openDatasets after a certain time limit has expired
+  // TODO: Implement automatic closing of openDatasets after expiration time, exclude default dataset from closing, or keep it open always
 
   for (let [id, val] of Object.entries(configDatasets)) {
 
     const isAlias = val != null && typeof val.valueOf() === 'string' && !!configDatasets[ val ];
 
+    let targetId = id;
+
     if (isAlias) {  // entry is an alias
+      targetId = val;
       val = configDatasets[ val ];
     }
 
@@ -42,7 +45,7 @@ module.exports = fp(async fastify => {
 
       if (fs.existsSync(file)) {
 
-        const key = `${val.path}:${val.band || 1}`
+        const key = targetId
             , handle = openDatasets[ key ] || (openDatasets[ key ] = gpicker.openFile(file, val.band))
             , {info} = handle
             , isDefault = (id === 'default' || id === configDatasets.default);
@@ -56,7 +59,7 @@ module.exports = fp(async fastify => {
         }
       }
       else {
-        fastify.log.warn(`Dataset not exists! ${id} ${file} `);
+        fastify.log.warn(`Dataset not exists! ${id}: ${file} `);
         //remove from config if not exists
         delete configDatasets[id];
       }
@@ -68,9 +71,8 @@ module.exports = fp(async fastify => {
     //throw errors.nodatasets;
   }
 
-  // collecting all datasets and aliases that exist by config.yml in fastify decorators
+  // collecting all datasets, aliases by config.yml and open datasets (gdal.Dataset)
   fastify.decorate('datasets', datasets);
-  // collecting all open dataset handles (gdal.Dataset) for each unique dataset file and band in fastify decorators
   fastify.decorate('openDatasets', openDatasets);
 
   fastify.log.info(`Datasets available: ${Object.keys(datasets).join(', ')}`);
@@ -78,11 +80,6 @@ module.exports = fp(async fastify => {
   // eslint-disable-next-line
   const datasetDefault = datasets[ configDatasets.default ]
 
-  if (datasetDefault) {
-    fastify.log.info(`Dataset default loaded: ${defaultFile}`);
-  }
-  else {
-    fastify.status = errors.nodatasetdefault.message;
-    fastify.log.warn(errors.nodatasetdefault.message);
-  }
+  fastify.log.info(`Dataset default loaded: ${defaultFile}`);
+
 });

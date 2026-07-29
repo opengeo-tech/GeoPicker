@@ -25,6 +25,7 @@ Thumbs.db
 
 # local notes & AI assistant files
 TODO
+TODO.*
 .claude/
 CLAUDE.*
 AGENTS.*

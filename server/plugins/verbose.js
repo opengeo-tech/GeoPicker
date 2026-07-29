@@ -33,7 +33,7 @@ module.exports = fp(async fastify => {
     routes.push(route)
   })
   .addHook('onReady', async () => {
-    fastify.log.info(fastify.config, 'CONFIG');
+    //deprecated fastify.log.info(fastify.config, 'CONFIG'); use cli show-config
     fastify.log.info(listRoutes(routes), 'ENDPOINTS');
   });
 })

@@ -1,7 +1,7 @@
 GeoPicker
 ==========
 
-![geopicker](docs/cover_600.png)
+![geopicker](docs/cover.png)
 
 Geospatial dataset picker via fast Api Rest interface written in [NodeJs for GDAL](https://github.com/mmomtchev/node-gdal-async) bindings and [Fastify](https://www.fastify.io/)
 
@@ -78,7 +78,7 @@ Some behaviors to know about parameters are that:
 - `datasetId` can have the value `default` to referring the main dataset defined in config
 - from version v1.6.1 `/<datasetId>/...` is the same of `/datasets/<datasetId>/...` `/datasets/` is implicit.
 
-### Formats
+#### Formats
 
 If the `format` parameter is not specified the default behavior is to output the same format as the input
 
@@ -102,14 +102,15 @@ each endpoint has its own default format, for example endpoint `/dataset/lon/lat
 
 # Architecture
 
-The repository has 3 independent npm packages, linked as [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces) from the root `package.json`:
+The repository has 4 npm packages, linked as [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces) from the root `package.json`:
 
 - `lib/` core logic defining utils and GDAL bindings
-- `cli/` standalone CLI (`cli/bin/geopicker-cli`) for dataset get/set, config validation and other side operations; declared as a dependency of `server/` and installed by npm as the `geopicker` command
+- `cli/` standalone CLI (`cli/bin/geopicker`) for dataset get/set, config validation and other side operations; declared as a dependency of `server/` and installed by npm as the `geopicker` command
 - `server/` a standard Fastify HTTP server defining routes, plugins and schemas for the API Rest endpoints
+- `benchmark/` HTTP benchmark script based on autocannon (not published), declares `server/` and `cli/` as its own dependencies; it generates its config and spawns the server by itself, run with `npm run benchmark`
 - `index.html` demo page with LeafletJs map that demostrates the usage of the API Rest endpoints
 
-Other folders: `docs/` extended documentation, `tests/` sample datasets and benchmarks
+Other folders: `docs/` extended documentation, `tests/` sample datasets
 
 # Usage
 
@@ -121,13 +122,6 @@ docker run -v "/$(pwd)/tests/data:/data" -e DEMO_PAGE=true -p 8080:8080 stefcud/
 
 then browse the demo page: http://localhost:8080/ (in production the server listens on port `8080`, see `prod:` section in `server/config.yml`)
 
-The `geopicker` command is also available inside the running container, for example:
-
-```bash
-docker exec <container> geopicker config-validate
-docker exec <container> geopicker -d /data/trentino-altoadige_dem_90m.tif -g "11.123,46.123"
-```
-
 More details about the Docker image structure, docker-compose and custom deployments in [docs docker](./docs/docker.md)
 
 Running from source code in development mode, requirements: _nodejs 18.x_ > , _npm 8.x_ > and _glibc 2.28_ (_Ubuntu 20.x_ > ):
@@ -137,28 +131,40 @@ npm install
 npm run dev
 ```
 
-`npm install` at the repository root installs `server/` and `cli/` too, via [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces).
+`npm install` at the repository root installs `server/`, `cli/` and `benchmark/` too, via [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces).
 Then browse the demo page (in dev mode the server listens on port `9090`): http://localhost:9090/
 
 ## Configuration
 
 Full configuration options can be found in [docs config](./docs/config.md)
 
+A new `config.yml` file can be generated interactively with the CLI command `geopicker config-generate [file]`, printing to stdout if `file` is omitted.
+It can also run unattended with `--yes` (keep every default) and `-p <dir>` (dataset files directory), scanning that directory to fill the `datasets` section.
+
 ## CLI
 
 Command Line interface is useful for side management operations, for example inside docker container, and its config validation tool.
-The `geopicker` command is installed by npm as bin of the `cli/` workspace and is available by name inside the Docker container:
+The `geopicker` command is installed by npm as bin of the `cli/` workspace.
 
 ```bash
 $ geopicker --help
 $ geopicker config-validate custom.config.yml
 ```
 
+The `geopicker` command is also available inside the Docker container, for example:
+
+```bash
+docker exec <container> geopicker config-validate ./my/custom.config.yml
+docker exec <container> geopicker -d /data/trentino-altoadige_dem_90m.tif -g "11.123,46.123"
+```
+
+
 Full CLI options can be found in [docs cli](./docs/cli.md)
 
 ### Requests Example
 
 Get single location exchanging a few bytes:
+
 ```bash
  $ curl "http://localhost:9090/default/11.123/46.123"
 

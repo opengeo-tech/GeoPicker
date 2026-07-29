@@ -4,11 +4,22 @@
 const fs = require('fs')
 const yaml = require('js-yaml')
 const Ajv = require('ajv')
-const S = require('fluent-json-schema')
 
-function validateConfig(config, schemaPath) {
-    const configSchema = require(schemaPath)(S)
-    const validate = new Ajv({ allErrors: true }).compile(configSchema.valueOf())
+const processEnv = {
+    NODE_ENV: 'prod'
+}
+let envId
+let ENVID
+let isDev
+let environmentType
+let environmentTypes
+let environments
+let config
+let defaultsEnvVars = {}
+
+
+function validateConfig(config, schema) {
+    const validate = new Ajv({ allErrors: true }).compile(schema)
 
     if (validate(config)) return { valid: true, errors: [] }
 
@@ -47,18 +58,6 @@ function merge(a, b) {
             ])
         )
     };
-}
-let multiFile = false
-let envId
-let ENVID
-let isDev
-let environmentType
-let environmentTypes
-let environments
-let config
-let defaultsEnvVars = {}
-const processEnv = {
-    NODE_ENV: 'prod'
 }
 
 function load(opts) {
@@ -100,20 +99,6 @@ function loadConfigFile(file) {
 function loadConfig(basepath = '.', configfile = 'config.yml') {
     if (fs.existsSync(`${basepath}/${configfile}`)) {
         return loadConfigFile(`${basepath}/${configfile}`)
-    } else if (fs.existsSync(`${basepath}/config`)) {
-        const tmpl = {}
-        multiFile = true
-        const files = fs.readdirSync(`${basepath}/config`)
-        for (let i = 0; i < files.length; i++) {
-            if (files[i].endsWith('.yml')) {
-                const keyName = files[i].substring(
-                    0,
-                    files[i].length - '.yml'.length
-                )
-                tmpl[keyName] = loadConfigFile(`${basepath}/config/` + files[i])
-            }
-        }
-        return tmpl
     } else {
         console.log(`Not found config in path: ${basepath}`)
         throw new Error(`Not found config in path: ${basepath}`)
@@ -196,7 +181,7 @@ function swapVariables(configFile) {
         return obj
     }
 
-    let file = multiFile ? mapValues(configFile, readAndSwap) : configFile
+    let file = configFile
     file = merge(merge(file || {}, file[environmentType] || {}), {
         envId,
         ENVID,

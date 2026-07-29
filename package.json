@@ -28,8 +28,8 @@
     "postpublish": "npm run docker-build && npm run docker-push",
     "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -e js,yml -w lib -w server -w index.html server/server.js",
     "start": "node server/server.js",
-    "validate-custom-config": "node cli/bin/geopicker-cli config-validate server/custom.config.yml",
-    "bench": "node tests/benchmarks.js"
+    "validate-custom-config": "node cli/bin/geopicker config-validate server/custom.config.yml",
+    "benchmark": "npm start --workspace=benchmark"
   },
   "pre-commit": [
     "lint"
@@ -40,11 +40,12 @@
   ],
   "workspaces": [
     "server",
-    "cli"
+    "cli",
+    "benchmark"
   ],
   "engines": {
-    "node": ">= 18",
-    "npm": ">= 8"
+    "node": ">= 20",
+    "npm": ">= 10"
   },
   "keywords": [
     "geospatial",
@@ -61,16 +62,14 @@
   ],
   "dependencies": {
     "@turf/turf": "^6.5.0",
-    "gdal-async": "^3.7.0"
+    "gdal-async": "^3.12.3"
   },
   "devDependencies": {
-    "autocannon": "^7.10.0",
     "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard": "^17.0.0",
     "nodemon": "^3.1.10",
     "pre-commit": "^1.2.2",
-    "prettier": "^2.8.1",
-    "tap": "^16.3.2"
+    "prettier": "^2.8.1"
   }
 }
