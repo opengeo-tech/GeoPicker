@@ -1,11 +1,11 @@
 
 # CLI
 
-GeoPicker ships a command line entry point `cli/bin/geopicker-cli` (installed as the `geopicker` command by npm, e.g. inside the Docker container), backed by `cli/geopicker-cli.js`.
+GeoPicker ships a command line entry point `cli/bin/geopicker` (installed as the `geopicker` command by npm, e.g. inside the Docker container), backed by `cli/geopicker-cli.js`.
 The CLI is the `cli/` npm workspace, declared as a dependency of `server/`, so npm installs it as `node_modules/.bin/geopicker`.
 
 ```bash
-node cli/bin/geopicker-cli --help
+node cli/bin/geopicker --help
 ```
 
 Inside the Docker container the command is available by name from any directory:
@@ -56,13 +56,25 @@ Same validation as `config-validate`, then prints the parsed config object as JS
 geopicker config-show [file]
 ```
 
-## server-start
+## config-generate
 
-Start the GeoPicker HTTP server, equivalent to `npm start`.
+Interactively generate a new config file: one sequential prompt for each setting documented in [Configuration](config.md), press ENTER to skip a question keeping the default value of `server/config.yml`. For the `datasets` section the command asks for the folder where the dataset files are located (defaults to the chosen `datapath`), scans it for `.tif`/`.tiff` files and proposes the found list, asking confirmation before adding each one.
 
 ```bash
-geopicker server-start
+geopicker config-generate [file]
 ```
+
+The resulting YAML is validated against the config schema (`server/schemas/config.js`) before being saved; if `file` is omitted it is printed to stdout (prompts go to stderr). If `file` already exists, the command asks for confirmation before overwriting it.
+
+## server-start
+
+Start the GeoPicker HTTP server.
+
+```bash
+geopicker server-start [-c|--config <file>]
+```
+
+`--config` defaults to `./config.yml` in the directory where the command is launched. Note this differs from `npm start` (which runs `server/server.js` directly and uses `server/config.yml`); the official Docker image passes `--config server/config.yml` in its `CMD`.
 
 ## server-status
 
@@ -72,13 +84,13 @@ Show the status JSON of the running GeoPicker HTTP server, the same returned by 
 geopicker server-status
 ```
 
-## completion
+## bash-completion
 
 Generate a bash completion script for the `geopicker` command. The script is built at runtime from the commands and options currently registered in the CLI, so it is always in sync — regenerate it after upgrading GeoPicker.
 
 ```bash
-geopicker completion > /etc/bash_completion.d/geopicker   # system-wide
-source <(geopicker completion)                            # only current shell
+geopicker bash-completion > /etc/bash_completion.d/geopicker   # system-wide
+source <(geopicker bash-completion)                            # only current shell
 ```
 
 In the official Docker image the completion is already installed, see [Docker](docker.md).

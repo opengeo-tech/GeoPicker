@@ -6,8 +6,10 @@
 const Fastify = require('fastify')
     , gpicker = require('../lib/geopicker')
     , parserConfig = require('./parserConfig')
+    , path = require('path');
 
-const config = parserConfig.load({basepath: __dirname, configfile: 'config.yml'})
+const configPath = process.env.CONFIG || path.join(__dirname, 'config.yml')
+    , config = parserConfig.load({basepath: path.dirname(configPath), configfile: path.basename(configPath)})
     , {valid, errors} = parserConfig.validateConfig(config, './schemas/config');
 
 if (!valid) {

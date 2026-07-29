@@ -1,33 +1,32 @@
 ##
-## Config file parsed by ConfigYml library
+## Config file parsed by parserConfig.js
 ##
 
-## Default values if not present in environment
+## Default values if not present in environment (nodejs process.env)
 defaultsEnvVars:
   PREFIX: '/'
   DEMO_PAGE: false
-  DATASET_DEFAULT: 'alps' #./tests/data/test_4611_dem.tif
+  DATASET_DEFAULT: 'elevation'
 
-## Production/Dockerized environment config override
+## Environment Production/Dockerized config override
 prod:
   port: 8080
   host: 0.0.0.0
   datapath: '/data' #default path in Docker container
 
-## Development environment config override
+## Environment Development config override
 dev:
   port: 9090
-  host: 127.0.0.1
+  host: 0.0.0.0
   datapath: './tests/data'
   verbose: true
-  #validation: false
   status:
     config: true
     stats: true
-  fastifyConf:
+  fastifyConf: # initial configuration for Fastify server (https://fastify.dev/docs/latest/Reference/Server/#initialconfig)
     #logger: false
     logger:
-      level: 'warn' #'trace', 'debug', 'info', 'warn',' error', 'fatal'
+      level: 'info' #'trace', 'debug', 'info', 'warn',' error', 'fatal'
       transport:
         target: 'pino-pretty'
   formats:
@@ -35,10 +34,9 @@ dev:
     - 'polyline'
     - 'gpx'
     - 'geojson'
-    - 'json'
-    - 'array'
 
-## the `prod` and `dev` directives above can override any of the default following configurations
+
+## Environments `prod` and `dev` directives above can override any following config values below
 
 ## Prefix for any endpoints url
 prefix: ${PREFIX}
@@ -69,12 +67,7 @@ validation: true
 ## Enable Swagger front-end (options by: https://github.com/fastify/fastify-swagger)
 swagger:
   enabled: true
-  # path append to main `prefix`
   routePrefix: '${prefix}/docs'
-  # docExpansion
-  # 'none' It'll Hide everything.
-  # 'list' It'll expand/List all the operations only.
-  # 'full' It'll expand everything(Full expand as the name says).
   docExpansion: 'list'
 
 ## Cross-origin resource sharing (options by: https://github.com/fastify/fastify-cors)
@@ -97,7 +90,7 @@ status:
   #show base configs in /status enpoint
   config: true
   #show usage stats runtime in /status enpoint
-  stats: true
+  stats: false
 
 ## Maximum number of locations picked in a single request
 maxLocations: 10000
@@ -122,52 +115,22 @@ formats:
   - 'input'
   - 'polyline'
   - 'gpx'
-  #- 'geojson'
-  #- 'json'
-  #TODO - 'array'
+  #- 'array' work in progress
+  #- 'geojson' work in progress
+  #- 'json' work in progress
 
-## Datasets for `dataset` api parameter
+## Datasets mapping `datasetId` api parameter with data source files and bands
 datasets:
-  default: ${DATASET_DEFAULT}
+  default: ${DATASET_DEFAULT} #defaul
+  # elevation is an alias of trentino dataset, can be used in datasetId parameter of the endpoint /locations
+  elevation: trentino
+  trentino:
+    path: trentino-altoadige_dem_90m.tif
+    band: 1
+  # test dataset used usually for unit tests
   test:
     path: test_4611_dem.tif
     band: 1
-  # aliases of same dataset
-  altitude: elevation
-  trentino: elevation
-  elevation:
-    path: trentino-altoadige_dem_90m.tif
-    band: 1
-  alps:
-    path: alps_dem_10m.tif
-    band: 1
-  alps30:
-    path: alps_dem_30m.tif
-    band: 1
-  alps90:
-    path: alps_dem_90m.tif
-    band: 1
-  ## load from same Geotif different bands
-  veneto_elevation:
-    path: veneto_30m_2bands_ele_aspect.tif
-    band: 1
-  veneto_aspect:
-    path: veneto_30m_2bands_ele_aspect.tif
-    band: 2
-  veneto_mercator3857:
-    path: veneto_30m_3857.tif
-    band: 1
-  ## if path not exists not listed in the endpoint /datasets
+  ## example of path not exists, not listed in the endpoint /datasets but logged in the server console at startup
   nope:
     path: this-file-not-exists.tif
-  #
-  #TODO wms:
-  #   path: wms.tif
-  #   download:
-  #       wmspath: wms.xml
-  #       bboxpath:
-  #   band: 1
-  # TODO band: * # TODO espose all bands if value is *
-  # TODO manage shape
-  #  admins:
-  #   path: a-shape-file.shp

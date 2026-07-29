@@ -224,12 +224,12 @@
 </head>
 <body>
     <h1>
-      <a href="https://opengeo.tech/geopicker"><img src="https://raw.githubusercontent.com/opengeo-tech/GeoPicker/master/docs/logo.png" /> GeoPicker</a>
+      <a href="https://opengeo.tech/geopicker"><img src="https://raw.githubusercontent.com/opengeo-tech/GeoPicker/master/docs/images/logo.png" /> GeoPicker</a>
     </h1>
     <nav>
-      <a href="https://github.com/opengeo-tech/GeoPicker/"><i class="fa fa-github" aria-hidden="true"></i> <span>GitHub Sources</span></a> | 
-      <a href="https://opengeo.tech/geopicker/docs"><i class="fa fa-question-circle"></i> <span>API Docs</span></a> | 
-      <a href="https://opengeo.tech/stefano-cudini"><i class="fa fa-user"></i> <span>Author</span></a> | 
+      <a href="https://github.com/opengeo-tech/GeoPicker/"><i class="fa fa-github" aria-hidden="true"></i> <span>GitHub Sources</span></a> |
+      <a href="https://opengeo.tech/geopicker/docs"><i class="fa fa-question-circle"></i> <span>API Docs</span></a> |
+      <a href="https://opengeo.tech/stefano-cudini"><i class="fa fa-user"></i> <span>Author</span></a> |
       <a href="https://www.paypal.com/paypalme/stefanocudini" target="_blank" title="finance the project if it was useful for your work"><i class="fa fa-heart"></i> <span>Donate</span></a>
     </nav>
     <aside>
@@ -319,7 +319,7 @@
         const row = `<span style="color:${col}"> ${type} ${log}</span>`;
         $divLog.append(`${row}\n`).scrollTop($divLog[0].scrollHeight);
     }
-    
+
     function apiGet(...urlParts) {
         let url = Array.prototype.join.call([apiBaseUrl, ...urlParts].map(a => `${a}`.replace(/\/$/, '')), '/');
         if (Object.keys(GeoPickerAPI.globalParams).length > 0) {
@@ -528,7 +528,7 @@
                 });
 
                 editableLayer.addLayer(layerElevation);
-                
+
             });
 
             GeoPickerAPI.postGeometryMetadata(geometry).then(res => {
@@ -643,7 +643,7 @@
      */
     const controlMousePointAspect = new L.Control({ position: 'topleft' });
     controlMousePointAspect.onAdd = map => {
-        
+
         controlMousePointAspect._icon = L.divIcon({
             className: 'aspect-marker',
             html: '<div class="aspect-triangle"></div><div class="aspect-center"></div>',
@@ -711,7 +711,7 @@
         polylocs.setLatLngs(locs);
 
         const { geometry } = polylocs.toGeoJSON(4);
-        
+
         /* convert to geopicker locations string `lon1,lat1|lon2,lat2|...` */
         const locsString = geometry.coordinates.map(a => a.join(',')).join('|');
 
@@ -766,7 +766,7 @@
         const [lon, lat] = [e.latlng.lng, e.latlng.lat].map(n => L.Util.formatNum(n, 4))
 
         GeoPickerAPI.getContourLonLat(datasetDefault, lon, lat).then(coordinates => {
-            
+
             editableLayer.clearLayers();
             const layerContour = L.geoJSON({
                 type: 'Feature',

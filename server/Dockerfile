@@ -1,4 +1,4 @@
-FROM node:18-buster-slim
+FROM node:20-bookworm-slim
 
 WORKDIR /home
 
@@ -29,7 +29,7 @@ RUN npm install --ignore-scripts
 # for interactive shells (docker exec -it <container> bash); the slim image has
 # no bash-completion package, so /etc/bash_completion.d is not sourced by default.
 RUN mkdir -p /etc/bash_completion.d \
- && geopicker completion > /etc/bash_completion.d/geopicker \
+ && geopicker bash-completion > /etc/bash_completion.d/geopicker \
  && echo '. /etc/bash_completion.d/geopicker' >> /etc/bash.bashrc
 
-CMD ["geopicker", "server-start"]
+CMD ["geopicker", "server-start", "--config", "server/config.yml"]

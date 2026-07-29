@@ -10,7 +10,7 @@ module.exports = async fastify => {
       , gdal = gpicker.gdal.version
       , crossorigin = cors.enabled ? cors.origin : false
       , compression = compress.enabled ? compress.encodings : false
-      , frontend = demopage ? demopage.path : false
+      , frontend = demopage?.enabled && demopage.url
       , {version, homepage} = package
       , documentation = swagger.enabled ? resolve(swagger.routePrefix) : homepage;
 
