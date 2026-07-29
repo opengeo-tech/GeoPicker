@@ -8,12 +8,12 @@ const Fastify = require('fastify')
     , parserConfig = require('./parserConfig')
 
 const config = parserConfig.load({basepath: __dirname, configfile: 'config.yml'})
+    , {valid, errors} = parserConfig.validateConfig(config, './schemas/config');
 
-// TODO config validation before starting the server
-//     , configValid = parserConfig.validateConfig(config, './schemas/config');
-// if(!configValid) {
-//     throw new Error('Invalid config.yml');
-// }
+if (!valid) {
+    console.error('Invalid config.yml:\n' + errors.join('\n'))
+    process.exit(1)
+}
 
 const {utils, package} = gpicker
 const {fastifyConf, port, host, prefix} = config
@@ -93,8 +93,4 @@ fastify.listen({port, host}, err => {
         fastify.log.error(err);
         process.exit(1)
     }
-    const {datasetsIds, datasetHandles} = fastify;
-    setInterval(() => {
-        console.log({datasetsIds, datasetHandles});
-    }, 5000);
 });

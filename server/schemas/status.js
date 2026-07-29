@@ -1,6 +1,6 @@
 module.exports = (S, fastify) => {
 
-  const {config: {formats, compress:{encodings}}, datasetsIds} = fastify;
+  const {config: {formats, compress:{encodings}}, openDatasets} = fastify;
 
   const status = S.object()
         .prop('status')
@@ -18,13 +18,13 @@ module.exports = (S, fastify) => {
           .prop('maxParamLength', S.number())
           .prop('bodyLimit', S.number())
           .prop('crossorigin')
-          .prop('datasets', S.array().items(S.string().enum(datasetsIds)))
           .prop('formats', S.array().items(S.string().enum(formats)))
           .prop('compression', S.array().items(S.string().enum(encodings)))
         )
         .prop('stats',
           S.object()
           .prop('memory')
+          .prop('openDatasets', S.array().items(S.string().enum(Object.keys(openDatasets))))
         )
 
 

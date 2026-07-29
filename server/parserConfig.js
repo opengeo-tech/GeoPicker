@@ -10,13 +10,12 @@ function validateConfig(config, schemaPath) {
     const configSchema = require(schemaPath)(S)
     const validate = new Ajv({ allErrors: true }).compile(configSchema.valueOf())
 
-    if (validate(config)) return
+    if (validate(config)) return { valid: true, errors: [] }
 
-    const details = validate.errors
-        .map(e => `${e.instancePath || '(root)'} ${e.message}`)
-        .join('; ')
-
-    throw new Error(`Invalid config.yml: ${details}`)
+    return {
+        valid: false,
+        errors: validate.errors.map(e => `${e.instancePath || '(root)'} ${e.message}`)
+    }
 }
 
 function isPlainObject(val) {

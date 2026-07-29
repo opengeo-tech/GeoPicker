@@ -96,8 +96,8 @@ compress:
 status:
   #show base configs in /status enpoint
   config: true
-  #show usage stats in /status enpoint
-  stats: false
+  #show usage stats runtime in /status enpoint
+  stats: true
 
 ## Maximum number of locations picked in a single request
 maxLocations: 10000
@@ -146,7 +146,7 @@ datasets:
     band: 1
   alps90:
     path: alps_dem_90m.tif
-    band: 1        
+    band: 1
   ## load from same Geotif different bands
   veneto_elevation:
     path: veneto_30m_2bands_ele_aspect.tif

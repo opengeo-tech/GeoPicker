@@ -3,12 +3,11 @@ const {resolve} = require('path');
 
 module.exports = async fastify => {
 
-  const {config, gpicker, package, utils, datasetsIds} = fastify
+  const {config, gpicker, package, utils, openDatasets} = fastify
       , {fastifyConf, attribution, swagger, compress, cors, demopage} = config
       , {validation, maxLocations, precision} = config
       , {maxParamLength, bodyLimit} = fastifyConf || {}
       , gdal = gpicker.gdal.version
-      , datasets = datasetsIds
       , crossorigin = cors.enabled ? cors.origin : false
       , compression = compress.enabled ? compress.encodings : false
       , frontend = demopage ? demopage.path : false
@@ -43,17 +42,20 @@ module.exports = async fastify => {
       crossorigin,
       compression,
       formats,
-      datasets,
     }
   }
 
-  if (config.status?.stats) {
-    //https://github.com/fastify/fastify/issues/517#issuecomment-349958775
-    //TODO https://github.com/fastify/under-pressure
-    out.stats = {
-      memory: utils.humanSize(process.memoryUsage().rss)
-    }
-  }
+  fastify.get('/status', async () => {
 
-  fastify.get('/status', async () => out);
+    if (config.status?.stats) {
+      //https://github.com/fastify/fastify/issues/517#issuecomment-349958775
+      //TODO https://github.com/fastify/under-pressure
+      out.stats = {
+        memory: utils.humanSize(process.memoryUsage().rss),
+        openDatasets: Object.keys(openDatasets)
+      }
+    }
+
+    return out;
+  });
 }

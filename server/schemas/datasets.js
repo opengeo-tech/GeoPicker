@@ -8,6 +8,7 @@ module.exports = (S, fastify) => {
   const dataset = S.object()
         .prop('id', S.string())
         .prop('isDefault', S.boolean())
+        .prop('isAlias', S.boolean())
         .prop('type', S.string().enum(['raster','vector']))
         .prop('epsg', S.integer())
         .prop('band', S.integer())

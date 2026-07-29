@@ -8,28 +8,32 @@ const fs = require('fs')
 module.exports = fp(async fastify => {
 
   const {config, gpicker, errors} = fastify
-      , {datapath, datasets} = config
+      , {datapath, datasets: configDatasets} = config
 
   if (!fs.existsSync(datapath)) {
     fastify.log.error(errors.nodatadir.message);
     //throw errors.nodatadir
   }
 
-  if (!datasets || !datasets.default) {
+  if (!configDatasets || !configDatasets.default) {
     fastify.log.error(errors.nodatasets.message);
     //throw errors.nodatasets;
   }
 
   // eslint-disable-next-line
-  const def = datasets[ datasets.default ] // (datasets.default && typeof datasets.default.valueOf()==='string') ?
+  const def = configDatasets[ configDatasets.default ] // (configDatasets.default && typeof configDatasets.default.valueOf()==='string') ?
       , defaultFile = `${datapath}/${def.path}`
-      , listDatasets = {}
-      , datasetHandles = {};
+      , datasets = {}
+      , openDatasets = {}; // open dataset handles (gdal.Dataset) for each unique dataset file and band
 
-  for (let [id, val] of Object.entries(datasets)) {
+  //TODO in the future there could be a mechanism for automatically closing openDatasets after a certain time limit has expired
 
-    if (val != null && typeof val.valueOf() === 'string' && datasets[ val ]) {  // entry is an alias
-      val = datasets[ val ];
+  for (let [id, val] of Object.entries(configDatasets)) {
+
+    const isAlias = val != null && typeof val.valueOf() === 'string' && !!configDatasets[ val ];
+
+    if (isAlias) {  // entry is an alias
+      val = configDatasets[ val ];
     }
 
     if(val.path) {
@@ -38,41 +42,41 @@ module.exports = fp(async fastify => {
 
       if (fs.existsSync(file)) {
 
-        const handle = gpicker.openFile(file, val.band)
+        const key = `${val.path}:${val.band || 1}`
+            , handle = openDatasets[ key ] || (openDatasets[ key ] = gpicker.openFile(file, val.band))
             , {info} = handle
-            , isDefault = (id === 'default' || id === datasets.default);
+            , isDefault = (id === 'default' || id === configDatasets.default);
 
-        listDatasets[ id ] = {
+        datasets[ id ] = {
           id,
           isDefault,
-          ...info
+          isAlias,
+          ...info,
+          ...handle //not esposed in API, but available in fastify.openDatasets
         }
-        datasetHandles[ id ] = handle;
       }
       else {
         fastify.log.warn(`Dataset not exists! ${id} ${file} `);
         //remove from config if not exists
-        delete datasets[id];
+        delete configDatasets[id];
       }
     }
   }
 
-  if (Object.keys(listDatasets).length===0) {
+  if (Object.keys(datasets).length===0) {
     fastify.log.error(errors.nodatasets.message);
     //throw errors.nodatasets;
   }
 
-  // eslint-disable-next-line
-  const datasetsIds = Object.keys(listDatasets)
+  // collecting all datasets and aliases that exist by config.yml in fastify decorators
+  fastify.decorate('datasets', datasets);
+  // collecting all open dataset handles (gdal.Dataset) for each unique dataset file and band in fastify decorators
+  fastify.decorate('openDatasets', openDatasets);
 
-  fastify.decorate('datasets', listDatasets);
-  fastify.decorate('datasetsIds', datasetsIds);
-  fastify.decorate('datasetHandles', datasetHandles);
-
-  fastify.log.info(`Datasets available: ${datasetsIds}`);
+  fastify.log.info(`Datasets available: ${Object.keys(datasets).join(', ')}`);
 
   // eslint-disable-next-line
-  const datasetDefault = datasetHandles[ datasets.default ]
+  const datasetDefault = datasets[ configDatasets.default ]
 
   if (datasetDefault) {
     fastify.log.info(`Dataset default loaded: ${defaultFile}`);

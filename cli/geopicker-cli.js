@@ -13,10 +13,10 @@ function loadAndValidateConfig(file) {
       , basepath = path.dirname(configPath)
       , configfile = path.basename(configPath);
 
-  const config = parserConfig.load({basepath, configfile});
-  parserConfig.validateConfig(config, './schemas/config');
+  const config = parserConfig.load({basepath, configfile})
+      , {valid, errors} = parserConfig.validateConfig(config, './schemas/config');
 
-  return {config, configPath};
+  return {config, configPath, valid, errors};
 }
 
 module.exports = process => {
@@ -29,7 +29,11 @@ module.exports = process => {
     .description('validate a config.yml file against the GeoPicker config schema')
     .action(file => {
       try {
-        const {configPath} = loadAndValidateConfig(file);
+        const {configPath, valid, errors} = loadAndValidateConfig(file);
+        if (!valid) {
+          console.error(errors.join('\n'));
+          process.exit(1);
+        }
         console.log(`${configPath} valido`);
       } catch (e) {
         console.error(e.message);
@@ -42,7 +46,11 @@ module.exports = process => {
     .description('print the parsed config.yml object as JSON')
     .action(file => {
       try {
-        const {config} = loadAndValidateConfig(file);
+        const {config, valid, errors} = loadAndValidateConfig(file);
+        if (!valid) {
+          console.error(errors.join('\n'));
+          process.exit(1);
+        }
         console.log(JSON.stringify(config, null, 2));
       } catch (e) {
         console.error(e.message);
