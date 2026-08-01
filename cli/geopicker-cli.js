@@ -104,7 +104,7 @@ module.exports = process => {
       require('http').get(url, res => {
         let body = '';
         res.on('data', chunk => { body += chunk });
-        res.on('end', () => process.stdout.write(body + '\n'));
+        res.on('end', () => process.stdout.write(JSON.stringify(JSON.parse(body), null, 4) + '\n'));
       }).on('error', e => {
         console.error(`server not reachable at ${url}: ${e.message}`);
         process.exit(1);
