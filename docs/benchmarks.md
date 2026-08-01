@@ -3,10 +3,10 @@
 
 ## HTTP throughput (autocannon)
 
-Benchmarks scripts: `benchmark/index.js` (npm workspace `benchmark/`, depends on `server/` and `cli/`) using [AutoCannon](https://github.com/mcollina/autocannon)
+Benchmarks scripts: `benchmark/index.js` using [AutoCannon](https://github.com/mcollina/autocannon) to produce benchmarks statistics in stdout.
 
 ```bash
-npm start --workspace=benchmark   # or: npm run benchmark, from the repository root
+npm run benchmark
 ```
 
 The run is self contained: it spawns its own server with `geopicker server-start`, waits for the `/status` endpoint to answer, reads the dataset bounding box to pick random locations inside it, hits `/:datasetId/:lon/:lat` with autocannon and finally stops the server.
@@ -49,41 +49,12 @@ Req/Bytes counts sampled once per second.
 
 ## Benchmarking an already running server
 
-Setting the `BENCH_SERVER` environment variable to a base url skips both the config loading and the server spawn, so the benchmark runs against an already running instance (a Docker container, a remote deployment) and leaves it running at the end:
+ By default `npm run start --workspace=benchmark` runs a spawned server, but you can also benchmark an already running instance (a Docker container, a remote deployment) by setting the `BENCH_SERVER` environment variable to a base url, in this way:
 
 ```bash
-BENCH_SERVER=http://localhost:8080/ npm run benchmark
+BENCH_SERVER=http://localhost:8080/ npm run start --workspace=benchmark
 ```
 
-## Dataset handle memory footprint
-
-Since `server/plugins/datasets.js` now keeps one open GDAL handle per configured dataset (instead of only the default one) for the whole lifetime of the server, it's worth knowing how much memory each open handle actually costs.
-
-### What a handle is
-
-`gpicker.openFile(file, band)` (`lib/geopicker.js`) returns a plain object:
-```js
-{
-  info,          // small JS object: bbox, centroid, pixelSize, stats... (~400 bytes as JSON)
-  dataset,       // gdal-async Dataset — native wrapper around a GDALDataset
-  rasterband,    // gdal-async RasterBand — native wrapper around a GDALRasterBand
-  geoTransform,  // gdal.CoordinateTransformation instance
-  locPixel,      // closure reading a pixel value
-  close,         // closure calling dataset.close()
-}
-```
-None of these hold the raster data itself in the JS object — `dataset`/`rasterband`/`geoTransform` are thin references to native GDAL C++ objects.
-
-### Method
-
-Measured `process.memoryUsage().rss` (Node 18.20.8) before/after opening handles for two sample datasets from `tests/data/`, then after 1000 `locPixel()` calls at random coordinates:
-
-```js
-const gpicker = require('./lib/geopicker');
-const h1 = gpicker.openFile('path/to/fine_resolution_10m_dem.tif', 1);        // fine resolution (10m)
-const h2 = gpicker.openFile('./tests/data/trentino-altoadige_dem_90m.tif', 1); // coarser resolution (90m)
-for (let i = 0; i < 1000; i++) h1.locPixel([11 + Math.random()*0.1, 46 + Math.random()*0.1]);
-```
 
 ### Results
 

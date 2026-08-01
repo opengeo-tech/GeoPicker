@@ -47,7 +47,7 @@ The same validation can be run without starting the server via the [CLI](cli.md)
 
 ## Performance impact
 
-Some settings directly affect throughput and latency; how they act has been checked in the server code:
+Some settings directly affect throughput and latency; how they act has been checked in the server code and confirmed by benchmarks (see [benchmarks.md](benchmarks.md)):
 
 - **[validation](#validation)** — when `false` the validator compiler is replaced with one that always accepts, so no json-schema check is run on any request. It is the single most direct speed/safety trade-off: faster responses, but malformed locations reach the GDAL layer unchecked.
 - **[maxLocations](#maxlocations)** — every location in a request costs one pixel read on the raster, and reads are currently synchronous (they block the event loop, see "async" in the README Roadmap). This limit is what bounds the work a single request can demand; lower it on small servers.

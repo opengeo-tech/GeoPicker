@@ -83,7 +83,6 @@ async function main() {
     baseUrl = url.href;
     basePath = url.pathname;
     instance = `external ${baseUrl} ${url.origin}`;
-    console.log(`using the already running server ${baseUrl} from BENCH_SERVER`);
   }
   else {
     config = parserConfig.load({basepath: __dirname, configfile: CONFIG_FILE});
@@ -100,7 +99,6 @@ async function main() {
       stdio: ['ignore', 'ignore', 'inherit']
     });
     instance = `spawned ${baseUrl}`;
-    console.log(`spawned server ${baseUrl} from ${CLI_BIN} server-start -c ${CONFIG_FILE}`);
   }
 
   try {
