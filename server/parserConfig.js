@@ -4,7 +4,6 @@
 const fs = require('fs')
 const yaml = require('js-yaml')
 const Ajv = require('ajv')
-const S = require('fluent-json-schema')
 
 const processEnv = {
     NODE_ENV: 'prod'
@@ -19,9 +18,8 @@ let config
 let defaultsEnvVars = {}
 
 
-function validateConfig(config, schemaPath) {
-    const configSchema = require(schemaPath)(S)
-    const validate = new Ajv({ allErrors: true }).compile(configSchema.valueOf())
+function validateConfig(config, schema) {
+    const validate = new Ajv({ allErrors: true }).compile(schema)
 
     if (validate(config)) return { valid: true, errors: [] }
 

@@ -16,6 +16,7 @@
     "geopicker": "./bin/geopicker"
   },
   "dependencies": {
-    "commander": "^13.1.0"
+    "commander": "^13.1.0",
+    "fluent-json-schema": "^4.0.0"
   }
 }

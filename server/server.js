@@ -4,13 +4,15 @@
  * https://opengeo.tech
  */
 const Fastify = require('fastify')
+    , S = require('fluent-json-schema')
     , gpicker = require('../lib/geopicker')
     , parserConfig = require('./parserConfig')
     , path = require('path');
 
 const configPath = process.env.CONFIG || path.join(__dirname, 'config.yml')
     , config = parserConfig.load({basepath: path.dirname(configPath), configfile: path.basename(configPath)})
-    , {valid, errors} = parserConfig.validateConfig(config, './schemas/config');
+    , configSchema = require('./schemas/config')(S)
+    , {valid, errors} = parserConfig.validateConfig(config, configSchema.valueOf());
 
 if (!valid) {
     console.error('Invalid config.yml:\n' + errors.join('\n'))

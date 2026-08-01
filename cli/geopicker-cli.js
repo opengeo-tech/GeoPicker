@@ -9,12 +9,14 @@ const path = require('path')
 
 function loadAndValidateConfig(file) {
   const parserConfig = require('../server/parserConfig')
+      , S = require('fluent-json-schema')
+      , configSchema = require('../server/schemas/config')(S)
       , configPath = file || path.join(__dirname, '../server/config.yml')
       , basepath = path.dirname(configPath)
       , configfile = path.basename(configPath);
 
   const config = parserConfig.load({basepath, configfile})
-      , {valid, errors} = parserConfig.validateConfig(config, './schemas/config');
+      , {valid, errors} = parserConfig.validateConfig(config, configSchema.valueOf());
 
   return {config, configPath, valid, errors};
 }

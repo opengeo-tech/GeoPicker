@@ -2,6 +2,8 @@ const fs = require('fs')
     , path = require('path')
     , readline = require('readline')
     , yaml = require('js-yaml')
+    , S = require('fluent-json-schema')
+    , configSchema = require('../server/schemas/config')(S)
     , parserConfig = require('../server/parserConfig');
 
 const SCANDIR_TYPES = ['.tif', '.tiff'];
@@ -273,7 +275,8 @@ module.exports = async (file, process, console, opts = {}) => {
 
 ` + yaml.dump({port, host, datapath, ...others, datasets});
 
-  const {valid, errors} = parserConfig.validateConfig(yaml.load(text), './schemas/config');
+  const {valid, errors} = parserConfig.validateConfig(yaml.load(text), configSchema.valueOf());
+
   if (!valid) {
     console.error('generated config is invalid:\n' + errors.join('\n'));
     process.exit(1);
