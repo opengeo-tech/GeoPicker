@@ -6,6 +6,7 @@ const fs = require('fs')
 
 const SCANDIR_TYPES = ['.tif', '.tiff'];
 
+// TODO move strings on schemas/config.js
 const SETTINGS = {
     'datapath': 'datapath, base directory of the dataset files (TAB to autocomplete)'
   , 'datasets': 'datasets, folder to scan for dataset files (TAB to autocomplete)'
@@ -277,10 +278,13 @@ module.exports = async (file, process, console, opts = {}) => {
     console.error('generated config is invalid:\n' + errors.join('\n'));
     process.exit(1);
   }
-  console.log(`generated config ${outPath} is valid`);
+  console.log(outPath ? `generated config ${outPath} is valid` : 'generated config is valid');
 
   if (outPath) {
     fs.writeFileSync(outPath, text);
     console.log(`${outPath} generated`);
+  }
+  else {
+    process.stdout.write(text);
   }
 }
