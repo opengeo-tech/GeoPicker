@@ -215,7 +215,8 @@ module.exports = async (file, process, console, opts = {}) => {
 
   console.log('resulting datasets config:\n' + yaml.dump({datasets: config.datasets}));
 
-  config.port = await askNum(SETTINGS.port, defaults.port);
+  config.port = opts.port ? Number(opts.port) : await askNum(SETTINGS.port, defaults.port);
+
   config.host = await ask(SETTINGS.host, defaults.host);
   config.prefix = await ask(SETTINGS.prefix, defaults.prefix);
 

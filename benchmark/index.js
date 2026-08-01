@@ -30,7 +30,24 @@ function locRandom(bbox = [[-90, -180], [90, 180]]) {
 }
 
 /**
- * poll the /status endpoint until the spawned server answers
+ * resolve the dataset file of an id, following the aliases of config.yml
+ */
+function datasetFile(config, id) {
+  if (!config) {
+    return null
+  }
+  const {datapath, datasets} = config
+
+  let entry = datasets[id];
+
+  if (typeof entry === 'string') {  // 'default' or an alias
+    entry = datasets[entry];
+  }
+  return entry && entry.path ? path.join(datapath, entry.path) : null
+}
+
+/**
+ * poll the /status endpoint until the spawned server answers, return its status
  */
 async function waitServer(url, retries = 60) {
   for (let i = 0; i < retries; i++) {
@@ -39,7 +56,7 @@ async function waitServer(url, retries = 60) {
       if (!res.ok) {
         throw new Error(`${url} responded ${res.status}`)
       }
-      return
+      return await res.json()
     }
     catch (e) {
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -53,6 +70,7 @@ async function main() {
   let baseUrl
     , basePath
     , datasetId
+    , config = null
     , server = null;
 
   if (BENCH_SERVER) {
@@ -62,8 +80,9 @@ async function main() {
     console.log(`using the already running server ${baseUrl} from BENCH_SERVER`);
   }
   else {
-    const config = parserConfig.load({basepath: __dirname, configfile: CONFIG_FILE})
-        , {port, host, prefix} = config
+    config = parserConfig.load({basepath: __dirname, configfile: CONFIG_FILE});
+
+    const {port, host, prefix} = config
         , hostname = host === '0.0.0.0' ? '127.0.0.1' : host;
 
     basePath = prefix.endsWith('/') ? prefix : prefix + '/';
@@ -79,7 +98,7 @@ async function main() {
   try {
 
     // wait for the server to be ready
-    await waitServer(`${baseUrl}status`);
+    const {version, gdal} = await waitServer(`${baseUrl}status`);
 
     datasetId = BENCH_DATASET ?? 'default';
 
@@ -89,11 +108,20 @@ async function main() {
       throw new Error(`no dataset found: '${datasetId}' to benchmark on ${baseUrl}`)
     }
 
-    const {bbox} = await res.json()
+    const info = await res.json()
+        , {bbox, dataType, epsg, width, height, pixelSize, stats} = info
         , {minLon, minLat, maxLon, maxLat} = bbox
-        , bb = [[minLat, minLon], [maxLat, maxLon]];
+        , bb = [[minLat, minLon], [maxLat, maxLon]]
+        , file = datasetFile(config, datasetId);
 
-    console.log(`benchmarking dataset "${datasetId}" on ${baseUrl}`);
+    console.log([
+      `GeoPicker v${version} (gdal ${gdal}) benchmark of ${new Date().toISOString()}`
+    , `server:  ${baseUrl}`
+    , `dataset: "${datasetId}"${file ? ` ${file}` : ''}`
+    , `raster:  ${width}x${height} ${dataType} epsg:${epsg} pixel ${pixelSize.avgInMeters || pixelSize.x} ${pixelSize.avgInMeters ? 'meters' : pixelSize.unit}`
+    , `values:  min ${stats.min} max ${stats.max} mean ${stats.mean}`
+    , `bbox:    ${minLon} ${minLat} ${maxLon} ${maxLat}`
+    ].join('\n'));
 
     // run the benchmark
     const result = await autocannon({

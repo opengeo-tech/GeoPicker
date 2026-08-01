@@ -8,15 +8,27 @@ The CLI is the `cli/` npm workspace, declared as a dependency of `server/`, so n
 node cli/bin/geopicker --help
 ```
 
-Inside the Docker container the command is available by name from any directory:
+Inside the Docker container the command is available for management and debugging, e.g. to validate the config file or check datasets:
 
 ```bash
 docker exec <container> geopicker --help
 ```
 
-## Dataset get/set
+## Index
 
-Read or write values from/into a dataset file (e.g. a GeoTIFF), the default action when no other command is given.
+- [Execute get/set](#execute-getset)
+- Config commands:
+  - [config-validate](#config-validate)
+  - [config-show](#config-show)
+  - [config-generate](#config-generate)
+- Server commands:
+  - [server-start](#server-start)
+  - [server-status](#server-status)
+- [bash-completion](#bash-completion)
+
+## Execute get/set
+
+Read or write values from/into a dataset file (e.g. a GeoTIFF), without rest api or server.
 
 ```bash
 geopicker -d path/to/dataset.tif -g "11.01,46.01"
@@ -68,11 +80,12 @@ Options:
 
 - `-p, --datapath <dir>` base directory of the dataset files, skips the `datapath` question (the rest stays interactive)
 - `-D, --default <file>` dataset file to set as `datasets.default`, skips the default id question; it accepts a path or just the file name, and fails if that file is not among the scanned datasets
+- `-P, --port <port>` TCP port the server listens on, skips the `port` question
 - `-y, --yes` answer yes to all the questions keeping the default values, and overwrite `file` if it already exists
 
 An excerpt of the interactive session:
 
-```
+```bash
 $ geopicker config-generate config.yml
 GeoPicker config generator, press ENTER to accept the [default] values
 datapath, base directory of the dataset files (TAB to autocomplete) [/data]: ./tests/data
@@ -89,8 +102,6 @@ datasets:
     path: test_4611_dem.tif
     band: 1
   default: test_4611_dem
-
-port, TCP port the server listens on [8080]: 9090
 ...
 ```
 

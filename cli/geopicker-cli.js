@@ -5,7 +5,9 @@
  */
 
 const path = require('path')
-    , { program } = require('commander');
+    , { program } = require('commander')
+    , fs = require('fs')
+    , geopicker = require('../lib/geopicker');
 
 function loadAndValidateConfig(file) {
   const parserConfig = require('../server/parserConfig')
@@ -66,6 +68,7 @@ module.exports = process => {
     .option('-p, --datapath <dir>', 'base directory of the dataset files, skips the datapath question')
     .option('-y, --yes', 'answer yes to all the questions keeping the default values, overwrite the file if exists')
     .option('-D, --default <file>', 'dataset file to set as default dataset, skips the datasets default id question')
+    .option('-P, --port <port>', 'TCP port the server listens on, skips the port question')
     .action(async (file, opts) => {
       try {
         await require('./config-generate')(file, process, console, opts);
@@ -122,14 +125,16 @@ module.exports = process => {
     .option('-i, --input-file <file>', 'input geojson file')
     .option('-t, --timing', 'print processing time', false)
     .option('-v, --verbose', 'print verbose output', false)
+    .option('-V, --version', 'print geopicker version', false)
     .action(opts => {
+      if (opts.version) {
+         process.stdout.write(`${geopicker.package.version}\n`);
+        process.exit(0);
+      }
+
       if (!opts.dataset) {
         program.error("error: required option '-d, --dataset <file>' not specified");
       }
-
-      const fs = require('fs')
-          , geopicker = require('../lib/geopicker')
-          , { setValue, getValue, utils: { parseLocations } } = geopicker;
 
       const {dataset, inputFile, timing, get, set, verbose} = opts;
 
@@ -145,12 +150,12 @@ module.exports = process => {
       }
 
       if(set && inputGeojson) {
-        setValue(inputGeojson, dataset);
+        geopicker.setValue(inputGeojson, dataset);
         process.stdout.write(JSON.stringify(inputGeojson,null,4));
       }
       else if(get) {
-        const locs = parseLocations(get,'_');
-        const values = getValue(locs, dataset);
+        const locs = geopicker.utils.parseLocations(get,'_');
+        const values = geopicker.getValue(locs, dataset);
         process.stdout.write(JSON.stringify(values,null,4)+'\n');
       }
 
