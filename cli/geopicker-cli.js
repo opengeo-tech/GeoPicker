@@ -63,7 +63,7 @@ module.exports = process => {
     .description('interactively generate a new config.yml file, print to stdout if file is omitted')
     .option('-p, --datapath <dir>', 'base directory of the dataset files, skips the datapath question')
     .option('-y, --yes', 'answer yes to all the questions keeping the default values, overwrite the file if exists')
-    .option('-D, --default <id>', 'id of the default dataset, skips the datasets default id question')
+    .option('-D, --default <file>', 'dataset file to set as default dataset, skips the datasets default id question')
     .action(async (file, opts) => {
       try {
         await require('./config-generate')(file, process, console, opts);

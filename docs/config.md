@@ -36,7 +36,7 @@ The main configuration file is `server/config.yml`, parsed and validated at star
 `server/parserConfig.js` is a standalone replacement of the deprecated `@stefcud/configyml` package. When the server starts (`server/server.js`) the config goes through this pipeline:
 
 1. **File resolution** — the file path comes from the `CONFIG` environment variable (set by the [CLI](cli.md) command `geopicker server-start --config <file>`), falling back to `server/config.yml` when running `npm start`/`npm run dev` directly.
-2. **YAML loading** — a single `config.yml` is loaded; alternatively a `config/` directory of multiple `.yml` files is supported, each file becoming a top-level key named after the file.
+2. **YAML loading** — the `config.yml` file is loaded and parsed.
 3. **`${VAR}` substitution** — placeholders are replaced with values from the process environment; when a variable is not set, the defaults declared in [`defaultsEnvVars`](#defaultsenvvars) are used.
 4. **Environment merge** — `NODE_ENV` selects the [`prod:` or `dev:` block](#environments-prod-and-dev) (any value other than a development one selects `prod`), which is deep-merged over the base config. This is why the server listens on port `8080` inside the Docker container and on `9090` with `npm run dev`.
 5. **Iterative substitution** — placeholders may also reference other keys of the config itself (e.g. `swagger.routePrefix: '${prefix}/docs'`); substitution is repeated until no placeholder is left to resolve.

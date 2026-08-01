@@ -10,7 +10,10 @@ const BENCH_CONFIG = {
     pipelining: 1,  // The number of pipelined requests for each connection. Will cause the Client API to throw when greater than 1. default: 1.
     connections: 8, // The number of concurrent connections to use. default: 10.
 }
-const BENCH_DATASET = 'test_4611_dem'; // ../tests/data/test_4611_dem.tif
+//const BENCH_DATASET = 'trentino-altoadige_dem_90m';
+//const BENCH_DATASET = 'test_4611_dem';
+const BENCH_DATASET = 'default';
+
 const CONFIG_FILE = 'config.yml'
 const CLI_BIN = path.join(__dirname, '../cli/bin/geopicker')
 const BENCH_SERVER = process.env.BENCH_SERVER;
@@ -56,17 +59,15 @@ async function main() {
     const url = new URL(BENCH_SERVER.endsWith('/') ? BENCH_SERVER : BENCH_SERVER + '/');
     baseUrl = url.href;
     basePath = url.pathname;
-    datasetId = BENCH_DATASET;
     console.log(`using the already running server ${baseUrl} from BENCH_SERVER`);
   }
   else {
     const config = parserConfig.load({basepath: __dirname, configfile: CONFIG_FILE})
-        , {port, host, prefix, datasets} = config
+        , {port, host, prefix} = config
         , hostname = host === '0.0.0.0' ? '127.0.0.1' : host;
 
     basePath = prefix.endsWith('/') ? prefix : prefix + '/';
     baseUrl = `http://${hostname}:${port}${basePath}`;
-    datasetId = datasets[BENCH_DATASET] ? BENCH_DATASET : datasets.default;
 
     // spawn the server in a child process
     server = spawn('node', [CLI_BIN, 'server-start', '-c', CONFIG_FILE], {
@@ -80,14 +81,12 @@ async function main() {
     // wait for the server to be ready
     await waitServer(`${baseUrl}status`);
 
+    datasetId = BENCH_DATASET ?? 'default';
+
     let res = await fetch(`${baseUrl}${datasetId}`);
 
     if (!res.ok) {
-      datasetId = 'default';
-      res = await fetch(`${baseUrl}${datasetId}`);
-    }
-    if (!res.ok) {
-      throw new Error(`no dataset to benchmark on ${baseUrl}`)
+      throw new Error(`no dataset found: '${datasetId}' to benchmark on ${baseUrl}`)
     }
 
     const {bbox} = await res.json()
