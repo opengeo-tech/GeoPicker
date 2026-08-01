@@ -18,15 +18,19 @@ const CONFIG_FILE = 'config.yml'
 const CLI_BIN = path.join(__dirname, '../cli/bin/geopicker')
 const BENCH_SERVER = process.env.BENCH_SERVER;
 
-/**
- * pick a random location inside a certain bounding box
- */
 function locRandom(bbox = [[-90, -180], [90, 180]]) {
     const [[minLat, minLon], [maxLat, maxLon]] = bbox;
     return [
         minLon + (maxLon - minLon) * Math.random(),
         minLat + (maxLat - minLat) * Math.random()
     ];
+}
+
+function humanSize(bytes) {
+    if (bytes === 0) return bytes;
+    const sizes = ['Bytes','KB','MB','GB','TB']
+        , i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    return Math.round(bytes / Math.pow(1024, i), 1) + ' ' + sizes[i];
 }
 
 /**
@@ -70,6 +74,7 @@ async function main() {
   let baseUrl
     , basePath
     , datasetId
+    , instance
     , config = null
     , server = null;
 
@@ -77,6 +82,7 @@ async function main() {
     const url = new URL(BENCH_SERVER.endsWith('/') ? BENCH_SERVER : BENCH_SERVER + '/');
     baseUrl = url.href;
     basePath = url.pathname;
+    instance = `external ${baseUrl} ${url.origin}`;
     console.log(`using the already running server ${baseUrl} from BENCH_SERVER`);
   }
   else {
@@ -93,6 +99,8 @@ async function main() {
       cwd: __dirname,
       stdio: ['ignore', 'ignore', 'inherit']
     });
+    instance = `spawned ${baseUrl}`;
+    console.log(`spawned server ${baseUrl} from ${CLI_BIN} server-start -c ${CONFIG_FILE}`);
   }
 
   try {
@@ -115,12 +123,16 @@ async function main() {
         , file = datasetFile(config, datasetId);
 
     console.log([
-      `GeoPicker v${version} (gdal ${gdal}) benchmark of ${new Date().toISOString()}`
-    , `server:  ${baseUrl}`
-    , `dataset: "${datasetId}"${file ? ` ${file}` : ''}`
-    , `raster:  ${width}x${height} ${dataType} epsg:${epsg} pixel ${pixelSize.avgInMeters || pixelSize.x} ${pixelSize.avgInMeters ? 'meters' : pixelSize.unit}`
-    , `values:  min ${stats.min} max ${stats.max} mean ${stats.mean}`
-    , `bbox:    ${minLon} ${minLat} ${maxLon} ${maxLat}`
+      `date:     ${new Date().toISOString()}`
+    , `instance: ${instance}`      
+    , `version:  GeoPicker ${version} Gdal ${gdal}`
+    , `dataset:  ${datasetId}`
+    , `  file:   ${file ? ` ${file}` : ''}`
+    , `  size:   ${humanSize(info.totalSize)}`
+    , `  raster: ${width}x${height} ${dataType} epsg:${epsg}`
+    , `  pixel:  ${pixelSize.avgInMeters || pixelSize.x} ${pixelSize.avgInMeters ? 'meters' : pixelSize.unit}`
+    , `  stats:  min ${stats.min} max ${stats.max} mean ${stats.mean}`
+    , `  bbox:   ${minLon} ${minLat} ${maxLon} ${maxLat}`
     ].join('\n'));
 
     // run the benchmark

@@ -29,6 +29,7 @@ module.exports = (S, fastify) => {
           .prop('y', S.number())
           .prop('avgInMeters', S.number())
         )
+        .prop('totalSize', S.integer())
         .prop('centroid',
           S.object()
           .prop('lon', S.number())
