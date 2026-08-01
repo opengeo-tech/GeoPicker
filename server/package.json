@@ -22,6 +22,7 @@
     "fastify": "^4.10.2",
     "fastify-plugin": "^4.4.0",
     "fluent-json-schema": "^4.0.0",
+    "geopicker-cli": "*",
     "pino-pretty": "^9.1.1",
     "togpx": "^0.5.4",
     "js-yaml": "^3.14.0"

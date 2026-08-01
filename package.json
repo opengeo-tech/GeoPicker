@@ -29,7 +29,7 @@
     "dev": "NODE_ENV=dev DEMO_PAGE=true nodemon -e js,yml -w lib -w server -w index.html server/server.js",
     "start": "node server/server.js",
     "validate-custom-config": "node cli/bin/geopicker config-validate server/custom.config.yml",
-    "bench": "node tests/benchmarks.js"
+    "benchmark": "npm start --workspace=benchmark"
   },
   "pre-commit": [
     "lint"
@@ -40,7 +40,8 @@
   ],
   "workspaces": [
     "server",
-    "cli"
+    "cli",
+    "benchmark"
   ],
   "engines": {
     "node": ">= 20",
@@ -64,7 +65,6 @@
     "gdal-async": "^3.12.3"
   },
   "devDependencies": {
-    "autocannon": "^7.10.0",
     "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard": "^17.0.0",

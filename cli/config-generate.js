@@ -40,11 +40,13 @@ function dirCompleter(line) {
   return [hits, line]
 }
 
-module.exports = async (file, process, console) => {
+module.exports = async (file, process, console, opts = {}) => {
+
+  const {yes} = opts;
 
   let completePaths = false;
 
-  const rl = readline.createInterface({
+  const rl = yes ? null : readline.createInterface({
         input: process.stdin
       , output: process.stderr
       , completer: line => completePaths ? dirCompleter(line) : [[], line]
@@ -56,25 +58,27 @@ module.exports = async (file, process, console) => {
   let waiting = null
     , ended = false;
 
-  rl.on('line', line => {
-    if (waiting) {
-      const resolve = waiting;
-      waiting = null;
-      resolve(line);
-    }
-    else {
-      queued.push(line);
-    }
-  });
+  if (rl) {
+    rl.on('line', line => {
+      if (waiting) {
+        const resolve = waiting;
+        waiting = null;
+        resolve(line);
+      }
+      else {
+        queued.push(line);
+      }
+    });
 
-  rl.on('close', () => {
-    ended = true;
-    if (waiting) {
-      const resolve = waiting;
-      waiting = null;
-      resolve('');
-    }
-  });
+    rl.on('close', () => {
+      ended = true;
+      if (waiting) {
+        const resolve = waiting;
+        waiting = null;
+        resolve('');
+      }
+    });
+  }
 
   function question(text) {
     rl.setPrompt(text);
@@ -89,6 +93,9 @@ module.exports = async (file, process, console) => {
   }
 
   async function ask(label, def, parse) {
+    if (yes) {
+      return def
+    }
     const answer = (await question(`${label} [${def}]: `)).trim()
     if (answer === '') {
       return def
@@ -97,11 +104,17 @@ module.exports = async (file, process, console) => {
   }
 
   async function askBool(label, def) {
+    if (yes) {
+      return def
+    }
     const answer = (await question(`${label} (y/n) [${def ? 'y' : 'n'}]: `)).trim()
     return answer === '' ? def : parseBool(answer)
   }
 
   async function askNum(label, def) {
+    if (yes) {
+      return def
+    }
     const answer = (await question(`${label} [${def}]: `)).trim()
         , num = Number(answer)
     return answer === '' || Number.isNaN(num) ? def : num
@@ -114,10 +127,12 @@ module.exports = async (file, process, console) => {
     return answer
   }
 
-  console.log('GeoPicker config generator, press ENTER to accept the [default] values');
+  console.log(yes
+    ? 'GeoPicker config generator, keeping all the default values'
+    : 'GeoPicker config generator, press ENTER to accept the [default] values');
 
   if (outPath && fs.existsSync(outPath)) {
-    const overwrite = await askBool(`${outPath} already exists, overwrite`, false)
+    const overwrite = yes || await askBool(`${outPath} already exists, overwrite`, false)
     if (!overwrite) {
       rl.close();
       console.error('aborted');
@@ -127,7 +142,7 @@ module.exports = async (file, process, console) => {
 
   const config = {};
 
-  config.datapath = await askPath('datapath, base directory of the dataset files (TAB to autocomplete)', defaults.datapath);
+  config.datapath = opts.datapath || await askPath('datapath, base directory of the dataset files (TAB to autocomplete)', defaults.datapath);
 
   const scanDir = await askPath('datasets, folder to scan for dataset files (TAB to autocomplete)', config.datapath)
       , foundFiles = fs.existsSync(scanDir)
@@ -149,7 +164,12 @@ module.exports = async (file, process, console) => {
     }
   }
 
-  config.datasets.default = await ask('datasets default id', Object.keys(config.datasets)[0] || '');
+  config.datasets.default = opts.default || await ask('datasets default id', Object.keys(config.datasets)[0] || '');
+
+  if (config.datasets.default && !config.datasets[config.datasets.default]) {
+    console.error(`the default dataset "${config.datasets.default}" is not among the generated datasets`);
+    process.exit(1);
+  }
 
   console.log('resulting datasets config:\n' + yaml.dump({datasets: config.datasets}));
 
@@ -200,7 +220,9 @@ module.exports = async (file, process, console) => {
   const fmts = await ask('formats, allowed output formats (comma separated)', defaults.formats.join(','));
   config.formats = String(fmts).split(',').map(s => s.trim()).filter(Boolean);
 
-  rl.close();
+  if (rl) {
+    rl.close();
+  }
 
   const {port, host, datapath, datasets, ...others} = config
       , text = `##

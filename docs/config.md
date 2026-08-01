@@ -6,6 +6,7 @@ The main configuration file is `server/config.yml`, parsed and validated at star
 ## Index
 
 - [How the config is loaded and validated](#how-the-config-is-loaded-and-validated)
+- [Performance impact](#performance-impact)
 - Settings reference:
   - [defaultsEnvVars](#defaultsenvvars)
   - [Environments: prod and dev](#environments-prod-and-dev)
@@ -29,7 +30,6 @@ The main configuration file is `server/config.yml`, parsed and validated at star
   - [formats](#formats)
   - [datasets](#datasets)
 - [More customization](#more-customization)
-- [Performance impact](#performance-impact)
 
 ## How the config is loaded and validated
 
@@ -275,13 +275,6 @@ datasets:
   elevation:
     path: trentino-altoadige_dem_90m.tif
     band: 1
-  ## load from same Geotif different bands
-  veneto_elevation:
-    path: veneto_30m_2bands_ele_aspect.tif
-    band: 1
-  veneto_aspect:
-    path: veneto_30m_2bands_ele_aspect.tif
-    band: 2
   ## if path not exists not listed in the endpoint /datasets
   nope:
     path: this-file-not-exists.tif

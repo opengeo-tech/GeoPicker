@@ -11,7 +11,7 @@
     "standard",
     "prettier"
   ],
-  "ignorePatterns": ["tests"],
+  "ignorePatterns": ["tests", "benchmark"],
   "rules": {
     "spaced-comment": 0,
     "n/no-path-concat": 0,

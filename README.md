@@ -102,14 +102,15 @@ each endpoint has its own default format, for example endpoint `/dataset/lon/lat
 
 # Architecture
 
-The repository has 3 independent npm packages, linked as [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces) from the root `package.json`:
+The repository has 4 npm packages, linked as [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces) from the root `package.json`:
 
 - `lib/` core logic defining utils and GDAL bindings
 - `cli/` standalone CLI (`cli/bin/geopicker`) for dataset get/set, config validation and other side operations; declared as a dependency of `server/` and installed by npm as the `geopicker` command
 - `server/` a standard Fastify HTTP server defining routes, plugins and schemas for the API Rest endpoints
+- `benchmark/` HTTP benchmark script based on autocannon (not published), declares `server/` and `cli/` as its own dependencies; it generates its config and spawns the server by itself, run with `npm run benchmark`
 - `index.html` demo page with LeafletJs map that demostrates the usage of the API Rest endpoints
 
-Other folders: `docs/` extended documentation, `tests/` sample datasets and benchmarks
+Other folders: `docs/` extended documentation, `tests/` sample datasets
 
 # Usage
 
@@ -130,7 +131,7 @@ npm install
 npm run dev
 ```
 
-`npm install` at the repository root installs `server/` and `cli/` too, via [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces).
+`npm install` at the repository root installs `server/`, `cli/` and `benchmark/` too, via [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces).
 Then browse the demo page (in dev mode the server listens on port `9090`): http://localhost:9090/
 
 ## Configuration
@@ -138,6 +139,7 @@ Then browse the demo page (in dev mode the server listens on port `9090`): http:
 Full configuration options can be found in [docs config](./docs/config.md)
 
 A new `config.yml` file can be generated interactively with the CLI command `geopicker config-generate [file]`, printing to stdout if `file` is omitted.
+It can also run unattended with `--yes` (keep every default) and `-p <dir>` (dataset files directory), scanning that directory to fill the `datasets` section.
 
 ## CLI
 

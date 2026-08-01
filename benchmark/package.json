@@ -1,0 +1,13 @@
+{
+  "name": "geopicker-benchmark",
+  "version": "1.0.0",
+  "scripts": {
+    "config-generate": "node ../cli/bin/geopicker config-generate --yes -p ../tests/data config.yml",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "autocannon": "^7.10.0",
+    "fastify-geopicker": "*",
+    "geopicker-cli": "*"
+  }
+}
