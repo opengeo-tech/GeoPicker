@@ -15,7 +15,7 @@ const BENCH_CONFIG = {
 const BENCH_DATASET = 'default';
 
 const CONFIG_FILE = 'config.yml'
-const CLI_BIN = path.join(__dirname, '../cli/bin/geopicker')
+const SERVER_JS = path.join(__dirname, '../server/server.js')
 const BENCH_SERVER = process.env.BENCH_SERVER;
 
 function locRandom(bbox = [[-90, -180], [90, 180]]) {
@@ -94,8 +94,9 @@ async function main() {
     baseUrl = `http://${hostname}:${port}${basePath}`;
 
     // spawn the server in a child process
-    server = spawn('node', [CLI_BIN, 'server-start', '-c', CONFIG_FILE], {
+    server = spawn('node', [SERVER_JS], {
       cwd: __dirname,
+      env: {...process.env, CONFIG: path.resolve(__dirname, CONFIG_FILE)},
       stdio: ['ignore', 'ignore', 'inherit']
     });
     instance = `spawned ${baseUrl}`;

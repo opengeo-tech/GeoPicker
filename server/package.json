@@ -7,7 +7,7 @@
     "url": "https://opengeo.tech/"
   },
   "license": "BSD-3-Clause",
-  "main": "./server.js",
+  "main": "./app.js",
   "engines": {
     "node": ">= 20",
     "npm": ">= 10"
