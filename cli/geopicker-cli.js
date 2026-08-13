@@ -7,21 +7,9 @@
 const path = require('path')
     , { program } = require('commander')
     , fs = require('fs')
-    , geopicker = require('../lib/geopicker');
+    , geopicker = require('../lib/geopicker')
+    , server = require('../server/server.js')
 
-function loadAndValidateConfig(file) {
-  const parserConfig = require('../server/parserConfig')
-      , S = require('fluent-json-schema')
-      , configSchema = require('../server/schemas/config')(S)
-      , configPath = file || path.join(__dirname, '../server/config.yml')
-      , basepath = path.dirname(configPath)
-      , configfile = path.basename(configPath);
-
-  const config = parserConfig.load({basepath, configfile})
-      , {valid, errors} = parserConfig.validateConfig(config, configSchema.valueOf());
-
-  return {config, configPath, valid, errors};
-}
 
 module.exports = process => {
 
@@ -33,7 +21,7 @@ module.exports = process => {
     .description('validate a config.yml file against the GeoPicker config schema')
     .action(file => {
       try {
-        const {configPath, valid, errors} = loadAndValidateConfig(file);
+        const {configPath, valid, errors} = server.loadConfig(file);
         if (!valid) {
           console.error(errors.join('\n'));
           process.exit(1);
@@ -50,7 +38,7 @@ module.exports = process => {
     .description('print the parsed config.yml object as JSON')
     .action(file => {
       try {
-        const {config, valid, errors} = loadAndValidateConfig(file);
+        const {config, valid, errors} = server.loadConfig(file);
         if (!valid) {
           console.error(errors.join('\n'));
           process.exit(1);
@@ -81,11 +69,11 @@ module.exports = process => {
   program
     .command('server-start')
     .description('start the GeoPicker HTTP server with a config file, defaults to ./config.yml')
-    .option('-c, --config <file>', 'config file path', './config.yml')
+    .option('-c, --config <file>', 'config file path')
     .action(opts => {
       try {
-        process.env.CONFIG = path.resolve(opts.config);
-        require('../server/server.js');
+        process.env.CONFIG = path.resolve(opts.config || process.env.CONFIG || './config.yml');
+        server.start();
       } catch (e) {
         console.error(e.message);
         process.exit(1);
@@ -95,9 +83,16 @@ module.exports = process => {
   program
     .command('server-status')
     .description('show the status JSON of the running GeoPicker HTTP server (same as the /status endpoint)')
-    .action(() => {
-      const {config} = loadAndValidateConfig()
-          , {port, host, prefix} = config
+    .option('-c, --config <file>', 'config file path')
+    .action(opts => {
+      const {config, valid, errors} = server.loadConfig(opts.config && path.resolve(opts.config));
+
+      if (!valid) {
+        console.error(errors.join('\n'));
+        process.exit(1);
+      }
+
+      const {port, host, prefix} = config
           , hostname = host === '0.0.0.0' ? '127.0.0.1' : host
           , url = `http://${hostname}:${port}${prefix.endsWith('/') ? prefix : prefix + '/'}status`;
 

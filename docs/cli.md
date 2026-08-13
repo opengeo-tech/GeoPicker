@@ -17,6 +17,7 @@ docker exec <container> geopicker --help
 ## Index
 
 - [Execute get/set](#execute-getset)
+- [Config file resolution](#config-file-resolution)
 - Config commands:
   - [config-validate](#config-validate)
   - [config-show](#config-show)
@@ -50,6 +51,33 @@ geopicker --get 11.01,46.01 -v -t -d tests/data/trentino-altoadige_dem_90m.tif
 geopicker --set -v -t -d tests/data/trentino-altoadige_dem_90m.tif -i tests/data/linestring_10pt_feature.geojson
 ```
 
+## Config file resolution
+
+Every command that reads a config file resolves it with the same priority chain:
+
+1. the explicit path given on the command line (`[file]` argument or `-c/--config` option);
+2. the `CONFIG` environment variable, if set;
+3. the command's own default.
+
+The final default differs by command, for backwards compatibility:
+
+| Command | Explicit path | Default |
+|---------|---------------|---------|
+| `config-validate` | `[file]` argument | `server/config.yml` |
+| `config-show` | `[file]` argument | `server/config.yml` |
+| `config-generate` | — (reads it only as the source of the proposed defaults; `[file]` is the output) | `server/config.yml` |
+| `server-start` | `-c/--config` option | `./config.yml` in the current directory |
+| `server-status` | `-c/--config` option | `server/config.yml` |
+
+This is the same chain used by `server/server.js` itself (`env CONFIG` → `server/config.yml`), so exporting `CONFIG` once makes the server and every CLI command point at the same file, e.g.:
+
+```bash
+export CONFIG=/etc/geopicker/config.yml
+geopicker config-validate     # validates /etc/geopicker/config.yml
+geopicker server-start        # starts the server with it
+geopicker server-status       # queries the right host and port
+```
+
 ## config-validate
 
 Validate a `config.yml` file against the GeoPicker config schema (`server/schemas/config.js`), without starting the server.
@@ -58,7 +86,7 @@ Validate a `config.yml` file against the GeoPicker config schema (`server/schema
 geopicker config-validate [file]
 ```
 
-`file` defaults to `server/config.yml`. Prints an error and exits with code 1 if the config is invalid; see also `npm run validate-custom-config` (validates `server/custom.config.yml`).
+`file` follows the [config file resolution](#config-file-resolution) chain. Prints an error and exits with code 1 if the config is invalid; see also `npm run validate-custom-config` (validates `server/custom.config.yml`).
 
 ## config-show
 
@@ -70,7 +98,7 @@ geopicker config-show [file]
 
 ## config-generate
 
-Interactively generate a new config file: one sequential prompt for each setting documented in [Configuration](config.md), press ENTER to skip a question keeping the default value of `server/config.yml`. For the `datasets` section the command asks for the folder where the dataset files are located (defaults to the chosen `datapath`), scans it for `.tif`/`.tiff` files and proposes the found list, asking confirmation before adding each one.
+Interactively generate a new config file: one sequential prompt for each setting documented in [Configuration](config.md), press ENTER to skip a question keeping the default value proposed by the [config file resolution](#config-file-resolution) chain (`server/config.yml`, or the config pointed by env `CONFIG`). For the `datasets` section the command asks for the folder where the dataset files are located (defaults to the chosen `datapath`), scans it for `.tif`/`.tiff` files and proposes the found list, asking confirmation before adding each one.
 
 ```bash
 geopicker config-generate [file]
@@ -121,15 +149,17 @@ Start the GeoPicker HTTP server.
 geopicker server-start [-c|--config <file>]
 ```
 
-`--config` defaults to `./config.yml` in the directory where the command is launched. Note this differs from `npm start` (which runs `server/server.js` directly and uses `server/config.yml`); the official Docker image passes `--config server/config.yml` in its `CMD`.
+`--config` follows the [config file resolution](#config-file-resolution) chain, falling back to `./config.yml` in the directory where the command is launched. Note this differs from `npm start` (which runs `server/server.js` directly and uses `server/config.yml`); the official Docker image passes `--config server/config.yml` in its `CMD`.
 
 ## server-status
 
-Show the status JSON of the running GeoPicker HTTP server, the same returned by its `/status` endpoint (host, port and prefix are read from the config). Prints an error and exits with code 1 if the server is not reachable.
+Show the status JSON of the running GeoPicker HTTP server, the same returned by its `/status` endpoint (host, port and prefix are read from the config). Prints the config validation errors and exits with code 1 if the config is invalid, or an error if the server is not reachable.
 
 ```bash
-geopicker server-status
+geopicker server-status [-c|--config <file>]
 ```
+
+`--config` follows the [config file resolution](#config-file-resolution) chain — so pointing `CONFIG` (or `-c`) at the same file used by `server-start` queries the right host and port.
 
 ## bash-completion
 

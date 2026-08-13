@@ -81,7 +81,8 @@ module.exports = async (file, process, console, opts = {}) => {
       , output: process.stderr
       , completer: line => completePaths ? dirCompleter(line) : [[], line]
       })
-      , defaults = parserConfig.load({basepath: path.join(__dirname, '../server'), configfile: 'config.yml'})
+      , defaultsPath = process.env.CONFIG || path.join(__dirname, '../server/config.yml')
+      , defaults = parserConfig.load({basepath: path.dirname(defaultsPath), configfile: path.basename(defaultsPath)})
       , outPath = file ? path.resolve(file) : null;
 
   const queued = [];
