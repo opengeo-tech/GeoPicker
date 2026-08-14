@@ -6,7 +6,7 @@
 defaultsEnvVars:
   PREFIX: '/'
   DEMO_PAGE: false
-  DATASET_DEFAULT: 'elevation'
+  DATASET_DEFAULT: 'trentino'
 
 ## Environment Production/Dockerized config override
 prod:

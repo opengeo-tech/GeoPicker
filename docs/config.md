@@ -260,7 +260,7 @@ formats:
 ## datasets
 
 The configuration section that maps the `datasetId` api parameter to data source files (relative to [`datapath`](#datapath)) and raster bands, and defines the `default` dataset id (`${DATASET_DEFAULT}` env var by default).
-Note that some entries (ex. `altitude: elevation`, `ele: elevation`) may be string aliases of the same resource that has more names.
+Note that some entries (ex. `altitude: elevation`, `ele: elevation`) may be string aliases of the same resource that has more names. `default` must point directly to a real dataset entry, not to an alias — the server refuses to start otherwise.
 
 ```yaml
 datapath: '/data'

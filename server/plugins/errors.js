@@ -7,6 +7,7 @@ const errors = {
   nodatadir: ["Data directory not exists", 500],
   nodataset: ["Dataset not found", 404],
   nodatasets: ["At least one default dataset is required", 500],
+  nodefaultalias: ["Default dataset can't be an alias, 'datasets.default' must reference a real dataset id", 500],
   //noformat: ["Request format not supported", 400],
   //nolocations: ["Require array of locations", 400],
 };

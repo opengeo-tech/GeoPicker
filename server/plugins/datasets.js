@@ -21,8 +21,14 @@ module.exports = fp(async fastify => {
   }
 
   // eslint-disable-next-line
-  const def = configDatasets[ configDatasets.default ] // (configDatasets.default && typeof configDatasets.default.valueOf()==='string') ?
-      , defaultFile = `${datapath}/${def.path}`
+  const def = configDatasets[ configDatasets.default ];
+
+  if (def != null && typeof def.valueOf() === 'string') {
+    fastify.log.error(errors.nodefaultalias.message);
+    throw errors.nodefaultalias;
+  }
+
+  const defaultFile = `${datapath}/${def.path}`
       , datasets = {}
       , openDatasets = {}; // open dataset handles (gdal.Dataset) for each unique dataset file and band
 
