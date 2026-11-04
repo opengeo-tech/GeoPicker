@@ -1,5 +1,6 @@
 # GeoPicker Documentation
 
+- [Architecture](architecture.md)
 - [Configuration](config.md)
 - [Docker](docker.md)
 - [Command Line Interface](cli.md)
